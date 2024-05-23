@@ -4,19 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start:dev": "vite-node ./src/app.ts",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "vite-node -w ./src/app.ts",
+    "build": "tsc && vite build"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.11",
-    "vite-node": "^1.6.0",
-    "vite-plugin-node": "^3.1.0"
+    "vite-node": "^1.6.0"
   },
   "dependencies": {
+    "@repo/typescript-config": "workspace:*",
     "express": "^4.19.2",
+    "telegraf": "^4.16.3",
     "telegram": "^2.21.2"
   }
 }
