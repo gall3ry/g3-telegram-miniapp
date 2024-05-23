@@ -2,7 +2,7 @@ import { sha256 } from "@ton/crypto";
 import { Address, Cell, contractAddress, loadStateInit } from "@ton/ton";
 import { Buffer } from "buffer";
 import { randomBytes, sign } from "tweetnacl";
-import { CheckProofRequestDto } from "../_dto/check-proof-request-dto";
+import { type CheckProofRequestDto } from "../_dto/check-proof-request-dto";
 import { tryParsePublicKey } from "../_wrappers/wallets-data";
 
 const tonProofPrefix = "ton-proof-item-v2/";
@@ -24,18 +24,18 @@ export class TonProofService {
    */
   static async checkProof(
     payload: CheckProofRequestDto,
-    getWalletPublicKey: (address: string) => Promise<Buffer | null>
+    getWalletPublicKey: (address: string) => Promise<Buffer | null>,
   ): Promise<boolean> {
     try {
       const stateInit = loadStateInit(
-        Cell.fromBase64(payload.proof.state_init).beginParse()
+        Cell.fromBase64(payload.proof.state_init).beginParse(),
       );
 
       // 1. First, try to obtain public key via get_public_key get-method on smart contract deployed at Address.
       // 2. If the smart contract is not deployed yet, or the get-method is missing, you need:
       //  2.1. Parse TonAddressItemReply.walletStateInit and get public key from stateInit. You can compare the walletStateInit.code
       //  with the code of standard wallets contracts and parse the data according to the found wallet version.
-      let publicKey =
+      const publicKey =
         tryParsePublicKey(stateInit) ??
         (await getWalletPublicKey(payload.address));
       if (!publicKey) {

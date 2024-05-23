@@ -6,15 +6,23 @@ import {
 import axios from "axios";
 import { useEffect, useRef } from "react";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { TonProofService } from "../api/_services/ton-proof-service";
 
 const useAuth = create<{
   token: string | null;
   setToken: (token: string | null) => void;
-}>((set) => ({
-  token: null,
-  setToken: (token) => set({ token }),
-}));
+}>()(
+  persist(
+    (set) => ({
+      token: null,
+      setToken: (token) => set({ token }),
+    }),
+    {
+      name: "miniapp-auth",
+    },
+  ),
+);
 
 const localStorageKey = "my-dapp-auth-token";
 const payloadTTLMS = 1000 * 60 * 20;
@@ -28,7 +36,7 @@ export const BackendAuthProvider = ({
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
   const interval = useRef<ReturnType<typeof setInterval> | undefined>();
-  const { token, setToken } = useAuth();
+  const { setToken } = useAuth();
 
   useEffect(() => {
     if (!isConnectionRestored || !setToken) {
@@ -41,7 +49,7 @@ export const BackendAuthProvider = ({
       localStorage.removeItem(localStorageKey);
       setToken(null);
 
-      const refreshPayload = async () => {
+      const refreshPayload = () => {
         tonConnectUI.setConnectRequestParameters({ state: "loading" });
 
         const value = {
@@ -56,7 +64,7 @@ export const BackendAuthProvider = ({
         }
       };
 
-      refreshPayload();
+      void refreshPayload();
       setInterval(refreshPayload, payloadTTLMS);
       return;
     }
@@ -71,26 +79,26 @@ export const BackendAuthProvider = ({
       wallet.connectItems?.tonProof &&
       !("error" in wallet.connectItems.tonProof)
     ) {
-      console.log(wallet);
-
-      axios.post("/api/auth/check-proof", {});
-
-      //   backendAuth
-      //     .checkProof(wallet.connectItems.tonProof.proof, wallet.account)
-      //     .then((result) => {
-      //       if (result) {
-      //         setToken(result);
-      //         localStorage.setItem(localStorageKey, result);
-      //       } else {
-      //         alert("Please try another wallet");
-      //         tonConnectUI.disconnect();
-      //       }
-      //     });
+      void axios
+        .post<{
+          token: string;
+        }>("/api/auth/check-proof", {
+          proof: wallet.connectItems.tonProof.proof,
+        })
+        .then((result) => {
+          if (result) {
+            setToken(result.data.token);
+            localStorage.setItem(localStorageKey, result.data.token);
+          } else {
+            alert("Please try another wallet");
+            void tonConnectUI.disconnect();
+          }
+        });
     } else {
       alert("Please try another wallet");
-      tonConnectUI.disconnect();
+      void tonConnectUI.disconnect();
     }
-  }, [wallet, isConnectionRestored, setToken]);
+  }, [wallet, isConnectionRestored, setToken, tonConnectUI]);
 
   return <>{children}</>;
 };
