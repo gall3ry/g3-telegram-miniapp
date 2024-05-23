@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^3.0.5",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
@@ -21,6 +22,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "database": "workspace:*",
     "geist": "^1.3.0",
     "jose": "^5.3.0",
     "next": "^14.2.1",
@@ -31,8 +33,7 @@
     "ton": "^13.9.0",
     "tweetnacl": "^1.0.3",
     "zod": "^3.23.3",
-    "zustand": "^4.5.2",
-    "database": "workspace:*"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",
