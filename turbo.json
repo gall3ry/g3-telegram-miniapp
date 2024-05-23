@@ -10,8 +10,18 @@
       "dependsOn": ["^lint"]
     },
     "dev": {
+      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:deploy": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
     }
   }
 }

@@ -3,7 +3,7 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useCallback, useEffect, useRef } from "react";
 import { api } from "../../trpc/react";
 import useInterval from "../_hooks/useInterval";
-import { useAuth } from "./useAuth";
+import { useAuth, useAuthHydrated } from "./useAuth";
 
 const payloadTTLMS = 1000 * 60 * 9;
 
@@ -13,9 +13,11 @@ export const BackendAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const firstProofLoading = useRef<boolean>(true);
-
   const [tonConnectUI] = useTonConnectUI();
-  const { reset, accessToken, setAccessToken } = useAuth();
+  const { reset, setAccessToken, accessToken } = useAuth();
+  const utils = api.useUtils();
+  const isHydrated = useAuthHydrated();
+
   const { refetch: fetchPayload } = api.auth.generatePayload.useQuery(
     undefined,
     {
@@ -26,10 +28,6 @@ export const BackendAuthProvider = ({
   const { mutateAsync: checkProof } = api.auth.checkProof.useMutation();
 
   const recreateProofPayload = useCallback(async () => {
-    if (!tonConnectUI) {
-      return;
-    }
-
     if (firstProofLoading.current) {
       tonConnectUI.setConnectRequestParameters({ state: "loading" });
       firstProofLoading.current = false;
@@ -59,7 +57,7 @@ export const BackendAuthProvider = ({
   useInterval(recreateProofPayload, payloadTTLMS);
 
   useEffect(() => {
-    if (!tonConnectUI || !setAccessToken) {
+    if (!tonConnectUI || !isHydrated) {
       // check setAccessToken is to make sure store is initialized
       return;
     }
@@ -68,13 +66,14 @@ export const BackendAuthProvider = ({
     tonConnectUI.onStatusChange(async (w) => {
       if (!w) {
         reset();
+        void utils.invalidate();
+
         return;
       }
 
-      let _accessToken;
+      let _accessToken = accessToken;
 
       if (w.connectItems?.tonProof && "proof" in w.connectItems.tonProof) {
-        // await checkProof(w.connectItems.tonProof.proof, w.account);
         if (!w.account.publicKey) {
           throw new Error("Public key is missing");
         }
@@ -91,17 +90,18 @@ export const BackendAuthProvider = ({
 
         _accessToken = token;
         setAccessToken(_accessToken);
+        void utils.invalidate();
       }
 
       if (!_accessToken) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         tonConnectUI.disconnect();
-        console.log("Disconnecting");
+        void utils.invalidate();
         return;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tonConnectUI, setAccessToken]);
+  }, [tonConnectUI, isHydrated]);
 
   return <>{children}</>;
 };
