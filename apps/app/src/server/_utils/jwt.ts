@@ -1,5 +1,5 @@
-import { CHAIN } from "@tonconnect/ui-react";
-import { decodeJwt, JWTPayload, jwtVerify, SignJWT } from "jose";
+import { type CHAIN } from "@tonconnect/sdk";
+import { SignJWT, decodeJwt, jwtVerify, type JWTPayload } from "jose";
 
 /**
  * Secret key for the token.
@@ -22,7 +22,7 @@ export type PayloadToken = {
  * Create a token with the given payload.
  */
 function buildCreateToken<T extends JWTPayload>(
-  expirationTime: string
+  expirationTime: string,
 ): (payload: T) => Promise<string> {
   return async (payload: T) => {
     const encoder = new TextEncoder();

@@ -1,4 +1,4 @@
-import { CHAIN } from "@tonconnect/ui-react";
+import { CHAIN } from "@tonconnect/sdk";
 import zod from "zod";
 
 export const CheckProofRequest = zod.object({

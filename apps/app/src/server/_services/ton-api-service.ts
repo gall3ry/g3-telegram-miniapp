@@ -1,5 +1,5 @@
 import { Address, TonClient4 } from "@ton/ton";
-import { CHAIN } from "@tonconnect/ui-react";
+import { CHAIN } from "@tonconnect/sdk";
 import { Buffer } from "buffer";
 
 export class TonApiService {
@@ -32,11 +32,11 @@ export class TonApiService {
       masterAt.last.seqno,
       Address.parse(address),
       "get_public_key",
-      []
+      [],
     );
     return Buffer.from(
       result.reader.readBigNumber().toString(16).padStart(64, "0"),
-      "hex"
+      "hex",
     );
   }
 
@@ -44,12 +44,12 @@ export class TonApiService {
    * Get account info by address.
    */
   public async getAccountInfo(
-    address: string
+    address: string,
   ): Promise<ReturnType<TonClient4["getAccount"]>> {
     const masterAt = await this.client.getLastBlock();
     return await this.client.getAccount(
       masterAt.last.seqno,
-      Address.parse(address)
+      Address.parse(address),
     );
   }
 }

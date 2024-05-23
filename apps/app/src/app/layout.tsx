@@ -5,7 +5,6 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 
 import Script from "next/script";
-import { TRPCReactProvider } from "~/trpc/react";
 import { Providers } from "./providers";
 
 export const metadata = {
@@ -24,9 +23,7 @@ export default function RootLayout({
       <body>
         <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
         <Providers>
-          <TRPCReactProvider>
-            <Theme>{children}</Theme>
-          </TRPCReactProvider>
+          <Theme>{children}</Theme>
         </Providers>
       </body>
     </html>

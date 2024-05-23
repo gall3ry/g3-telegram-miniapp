@@ -7,7 +7,8 @@ import { tryParsePublicKey } from "../_wrappers/wallets-data";
 
 const tonProofPrefix = "ton-proof-item-v2/";
 const tonConnectPrefix = "ton-connect";
-const allowedDomains = ["ton-connect.github.io"];
+// TODO: to add more domains
+const allowedDomains = ["g3-miniapp.vercel.app"];
 const validAuthTime = 60; // 1 minute
 
 export class TonProofService {
