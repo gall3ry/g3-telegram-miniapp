@@ -19,4 +19,5 @@ const createContext = cache(() => {
   });
 });
 
+// TODO: Since we use localStorage, so beware that this api doesn't work in SSR
 export const api = createCaller(createContext);
