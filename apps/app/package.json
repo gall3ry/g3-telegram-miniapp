@@ -5,15 +5,12 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "db:push": "prisma db push",
-    "db:studio": "prisma studio",
     "dev": "next dev",
-    "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2",
+    "@radix-ui/themes": "^3.0.5",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
     "@ton/crypto": "^3.2.0",
@@ -34,7 +31,8 @@
     "ton": "^13.9.0",
     "tweetnacl": "^1.0.3",
     "zod": "^3.23.3",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "database": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",
@@ -48,7 +46,6 @@
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "prisma": "^5.10.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2"
   },

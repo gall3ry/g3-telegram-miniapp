@@ -1,0 +1,25 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "dependencies": {
+    "@prisma/client": "latest"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.2",
+    "tsup": "^8.0.2"
+  },
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev",
+    "build": "tsup"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs",
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  }
+}

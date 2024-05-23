@@ -1,3 +1,5 @@
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -22,7 +24,9 @@ export default function RootLayout({
       <body>
         <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
         <Providers>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <Theme>{children}</Theme>
+          </TRPCReactProvider>
         </Providers>
       </body>
     </html>
