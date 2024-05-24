@@ -6,6 +6,7 @@ import { TonProofService } from "../../../_services/ton-proof-service";
 import { createAuthToken, verifyToken } from "../../../_utils/jwt";
 import { db } from "../../../db";
 import { publicProcedure } from "../../trpc";
+import { RewardService } from "../reward";
 
 class CheckProofService {
   static async checkProofOrThrow({
@@ -74,6 +75,11 @@ class CheckProofService {
         message: "No user associated with this address",
       });
     }
+
+    const rewardService = RewardService.getInstance();
+    await rewardService.rewardForBindWalletAddress({
+      userId: user.id,
+    });
 
     const token = await createAuthToken({
       address: address,

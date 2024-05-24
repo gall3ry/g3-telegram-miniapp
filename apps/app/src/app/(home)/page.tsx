@@ -1,23 +1,22 @@
 "use client";
-import { Box, Flex } from "@radix-ui/themes";
-import { TonConnectButton } from "@tonconnect/ui-react";
+import { Box, Flex, Spinner } from "@radix-ui/themes";
 import { api } from "../../trpc/react";
+import { LoggedUserUI } from "./_components/LoggedUserUI";
 
 export default function Home() {
-  const { data, isError, isFetching } = api.auth.getAuthTestText.useQuery(
-    undefined,
-    {
-      placeholderData: "Loading...",
-    },
-  );
+  const { isError, isFetching } = api.auth.getAuthTestText.useQuery();
   return (
     <>
-      <Flex justify="end">
-        <TonConnectButton />
-      </Flex>
-
       <Box py="4">
-        {isFetching ? "Loading..." : isError ? "Unauthenticated" : data}
+        {isFetching ? (
+          <Flex justify="center">
+            <Spinner size="3" />
+          </Flex>
+        ) : isError ? (
+          "Unauthenticated"
+        ) : (
+          <LoggedUserUI />
+        )}
       </Box>
     </>
   );

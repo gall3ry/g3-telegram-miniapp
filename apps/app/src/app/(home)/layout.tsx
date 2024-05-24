@@ -1,4 +1,5 @@
 import { Box, Container } from "@radix-ui/themes";
+import { Header } from "./_components/Header";
 
 export const metadata = {
   title: "Create T3 App",
@@ -12,13 +13,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Container py="4" size="1">
+    <Container
+      size="2"
+      style={{
+        background: "var(--black-a10)",
+      }}
+      minHeight="100vh"
+      pt="3"
+    >
+      <Header />
+
       <Box
+        className="bg-white"
+        p="4"
+        my="4"
         style={{
-          background: "var(--gray-a3)",
-          borderRadius: "var(--radius-3)",
+          borderRadius: "var(--radius-4)",
         }}
-        p="3"
       >
         {children}
       </Box>

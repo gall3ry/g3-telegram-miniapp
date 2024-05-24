@@ -28,12 +28,16 @@ export const BackendAuthProvider = ({
   const { mutateAsync: checkProof } = api.auth.checkProof.useMutation();
 
   const recreateProofPayload = useCallback(async () => {
+    if (!isHydrated) {
+      return;
+    }
+
     if (firstProofLoading.current) {
       tonConnectUI.setConnectRequestParameters({ state: "loading" });
       firstProofLoading.current = false;
     }
 
-    const data = (await fetchPayload()).data;
+    const { data } = await fetchPayload();
     if (!data) {
       throw new Error("Payload is missing");
     }
@@ -47,7 +51,7 @@ export const BackendAuthProvider = ({
       tonConnectUI.setConnectRequestParameters(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tonConnectUI, firstProofLoading]);
+  }, [tonConnectUI, firstProofLoading, isHydrated]);
 
   if (firstProofLoading.current) {
     void recreateProofPayload();

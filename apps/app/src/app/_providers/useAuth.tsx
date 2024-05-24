@@ -42,3 +42,11 @@ export const useAuthHydrated = () => {
 
   return isHydrated;
 };
+
+export const useIsAuthenticated = () => {
+  const { accessToken } = useAuth();
+
+  return {
+    isAuthenticated: !!accessToken,
+  };
+};

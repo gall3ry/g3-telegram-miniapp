@@ -10,19 +10,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
-}
-
 model User {
     id Int @id @default(autoincrement())
 
-    point      BigInt       @default(0)
+    point      Int          @default(0)
     RewardLogs RewardLogs[]
     Provider   Provider[]
 }
@@ -38,7 +29,7 @@ model OccTemplate {
 }
 
 enum RewardType {
-    POINT
+    BIND_WALLET_ADDRESS
 }
 
 model Reward {
@@ -59,7 +50,7 @@ model RewardLogs {
 
     user       User       @relation(fields: [userId], references: [id])
     rewardType RewardType
-    point      BigInt
+    point      Int
     userId     Int
 }
 

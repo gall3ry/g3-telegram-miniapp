@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "RewardType" AS ENUM ('POINT');
+CREATE TYPE "RewardType" AS ENUM ('BIND_WALLET_ADDRESS');
 
 -- CreateEnum
 CREATE TYPE "ProviderType" AS ENUM ('TON_WALLET');
@@ -17,7 +17,7 @@ CREATE TABLE "Post" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "point" BIGINT NOT NULL DEFAULT 0,
+    "point" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -49,7 +49,7 @@ CREATE TABLE "RewardLogs" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "rewardType" "RewardType" NOT NULL,
-    "point" BIGINT NOT NULL,
+    "point" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "RewardLogs_pkey" PRIMARY KEY ("id")

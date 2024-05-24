@@ -23,6 +23,12 @@ bot.command("quit", async (ctx) => {
 //   await ctx.reply(`Hello ${ctx.state.role}`);
 // });
 
+// onupdate
+
+bot.on("message", async (ctx) => {
+  console.log("message", ctx.message);
+});
+
 bot.on("callback_query", async (ctx) => {
   console.log(`Received callback query`, ctx.callbackQuery);
 
