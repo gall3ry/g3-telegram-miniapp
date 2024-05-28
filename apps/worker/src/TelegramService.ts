@@ -6,7 +6,7 @@ import { StringSession } from 'telegram/sessions/StringSession.js';
 export const apiId = 25258261;
 export const apiHash = 'ecdcb0e838175aee63d57acdbf9c76b0';
 export const stringSession = new StringSession(
-  '1BQANOTEuMTA4LjU2LjE1MgG7N4/tCs0IrLXKOgw0XQzW94ofujRIgu/fqxLoKkCSgLv1p2SxdFBMbCgx5I+49OXOV/WIBhDIoNxG+LLkJ+7e0DFfesGQ2jxEkd//7q73CKQ4OgTtNSR2lgrJSbbptPzatkL28dL1c0wR+hN0qZxH8q7bRpYz9WeK17CxBn8N59yhADcjujHZ2nx6474auz5etcJqtOj1PlMdqBNRON4hkYQoIL9h4fcwq9IeCMU7vWRYQLmHX5C23DqvvMW4kVejcOrRUHuCzQgCQd5PYn5c2LVTBF99lIYKDU86ncE/SoB8d0yi4E7eGSGeceGvpyFNkQ+JwetITdWs64yMlTm/1w==',
+  '1BQANOTEuMTA4LjU2LjE5NQG7EH4ndUJu7FYpz68jEA/RKE017/YDig10mXNhCYtRoA11ao3oRclhVwuUS3mzQOrOdxCDW3SKQsJZHkIthehAnK0f97jzIaELlXboJyHenYMEOm1Dp7XkxY5LUjfB5k6VwW65cSDhDf6fdJTzMEr/Ka9RwqY7eBFqpr+PJx+YkLdxUc+m6MpGeOeJcYgSBgRbvitEtszvFBtK2entvRAs85iQYNwdWFvIoLQR61MFCbcULTHZoomov81+obBPCtXgNoNfdlP6dYpkJEblMi+VY4yF6XTEmWZ0iufPruI55d0muyF8dvGeJAyvmWL5T+kYGCmO2CRmyzRbj8wzthOPbQ==',
 );
 
 export interface Dictionary<T> {

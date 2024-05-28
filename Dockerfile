@@ -30,6 +30,7 @@ COPY . .
 FROM base as installer
 WORKDIR /app
 ENV APP_NAME=worker
+ENV APP_NAME2=my-node-app
 
 RUN npm install -g pnpm
 RUN npm install -g turbo
@@ -52,13 +53,26 @@ RUN pnpm install
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN turbo run build --filter=${APP_NAME}...
+RUN turbo run build --filter=${APP_NAME}... --filter=${APP_NAME2}...
 
-FROM base AS runner
+FROM base AS worker
 WORKDIR /app
 ENV APP_NAME=worker
+RUN npm install -g pnpm
 
+# Don't run production as root
+# RUN addgroup --system --gid 1001 expressjs
+# RUN adduser --system --uid 1001 expressjs
 
+# USER expressjs
+COPY --from=installer /app .
+
+# TODO: Maybe use the npm script?
+CMD pnpm --filter "${APP_NAME}" run start
+
+FROM base AS my-node-app
+WORKDIR /app
+ENV APP_NAME=my-node-app
 RUN npm install -g pnpm
 
 # Don't run production as root

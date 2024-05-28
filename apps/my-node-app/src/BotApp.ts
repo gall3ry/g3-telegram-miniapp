@@ -1,29 +1,17 @@
 import { Prisma } from "database";
-// @ts-expect-error
-import input from "input";
 import { Telegraf } from "telegraf";
 import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
-import { TelegramClient } from "telegram";
-import { StringSession } from "telegram/sessions/index.js";
 import { z } from "zod";
 import { PersistentDb } from "./PersistentDb";
 import { COMMANDS, MAP_COMMAND_TO_DESCRIPTION } from "./commands";
 import { db } from "./utils/db";
 
-const apiId = 25258261;
-const apiHash = "ecdcb0e838175aee63d57acdbf9c76b0";
-const stringSession = new StringSession(
-  "1BQANOTEuMTA4LjU2LjE1MgG7N4/tCs0IrLXKOgw0XQzW94ofujRIgu/fqxLoKkCSgLv1p2SxdFBMbCgx5I+49OXOV/WIBhDIoNxG+LLkJ+7e0DFfesGQ2jxEkd//7q73CKQ4OgTtNSR2lgrJSbbptPzatkL28dL1c0wR+hN0qZxH8q7bRpYz9WeK17CxBn8N59yhADcjujHZ2nx6474auz5etcJqtOj1PlMdqBNRON4hkYQoIL9h4fcwq9IeCMU7vWRYQLmHX5C23DqvvMW4kVejcOrRUHuCzQgCQd5PYn5c2LVTBF99lIYKDU86ncE/SoB8d0yi4E7eGSGeceGvpyFNkQ+JwetITdWs64yMlTm/1w=="
-);
+// TODO: move to .env
 const botToken = "7162609772:AAEM7x3Kfeta5CBesezv5gdD5youN6CsnBI";
 
 export class BotApp {
   private static instance: BotApp;
   private bot = new Telegraf(botToken);
-
-  private telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
-    connectionRetries: 5,
-  });
 
   private constructor() {}
 
@@ -252,27 +240,10 @@ export class BotApp {
     });
   }
 
-  private async _initializeClient() {
-    console.log(`🚀 Initializing Telegram client...`);
-    await this.telegramClient.start({
-      phoneNumber: async () => await input.text("Please enter your number: "),
-      password: async () => await input.text("Please enter your password: "),
-      phoneCode: async () =>
-        await input.text("Please enter the code you received: "),
-      onError: (err) => console.log(err),
-    });
-
-    console.log(
-      `🚀 Telegram client is ready!`
-      // this.telegramClient.session.save()
-    );
-  }
-
   public async launch() {
     const bot = this.bot;
     this._initializeCommands();
     this._initializeListeners();
-    await this._initializeClient();
 
     console.log(`✅ Bot is running!`);
 
