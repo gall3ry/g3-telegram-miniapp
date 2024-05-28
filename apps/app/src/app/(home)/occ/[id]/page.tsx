@@ -32,6 +32,10 @@ const Page = (pageParams: PageParams) => {
   return (
     <Card>
       <Section>
+        <Heading>
+          OCC ID: <strong>{id}</strong>
+        </Heading>
+
         <Heading>All shared posts</Heading>
 
         <Table.Root mt="3" variant="surface">

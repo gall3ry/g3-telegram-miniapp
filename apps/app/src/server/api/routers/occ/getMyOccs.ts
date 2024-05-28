@@ -48,6 +48,10 @@ export class ReactionService {
             const reactions = (share.reactionMetadata as any)
               ?.reactions as any[];
 
+            if (!reactions) {
+              return acc;
+            }
+
             for (const [key, value] of Object.entries(reactions)) {
               if (!acc[key]) {
                 acc[key] = 0;
@@ -140,6 +144,7 @@ export const getMyOccs = protectedProcedure
     ]);
 
     const summaries = await ReactionService.getInstance().sumarizeReactions(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       occs.map((occ) => occ.id),
     );
 
