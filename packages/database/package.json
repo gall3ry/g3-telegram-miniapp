@@ -2,7 +2,8 @@
   "name": "database",
   "version": "0.0.0",
   "dependencies": {
-    "@prisma/client": "latest"
+    "@prisma/client": "latest",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "prisma": "^5.10.2",
@@ -12,9 +13,7 @@
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:migrate": "prisma migrate dev",
-    "build": "tsup",
-    "dev": "tsup --watch"
+    "db:migrate": "prisma migrate dev"
   },
   "main": "./index.ts",
   "types": "./index.ts",
