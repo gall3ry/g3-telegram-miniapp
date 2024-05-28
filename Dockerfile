@@ -70,5 +70,3 @@ COPY --from=installer /app .
 
 # TODO: Maybe use the npm script?
 CMD pnpm --filter "${APP_NAME}" run start
-# tail
-# CMD ["tail", "-f", "/dev/null"]
