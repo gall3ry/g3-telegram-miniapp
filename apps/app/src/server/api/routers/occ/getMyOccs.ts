@@ -114,7 +114,7 @@ export class ReactionService {
 export const getMyOccs = protectedProcedure
   .input(
     z.object({
-      page: z.number().default(1),
+      page: z.number().min(1).default(1),
       limit: z.number().default(10),
     }),
   )

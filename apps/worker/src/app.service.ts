@@ -30,7 +30,15 @@ export class AppService {
         ids: share.map((s) => +s.messageId),
       });
 
-      console.log(`Reactions:`, reactions);
+      // set them all to new Date()
+      await Promise.all(
+        shareList.map((s) =>
+          db.share.update({
+            where: { id: s.id },
+            data: { reactionUpdatedAt: new Date() },
+          }),
+        ),
+      );
 
       for (const [msgId, reaction] of Object.entries(reactions)) {
         const share = shareList.find((s) => s.messageId === msgId);
@@ -56,7 +64,6 @@ export class AppService {
         await db.share.update({
           where: { id: share.id },
           data: {
-            reactionUpdatedAt: new Date(),
             reactionMetadata,
             reactionCount,
           },
