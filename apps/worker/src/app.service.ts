@@ -30,6 +30,8 @@ export class AppService {
         ids: share.map((s) => +s.messageId),
       });
 
+      console.log(`Reactions:`, reactions);
+
       for (const [msgId, reaction] of Object.entries(reactions)) {
         const share = shareList.find((s) => s.messageId === msgId);
         if (!share) {
