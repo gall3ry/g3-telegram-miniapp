@@ -3,21 +3,25 @@
   "version": "0.0.0",
   "dependencies": {
     "@prisma/client": "latest",
+    "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "prisma": "^5.10.2",
-    "tsup": "^8.0.2"
+    "prisma": "^5.10.2"
   },
   "scripts": {
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "prisma": {
     "schema": "prisma/schema.prisma"
-  }
+  },
+  "type": "commonjs"
 }
