@@ -2,12 +2,11 @@ import input from 'input';
 import { groupBy, mapValues } from 'lodash-es';
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions/StringSession.js';
+import { env } from './env.js';
 
-export const apiId = 25258261;
-export const apiHash = 'ecdcb0e838175aee63d57acdbf9c76b0';
-export const stringSession = new StringSession(
-  '1BQANOTEuMTA4LjU2LjE5NQG7EH4ndUJu7FYpz68jEA/RKE017/YDig10mXNhCYtRoA11ao3oRclhVwuUS3mzQOrOdxCDW3SKQsJZHkIthehAnK0f97jzIaELlXboJyHenYMEOm1Dp7XkxY5LUjfB5k6VwW65cSDhDf6fdJTzMEr/Ka9RwqY7eBFqpr+PJx+YkLdxUc+m6MpGeOeJcYgSBgRbvitEtszvFBtK2entvRAs85iQYNwdWFvIoLQR61MFCbcULTHZoomov81+obBPCtXgNoNfdlP6dYpkJEblMi+VY4yF6XTEmWZ0iufPruI55d0muyF8dvGeJAyvmWL5T+kYGCmO2CRmyzRbj8wzthOPbQ==',
-);
+export const apiId = env.TELEGRAM_API_ID;
+export const apiHash = env.TELEGRAM_API_HASH;
+export const stringSession = new StringSession(env.TELEGRAM_STRING_SESSION);
 
 export interface Dictionary<T> {
   [index: string]: T;

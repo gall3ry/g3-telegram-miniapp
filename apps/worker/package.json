@@ -28,11 +28,13 @@
     "@repo/typescript-config": "workspace:*",
     "alchemy-sdk": "^3.3.1",
     "database": "workspace:*",
+    "dotenv": "^16.4.5",
     "input": "^1.0.1",
     "lodash-es": "^4.17.21",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "telegram": "^2.21.2"
+    "telegram": "^2.21.2",
+    "zod": "^3.23.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
