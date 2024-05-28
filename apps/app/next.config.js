@@ -7,7 +7,7 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: false,
-  transpilePackages: ["@repo/utils"],
+  transpilePackages: ["@repo/utils", "database"],
   experimental: {
     instrumentationHook: true,
   },

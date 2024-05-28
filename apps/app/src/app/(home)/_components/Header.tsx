@@ -18,10 +18,12 @@ export const Header = () => {
   return (
     <>
       <Flex justify="end" gap="2" align="center">
-        <Button size="3" variant="solid" color="lime" loading={isPending}>
-          <StarFilledIcon />
-          {isSuccess && <span>{formatNumber(data.point)}</span>}
-        </Button>
+        {isSuccess && (
+          <Button size="3" variant="solid" color="lime" loading={isPending}>
+            <StarFilledIcon />
+            <span>{formatNumber(data.point)}</span>
+          </Button>
+        )}
 
         <TonConnectButton />
       </Flex>
