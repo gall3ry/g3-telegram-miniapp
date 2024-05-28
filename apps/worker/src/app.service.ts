@@ -22,6 +22,9 @@ export class AppService {
     const groupedShare = groupBy(shareList, 'superGroupUsername');
 
     for (const [groupName, share] of Object.entries(groupedShare)) {
+      console.log(
+        `Processing group ${groupName}, share count: ${share.length}`,
+      );
       const reactions = await instance.getReactionsByIds({
         groupName: groupName,
         ids: share.map((s) => +s.messageId),

@@ -204,7 +204,7 @@ export class BotApp {
             return;
           }
 
-          const [occTemplate, occ] = await Promise.all([
+          await Promise.all([
             db.occTemplate.findUniqueOrThrow({
               where: { id: occEventId },
             }),
@@ -222,9 +222,9 @@ export class BotApp {
           const superGroupUsername = z.string().parse(message.chat.username);
 
           await Promise.all([
-            ctx.reply(
-              `Getting user data: ${occTemplate.name} (ID: ${occTemplate.id}), OCC ID: ${occ.id}`
-            ),
+            // ctx.reply(
+            //   `Getting user data: ${occTemplate.name} (ID: ${occTemplate.id}), OCC ID: ${occ.id}`
+            // ),
 
             db.share.create({
               data: {
@@ -246,7 +246,7 @@ export class BotApp {
     this._initializeCommands();
     this._initializeListeners();
 
-    console.log(`✅ Bot is running!`);
+    console.log(`[MY NODE APP] ✅ Bot is running!`);
 
     if (process.env.environment == "PRODUCTION") {
       bot
@@ -282,6 +282,9 @@ const app = express();
 app.get("/", (_req, res) => {
   res.send("Bot is running");
 });
-app.listen(process.env.PORT || 3200, () => {
-  console.log("Server is running on port 3000");
+
+const PORT = 3200;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
