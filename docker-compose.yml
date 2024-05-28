@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: .
+    restart: on-failure
+    # volumes:
+    # - ./:/webapps
+    # - ./log/:/var/log/apps
+    # ports:
+    # - 5005:8000
+    # environment:
+    # - PYTHONUNBUFFERED=true
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
+    # env_file:
+    #   - .env
+    command: tail -f /dev/null

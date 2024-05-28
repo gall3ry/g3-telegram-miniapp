@@ -16,13 +16,8 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "main": "index.js",
-  "module": "index.mjs",
-  "types": "index.d.ts",
-  "type": "commonjs",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "prisma": {
     "schema": "prisma/schema.prisma"
   }
