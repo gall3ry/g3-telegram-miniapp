@@ -129,7 +129,11 @@ export const getMyOccs = protectedProcedure
         skip: (input.page - 1) * input.limit,
         where,
         include: {
-          _count: { select: { Share: true } },
+          _count: {
+            select: {
+              Share: true,
+            },
+          },
         },
       }),
       db.occ.count({ where }),
