@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch --onSuccess \"node dist/app.js\"",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "get-string-session": "tsup ./src/scripts/get-string-session.ts --onSuccess \"node dist/get-string-session.js\""
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
