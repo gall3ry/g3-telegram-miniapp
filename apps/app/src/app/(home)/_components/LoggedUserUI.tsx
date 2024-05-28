@@ -1,5 +1,6 @@
 "use client";
 import { Button, Flex, Heading, Section, Table, Text } from "@radix-ui/themes";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 import toast from "react-hot-toast";
@@ -68,6 +69,16 @@ export const MyOCC = () => {
     page,
   });
 
+  const summarizeReaction = (reactions: Record<string, number> | undefined) => {
+    if (!reactions) {
+      return "No reactions";
+    }
+
+    return Object.entries(reactions)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(", ");
+  };
+
   return (
     <Section>
       <Heading>My OCCs</Heading>
@@ -76,7 +87,9 @@ export const MyOCC = () => {
           <Table.Row>
             <Table.ColumnHeaderCell>OCC ID</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Share Count</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Reactions</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell align="right">
+              Reactions
+            </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
@@ -85,9 +98,16 @@ export const MyOCC = () => {
             <Table.Row key={occ.id}>
               <Table.Cell>{occ.id}</Table.Cell>
               <Table.Cell>{occ._count.Share}</Table.Cell>
-              <Table.Cell>{occ.shareCount}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell align="right">
+                {summarizeReaction(occ.sumarizedReactions)}
+              </Table.Cell>
+              <Table.Cell align="right">
+                <Link href={`/occ/${occ.id}`}>
+                  <Button>View</Button>
+                </Link>
+
                 <Button
+                  ml="2"
                   onClick={() => {
                     router.push(`/occ/${occ.id}`);
                   }}
