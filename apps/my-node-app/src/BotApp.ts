@@ -1,4 +1,5 @@
 import { Prisma } from "database";
+import express from "express";
 import { Telegraf } from "telegraf";
 import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
 import { z } from "zod";
@@ -276,3 +277,11 @@ export class BotApp {
     });
   }
 }
+
+const app = express();
+app.get("/", (_req, res) => {
+  res.send("Bot is running");
+});
+app.listen(process.env.PORT || 3200, () => {
+  console.log("Server is running on port 3000");
+});

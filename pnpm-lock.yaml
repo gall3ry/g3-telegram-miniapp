@@ -168,6 +168,9 @@ importers:
       database:
         specifier: workspace:*
         version: link:../../packages/database
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
       input:
         specifier: ^1.0.1
         version: 1.0.1
@@ -184,6 +187,9 @@ importers:
         specifier: ^3.23.3
         version: 3.23.8
     devDependencies:
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.21
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
