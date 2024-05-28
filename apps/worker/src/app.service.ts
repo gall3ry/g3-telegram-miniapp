@@ -47,6 +47,10 @@ export class AppService {
 
         const [reactionMetadata] = reaction;
 
+        console.log(
+          `Updating share ${share.id} with reaction count ${reactionCount}`,
+        );
+
         await db.share.update({
           where: { id: share.id },
           data: {
