@@ -79,11 +79,6 @@ export class BotApp {
           undefined,
         ];
 
-        console.log({
-          occEventId,
-          occId,
-        });
-
         if (!occEventId || !occId) {
           return;
         }
@@ -109,17 +104,8 @@ export class BotApp {
             description: `Join OCC ${occTemplate.name}`,
             input_message_content: {
               message_text: `
-@${ctx.inlineQuery.from.username} invites you to join 
-                    
-*TIN TON 💎🐈‍⬛ THE BIGGEST GAMING COMMUNITY 👾
-                    
-🚨 Farming LAUNCH 🚨
-                    
-🚀 Play Game 🚀
-👨‍🎤 Join Clans 👩‍🎤
-🐈‍⬛ Invite Cats 🐈‍⬛
-
-💲 FARM $TINS 💲*`,
+@${ctx.inlineQuery.from.username}'s sticker
+                    `,
               link_preview_options: {
                 prefer_large_media: true,
                 prefer_small_media: false,

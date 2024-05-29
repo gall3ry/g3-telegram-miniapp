@@ -34,6 +34,7 @@
     "SKIP_ENV_VALIDATION",
     "DATABASE_URL",
     "JWT_SECRET",
-    "PORT"
+    "PORT",
+    "NEXT_PUBLIC_G3_ENV"
   ]
 }

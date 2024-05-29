@@ -1,5 +1,6 @@
 "use client";
 
+import { SDKProvider } from "@tma.js/sdk-react";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { TRPCReactProvider } from "../../trpc/react";
 import { BackendAuthProvider } from "./BackendAuthProvider";
@@ -17,7 +18,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         //   twaReturnUrl: "https://t.me/g3stgbot",
         // }}
       >
-        <BackendAuthProvider>{children}</BackendAuthProvider>
+        <SDKProvider acceptCustomStyles debug>
+          <BackendAuthProvider>{children}</BackendAuthProvider>
+        </SDKProvider>
       </TonConnectUIProvider>
     </TRPCReactProvider>
   );

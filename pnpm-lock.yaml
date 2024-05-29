@@ -44,6 +44,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.25.0
         version: 5.37.1(react@18.2.0)
+      '@tma.js/sdk-react':
+        specifier: ^2.2.1
+        version: 2.2.1(@types/react@18.2.61)(react@18.2.0)
       '@ton/crypto':
         specifier: ^3.2.0
         version: 3.2.0
@@ -3624,6 +3627,24 @@ packages:
 
   /@telegraf/types@7.1.0:
     resolution: {integrity: sha512-kGevOIbpMcIlCDeorKGpwZmdH7kHbqlk/Yj6dEpJMKEQw5lk0KVQY0OLXaCswy8GqlIVLd5625OB+rAntP9xVw==}
+    dev: false
+
+  /@tma.js/sdk-react@2.2.1(@types/react@18.2.61)(react@18.2.0):
+    resolution: {integrity: sha512-y4pQC5Wo3jTykhMitO+btBLj88QOTo1N2scT643eSbbqke9HA4XYI8IVWOaf201SmELbCt7hEXu9vdStbmFL4w==}
+    peerDependencies:
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@tma.js/sdk': 2.3.0
+      '@types/react': 18.2.61
+      react: 18.2.0
+    dev: false
+
+  /@tma.js/sdk@2.3.0:
+    resolution: {integrity: sha512-FAVpgOLkPNcS+uwS+jv8ql1tiXcfpyzYNXteN6JY76rZ4Tt0wsi0uYAyDwtmuagmkMvFUnct+ud3gTguxZ8QeQ==}
     dev: false
 
   /@ton/core@0.56.3(@ton/crypto@3.2.0):
