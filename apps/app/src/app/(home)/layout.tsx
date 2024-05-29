@@ -8,7 +8,7 @@ import {
 import { env } from "../../env";
 import { Header } from "./_components/Header";
 
-if (env.NEXT_PUBLIC_G3_ENV === "development") {
+if (typeof window !== "undefined" && env.NEXT_PUBLIC_G3_ENV === "development") {
   try {
     retrieveLaunchParams();
   } catch {

@@ -1,19 +1,22 @@
-# Create T3 App
+# Gall3ry Telegram Miniapp
 
 
 ## Run with filter
 
-```
-pnpm dev --filter app # my-node-app/worker
-```
+### App
 
 ```
-pnpm dev --filter app my-node-app
+pnpm dev --filter app 
 ```
 
-## Docker
+### Bot
 
 ```
-docker build . --target my-node-app --tag my-node-app:latest
-docker build . --target app2 --tag app2:latest
+pnpm dev --filter my-node-app
+```
+
+### Worker
+
+```
+pnpm dev --filter worker
 ```
