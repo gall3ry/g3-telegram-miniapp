@@ -4,14 +4,12 @@ import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
 import { z } from "zod";
 import { PersistentDb } from "./PersistentDb";
 import { COMMANDS, MAP_COMMAND_TO_DESCRIPTION } from "./commands";
+import { env } from "./env";
 import { db } from "./utils/db";
-
-// TODO: move to .env
-const botToken = "7162609772:AAEM7x3Kfeta5CBesezv5gdD5youN6CsnBI";
 
 export class BotApp {
   private static instance: BotApp;
-  private bot = new Telegraf(botToken);
+  private bot = new Telegraf(env.BOT_TOKEN);
 
   private constructor() {}
 
@@ -141,7 +139,6 @@ export class BotApp {
         console.error(error);
       }
     });
-
     bot.on("chosen_inline_result", async (ctx) => {
       console.log(`Received chosen inline result,`, ctx.chosenInlineResult);
 
@@ -169,7 +166,6 @@ export class BotApp {
         occId: +occId,
       });
     });
-
     bot.on("message", async (ctx) => {
       // delay 1s to make sure this callback will run after the chosen_inline_result
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -262,15 +258,3 @@ export class BotApp {
     });
   }
 }
-
-// const app = express();
-
-// app.get("/", (_req, res) => {
-//   res.send("Bot is running");
-// });
-
-// const PORT = 3200;
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });

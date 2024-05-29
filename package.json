@@ -3,13 +3,15 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "dotenv -- turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:studio": "dotenv -- turbo db:studio"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
     "turbo": "latest"

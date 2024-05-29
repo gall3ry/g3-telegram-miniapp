@@ -26,6 +26,9 @@
     "db:migrate": {
       "cache": false,
       "interactive": true
+    },
+    "db:studio": {
+      "cache": false
     }
   },
   "globalEnv": [
@@ -36,5 +39,6 @@
     "JWT_SECRET",
     "PORT",
     "NEXT_PUBLIC_G3_ENV"
-  ]
+  ],
+  "globalDotEnv": [".env"]
 }
