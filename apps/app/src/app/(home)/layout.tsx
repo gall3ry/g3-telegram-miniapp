@@ -5,6 +5,8 @@ import {
   parseInitData,
   retrieveLaunchParams,
 } from "@tma.js/sdk-react";
+import eruda from "eruda";
+import { useEffect } from "react";
 import { env } from "../../env";
 import { Header } from "./_components/Header";
 
@@ -64,6 +66,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      env.NEXT_PUBLIC_G3_ENV !== "production"
+    ) {
+      eruda.init();
+    }
+  }, []);
+
   return (
     <Container
       size="2"

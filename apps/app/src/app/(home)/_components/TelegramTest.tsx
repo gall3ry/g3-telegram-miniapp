@@ -5,13 +5,15 @@ import { useInitData, useMiniApp } from "@tma.js/sdk-react";
 export const TelegramTest = () => {
   const initData = useInitData();
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { switchInlineQuery } = useMiniApp();
+  const { switchInlineQuery, isBotInline } = useMiniApp();
 
   return (
     <>
       <Heading>Telegram Test</Heading>
 
       {initData && <Code>{JSON.stringify(initData, null, 2)}</Code>}
+
+      <p>isBotInline: {isBotInline ? "true" : "false"}</p>
 
       <Button
         onClick={() => {

@@ -1,11 +1,9 @@
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
-import "~/styles/globals.css";
-
 import { GeistSans } from "geist/font/sans";
-
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
+import "~/styles/globals.css";
 import { Providers } from "./_providers";
 
 export const metadata = {
