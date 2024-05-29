@@ -1,9 +1,9 @@
 "use client";
-import { Code, Heading, Text } from "@radix-ui/themes";
-import { useInitData } from "@tma.js/sdk-react";
+import { Text } from "@radix-ui/themes";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { MyOCC } from "./MyOCC";
 import { OCCCreation } from "./OCCCreation";
+import { TelegramTest } from "./TelegramTest";
 
 export function LoggedUserUI() {
   const { isAuthenticated } = useIsAuthenticated();
@@ -22,15 +22,3 @@ export function LoggedUserUI() {
     </div>
   );
 }
-
-export const TelegramTest = () => {
-  const initData = useInitData();
-
-  return (
-    <>
-      <Heading>Telegram Test</Heading>
-
-      {initData && <Code>{JSON.stringify(initData, null, 2)}</Code>}
-    </>
-  );
-};
