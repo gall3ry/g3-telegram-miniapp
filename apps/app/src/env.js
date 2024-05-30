@@ -23,6 +23,15 @@ export const env = createEnv({
     NEXT_PUBLIC_G3_ENV: z
       .enum(["development", "staging", "production"])
       .default("development"),
+    NEXT_PUBLIC_TWA_RETURN_URL: z
+      .string()
+      .url()
+      .regex(/t.me\/.+/)
+      .default("https://t.me/g3stg1bot/test55"),
+    NEXT_PUBLIC_TWA_MANIFEST_URL: z
+      .string()
+      .url()
+      .default("https://staging.miniapp.gall3ry.io/tonconnect-manifest.json"),
   },
 
   /**
@@ -34,6 +43,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     JWT_SECRET: process.env.JWT_SECRET,
     NEXT_PUBLIC_G3_ENV: process.env.NEXT_PUBLIC_G3_ENV,
+    NEXT_PUBLIC_TWA_RETURN_URL: process.env.NEXT_PUBLIC_TWA_RETURN_URL,
+    NEXT_PUBLIC_TWA_MANIFEST_URL: process.env.NEXT_PUBLIC_TWA_MANIFEST_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

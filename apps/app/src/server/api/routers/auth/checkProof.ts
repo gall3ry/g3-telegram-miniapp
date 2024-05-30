@@ -32,7 +32,13 @@ class CheckProofService {
       });
     }
 
-    const payloadToken = proof.payload;
+    const { payload: payloadToken } =
+      await db.mapTonProofToPayload.findUniqueOrThrow({
+        where: {
+          id: proof.payload,
+        },
+      });
+
     if (!(await verifyToken(payloadToken))) {
       throw new TRPCError({
         code: "BAD_REQUEST",

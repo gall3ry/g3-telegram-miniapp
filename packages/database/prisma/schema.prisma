@@ -104,3 +104,11 @@ model Share {
     reactionUpdatedAt DateTime?
     reactionCount     Int?
 }
+
+model MapTonProofToPayload {
+    id        String   @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    payload String
+}

@@ -2,20 +2,12 @@
 
 import { SDKProvider } from "@tma.js/sdk-react";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { env } from "../../env";
 import { TRPCReactProvider } from "../../trpc/react";
 import { BackendAuthProvider } from "./BackendAuthProvider";
-import { MiniappProvider } from "./MiniappProvider";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  const manifestUrl = useMemo(() => {
-    if (typeof window === "undefined") {
-      return "";
-    }
-    return new URL("tonconnect-manifest.json", window.location.href).toString();
-  }, []);
-
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -27,18 +19,17 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <TRPCReactProvider>
-      <SDKProvider acceptCustomStyles debug>
-        <TonConnectUIProvider
-          manifestUrl={manifestUrl}
-          // actionsConfiguration={{
-          //   twaReturnUrl: "https://t.me/g3stgbot",
-          // }}
-        >
-          <MiniappProvider>
-            <BackendAuthProvider>{children}</BackendAuthProvider>
-          </MiniappProvider>
-        </TonConnectUIProvider>
-      </SDKProvider>
+      <TonConnectUIProvider
+        manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}
+        actionsConfiguration={{
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          twaReturnUrl: env.NEXT_PUBLIC_TWA_RETURN_URL as any,
+        }}
+      >
+        <SDKProvider acceptCustomStyles debug>
+          <BackendAuthProvider>{children}</BackendAuthProvider>
+        </SDKProvider>
+      </TonConnectUIProvider>
     </TRPCReactProvider>
   );
 };

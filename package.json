@@ -7,6 +7,8 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:studio": "dotenv -- turbo db:studio",
+    "db:migrate": "dotenv -- turbo db:migrate",
+    "db:migrate:reset": "dotenv -- turbo db:migrate:reset",
     "commit": "cz"
   },
   "devDependencies": {

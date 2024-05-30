@@ -20,8 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
         <Providers>
+          <Script src="https://telegram.org/js/telegram-web-app.js"></Script>
+
           <Toaster />
           <Theme>{children}</Theme>
         </Providers>

@@ -1,18 +1,17 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
 import { useTonConnectUI } from "@tonconnect/ui-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { api } from "../../trpc/react";
-import useInterval from "../_hooks/useInterval";
 import { useAuth, useAuthHydrated } from "./useAuth";
 
-const payloadTTLMS = 1000 * 60 * 9;
+const payloadTTLMS = 1000 * 60 * 9; // 9 minutes
 
 export const BackendAuthProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const firstProofLoading = useRef<boolean>(true);
   const [tonConnectUI] = useTonConnectUI();
   const { reset, setAccessToken, accessToken } = useAuth();
   const utils = api.useUtils();
@@ -27,38 +26,38 @@ export const BackendAuthProvider = ({
   );
   const { mutateAsync: checkProof } = api.auth.checkProof.useMutation();
 
-  const recreateProofPayload = useCallback(async () => {
-    if (!isHydrated) {
-      return;
-    }
-
-    if (firstProofLoading.current) {
+  useQuery({
+    queryKey: [
+      "custom",
+      "recreateProofPayload",
+      {
+        isHydrated,
+        tonConnectUI,
+      },
+    ],
+    queryFn: async () => {
       tonConnectUI.setConnectRequestParameters({ state: "loading" });
-      firstProofLoading.current = false;
-    }
+      const { data } = await fetchPayload();
+      if (!data) {
+        throw new Error("Payload is missing");
+      }
 
-    const { data } = await fetchPayload();
-    if (!data) {
-      throw new Error("Payload is missing");
-    }
+      if (data) {
+        tonConnectUI.setConnectRequestParameters({
+          state: "ready",
+          value: {
+            tonProof: data.tonProof,
+          },
+        });
+      } else {
+        tonConnectUI.setConnectRequestParameters(null);
+      }
 
-    if (data) {
-      tonConnectUI.setConnectRequestParameters({
-        state: "ready",
-        value: data,
-      });
-    } else {
-      tonConnectUI.setConnectRequestParameters(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tonConnectUI, firstProofLoading, isHydrated]);
-
-  if (firstProofLoading.current) {
-    void recreateProofPayload();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  useInterval(recreateProofPayload, payloadTTLMS);
+      return data;
+    },
+    enabled: isHydrated && !!tonConnectUI,
+    refetchInterval: payloadTTLMS,
+  });
 
   useEffect(() => {
     if (!tonConnectUI || !isHydrated) {

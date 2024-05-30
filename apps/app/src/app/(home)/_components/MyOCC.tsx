@@ -1,8 +1,8 @@
 "use client";
 import { Button, Heading, Section, Table } from "@radix-ui/themes";
+import { postEvent } from "@tma.js/sdk";
 import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
-import toast from "react-hot-toast";
 import { FaTelegram } from "react-icons/fa6";
 import { api } from "../../../trpc/react";
 import { useMiniApp } from "../../_providers/MiniappProvider";
@@ -63,20 +63,10 @@ export const MyOCC = () => {
                   ml="2"
                   variant="outline"
                   onClick={() => {
-                    try {
-                      miniApp?.switchInlineQuery(
-                        `${occ.occTemplateId}-${occ.id}`,
-                        ["channels", "users", "groups"],
-                      );
-                    } catch (error) {
-                      if (
-                        error instanceof Error &&
-                        error.message ===
-                          "Method is unsupported because Mini App should be launched in inline mode."
-                      ) {
-                        toast.error(error.message);
-                      }
-                    }
+                    postEvent("web_app_switch_inline_query", {
+                      query: `${occ.occTemplateId}-${occ.id}`,
+                      chat_types: ["channels", "groups", "users"],
+                    });
                   }}
                 >
                   <FaTelegram />

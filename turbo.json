@@ -24,8 +24,10 @@
       "cache": false
     },
     "db:migrate": {
-      "cache": false,
-      "interactive": true
+      "cache": false
+    },
+    "db:migrate:reset": {
+      "cache": false
     },
     "db:studio": {
       "cache": false
@@ -38,7 +40,9 @@
     "DATABASE_URL",
     "JWT_SECRET",
     "PORT",
-    "NEXT_PUBLIC_G3_ENV"
+    "NEXT_PUBLIC_G3_ENV",
+    "NEXT_PUBLIC_TWA_RETURN_URL",
+    "NEXT_PUBLIC_TWA_MANIFEST_URL"
   ],
   "globalDotEnv": [".env"]
 }

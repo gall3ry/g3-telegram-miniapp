@@ -53,9 +53,12 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.25.0
         version: 5.37.1(react@18.2.0)
+      '@tma.js/sdk':
+        specifier: ^2.4.0
+        version: 2.4.0
       '@tma.js/sdk-react':
-        specifier: ^2.2.1
-        version: 2.2.1(@types/react@18.2.61)(react@18.2.0)
+        specifier: ^2.2.2
+        version: 2.2.2(@types/react@18.2.61)(react@18.2.0)
       '@ton/crypto':
         specifier: ^3.2.0
         version: 3.2.0
@@ -69,7 +72,7 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       '@tonconnect/ui-react':
-        specifier: ^2.0.2
+        specifier: ^2.0.0-beta.2
         version: 2.0.2(react-dom@18.2.0)(react@18.2.0)
       '@trpc/client':
         specifier: next
@@ -80,6 +83,9 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.374
+      '@twa-dev/sdk':
+        specifier: ^6.4.2
+        version: 6.9.2(react@18.2.0)
       database:
         specifier: workspace:*
         version: link:../../packages/database
@@ -122,6 +128,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      short-unique-id:
+        specifier: ^5.2.0
+        version: 5.2.0
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -3709,8 +3718,8 @@ packages:
     resolution: {integrity: sha512-kGevOIbpMcIlCDeorKGpwZmdH7kHbqlk/Yj6dEpJMKEQw5lk0KVQY0OLXaCswy8GqlIVLd5625OB+rAntP9xVw==}
     dev: false
 
-  /@tma.js/sdk-react@2.2.1(@types/react@18.2.61)(react@18.2.0):
-    resolution: {integrity: sha512-y4pQC5Wo3jTykhMitO+btBLj88QOTo1N2scT643eSbbqke9HA4XYI8IVWOaf201SmELbCt7hEXu9vdStbmFL4w==}
+  /@tma.js/sdk-react@2.2.2(@types/react@18.2.61)(react@18.2.0):
+    resolution: {integrity: sha512-zu0eEbZ6eAOwpJuR0dKrYYMrKNcx4xXMeC/7ZwmuxQldb5xwfH9HG4y/62Hs1br3nbidg6TPrkH5YHLxQRisgQ==}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0
@@ -3718,13 +3727,13 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@tma.js/sdk': 2.3.0
+      '@tma.js/sdk': 2.4.0
       '@types/react': 18.2.61
       react: 18.2.0
     dev: false
 
-  /@tma.js/sdk@2.3.0:
-    resolution: {integrity: sha512-FAVpgOLkPNcS+uwS+jv8ql1tiXcfpyzYNXteN6JY76rZ4Tt0wsi0uYAyDwtmuagmkMvFUnct+ud3gTguxZ8QeQ==}
+  /@tma.js/sdk@2.4.0:
+    resolution: {integrity: sha512-cSJClNfoI7S0mC7b7RJQwaUCeR83UahqNG4A8kmCO4SeFFYsOX/XXXMQN0NilcQA4BfqwTMLPUbi/dV7r6b7BQ==}
     dev: false
 
   /@ton/core@0.56.3(@ton/crypto@3.2.0):
@@ -3865,6 +3874,19 @@ packages:
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
+
+  /@twa-dev/sdk@6.9.2(react@18.2.0):
+    resolution: {integrity: sha512-xLqqtJfRtFyvM8arG8eoAtdY2GTdVzDdl64M3blHheY2OqON5QTG+WYUs5EZ+gPFXwxDxRCYTDbOJv1gycJqdA==}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      '@twa-dev/types': 6.9.0
+      react: 18.2.0
+    dev: false
+
+  /@twa-dev/types@6.9.0:
+    resolution: {integrity: sha512-hBkIuJgVtkLAPPhKsNfgyBpgS+15spzUScy5jgpfPJPqXPaaUVDTaWHbeEUU+lUgHmryeQjWyz+UjS7987Pyaw==}
+    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -10761,6 +10783,11 @@ packages:
       interpret: 1.4.0
       rechoir: 0.6.2
     dev: true
+
+  /short-unique-id@5.2.0:
+    resolution: {integrity: sha512-cMGfwNyfDZ/nzJ2k2M+ClthBIh//GlZl1JEf47Uoa9XR11bz8Pa2T2wQO4bVrRdH48LrIDWJahQziKo3MjhsWg==}
+    hasBin: true
+    dev: false
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
