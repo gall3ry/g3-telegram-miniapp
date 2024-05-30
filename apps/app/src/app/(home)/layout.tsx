@@ -5,10 +5,16 @@ import {
   parseInitData,
   retrieveLaunchParams,
 } from "@tma.js/sdk-react";
-import { BackButton } from "@twa-dev/sdk/react";
-import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { env } from "../../env";
 import { Header } from "./_components/Header";
+const BackButton = dynamic(
+  () => import("@twa-dev/sdk/react").then((mod) => mod.BackButton),
+  {
+    ssr: false,
+  },
+);
 
 if (typeof window !== "undefined" && env.NEXT_PUBLIC_G3_ENV === "development") {
   try {
@@ -66,7 +72,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
+  const pathname = usePathname();
   return (
     <Container
       size="2"
@@ -78,7 +84,7 @@ export default function RootLayout({
     >
       <Header />
 
-      {router.pathname !== "/" && <BackButton />}
+      {pathname !== "/" && <BackButton />}
 
       <Box
         className="bg-white"
