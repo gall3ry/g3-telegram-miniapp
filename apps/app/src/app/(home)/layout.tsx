@@ -5,6 +5,8 @@ import {
   parseInitData,
   retrieveLaunchParams,
 } from "@tma.js/sdk-react";
+import { BackButton } from "@twa-dev/sdk/react";
+import { useRouter } from "next/router";
 import { env } from "../../env";
 import { Header } from "./_components/Header";
 
@@ -64,6 +66,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   return (
     <Container
       size="2"
@@ -74,6 +77,8 @@ export default function RootLayout({
       pt="3"
     >
       <Header />
+
+      {router.pathname !== "/" && <BackButton />}
 
       <Box
         className="bg-white"
