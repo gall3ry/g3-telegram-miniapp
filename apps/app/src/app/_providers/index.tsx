@@ -22,8 +22,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       <TonConnectUIProvider
         manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}
         actionsConfiguration={{
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          twaReturnUrl: env.NEXT_PUBLIC_TWA_RETURN_URL as any,
+          twaReturnUrl:
+            env.NEXT_PUBLIC_TWA_RETURN_URL as `${string}://${string}`,
         }}
       >
         <SDKProvider acceptCustomStyles debug>

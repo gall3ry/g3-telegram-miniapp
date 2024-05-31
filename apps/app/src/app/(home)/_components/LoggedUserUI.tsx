@@ -1,9 +1,7 @@
 "use client";
 import { Text } from "@radix-ui/themes";
 import { useIsAuthenticated } from "../../_providers/useAuth";
-import { MyOCC } from "./MyOCC";
-import { OCCCreation } from "./OCCCreation";
-import { TelegramTest } from "./TelegramTest";
+import { Top } from "./Top";
 
 export function LoggedUserUI() {
   const { isAuthenticated } = useIsAuthenticated();
@@ -14,11 +12,7 @@ export function LoggedUserUI() {
 
   return (
     <div>
-      {/* <RewardLogList /> */}
-      {/* <FormAnimate /> */}
-      <OCCCreation />
-      <TelegramTest />
-      <MyOCC />
+      <Top />
     </div>
   );
 }

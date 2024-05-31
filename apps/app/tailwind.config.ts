@@ -6,7 +6,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        sans: ["var(--font-kanit)", ...fontFamily.sans],
+      },
+    },
+    container: {
+      center: true,
+      screens: {
+        sm: "448px",
       },
     },
   },

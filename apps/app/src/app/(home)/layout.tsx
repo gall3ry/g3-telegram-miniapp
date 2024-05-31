@@ -1,5 +1,5 @@
 "use client";
-import { Box, Container } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import {
   mockTelegramEnv,
   parseInitData,
@@ -8,6 +8,7 @@ import {
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { env } from "../../env";
+import { Footer } from "./_components/Footer";
 import { Header } from "./_components/Header";
 const BackButton = dynamic(
   () => import("@twa-dev/sdk/react").then((mod) => mod.BackButton),
@@ -74,28 +75,30 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   return (
-    <Container
-      size="2"
+    <Box
+      className="h-screen xl:py-2"
       style={{
         background: "var(--black-a10)",
       }}
-      minHeight="100vh"
-      pt="3"
     >
-      <Header />
+      <div className="container h-full overflow-hidden">
+        <Box
+          className="h-full max-h-screen overflow-hidden bg-white xl:rounded-lg"
+          position="relative"
+        >
+          {pathname !== "/" && <BackButton />}
 
-      {pathname !== "/" && <BackButton />}
+          <div className="p-4">
+            <Header />
+          </div>
 
-      <Box
-        className="bg-white"
-        p="4"
-        my="4"
-        style={{
-          borderRadius: "var(--radius-4)",
-        }}
-      >
-        {children}
-      </Box>
-    </Container>
+          <Box className="max-h-[calc(100vh-100px)] flex-grow overflow-y-auto p-4 pb-24">
+            {children}
+          </Box>
+
+          <Footer />
+        </Box>
+      </div>
+    </Box>
   );
 }
