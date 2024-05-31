@@ -4,6 +4,7 @@ import { useIsAuthenticated } from "../../_providers/useAuth";
 import { MyOCC } from "./MyOCC";
 import { OCCCreation } from "./OCCCreation";
 import { TelegramTest } from "./TelegramTest";
+import { MintOCC } from "./MintOCC";
 
 export function LoggedUserUI() {
   const { isAuthenticated } = useIsAuthenticated();
@@ -16,6 +17,7 @@ export function LoggedUserUI() {
     <div>
       {/* <RewardLogList /> */}
       {/* <FormAnimate /> */}
+      <MintOCC />
       <OCCCreation />
       <TelegramTest />
       <MyOCC />
