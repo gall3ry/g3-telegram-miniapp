@@ -1,8 +1,8 @@
 "use client";
-import { Text, Heading, Button, Flex, Link } from "@radix-ui/themes";
-import { useTonConnect } from "../../_hooks/useTonConnect";
-import { useNftContract } from "../../_hooks/useNftContract";
+import { Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import { CHAIN } from "@tonconnect/protocol";
+import { useNftContract } from "../../_hooks/useNftContract";
+import { useTonConnect } from "../../_hooks/useTonConnect";
 
 export function MintOCC() {
   const { connected } = useTonConnect();
@@ -22,6 +22,7 @@ export function MintOCC() {
           {address}
         </Link>
       </Text>
+
       <Button
         type="submit"
         disabled={!connected}
@@ -29,7 +30,8 @@ export function MintOCC() {
           sendMintNft({
             name: "Name Of NFT",
             description: "NFT Description",
-            image: "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
+            image:
+              "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
           });
         }}
       >
