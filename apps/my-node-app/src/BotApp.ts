@@ -90,7 +90,7 @@ export class BotApp {
                 prefer_large_media: true,
                 prefer_small_media: false,
                 show_above_text: false,
-                url: "https://m3mefest.gall3ry.io/images/thumbnail.png",
+                url: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTQydmU1ZmQ2ejcwY2h1cXp4ODg3eWNvaGc4YjlhMjNldnBzbmF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/njXxKcoVWY5hiEBS2w/giphy.gif",
               },
               parse_mode: "MarkdownV2",
             } as InputTextMessageContent,

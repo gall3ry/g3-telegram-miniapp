@@ -9,7 +9,8 @@
     "db:studio": "dotenv -- turbo db:studio",
     "db:migrate": "dotenv -- turbo db:migrate",
     "db:migrate:reset": "dotenv -- turbo db:migrate:reset",
-    "commit": "cz"
+    "commit": "cz",
+    "turbo": "dotenv -- turbo run"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
