@@ -16,11 +16,11 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "commitizen": "^4.3.0",
-    "cz-emoji": "1.3.2-canary.2",
     "dotenv-cli": "^7.4.2",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
-    "turbo": "latest"
+    "turbo": "latest",
+    "git-cz": "^4.9.0"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
@@ -28,7 +28,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "cz-emoji"
+      "path": "git-cz"
     }
   }
 }

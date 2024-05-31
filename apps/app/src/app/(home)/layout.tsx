@@ -76,29 +76,22 @@ export default function RootLayout({
   const pathname = usePathname();
   return (
     <Box
-      className="h-screen xl:py-2"
+      className="xl:py-2"
       style={{
         background: "var(--black-a10)",
       }}
     >
-      <div className="container h-full overflow-hidden">
-        <Box
-          className="h-full max-h-screen overflow-hidden bg-white xl:rounded-lg"
-          position="relative"
-        >
-          {pathname !== "/" && <BackButton />}
+      <Box className="container bg-white xl:rounded-lg" position="relative">
+        {pathname !== "/" && <BackButton />}
 
-          <div className="p-4">
-            <Header />
-          </div>
+        <div className="p-4">
+          <Header />
+        </div>
 
-          <Box className="max-h-[calc(100vh-100px)] flex-grow overflow-y-auto p-4 pb-24">
-            {children}
-          </Box>
+        <Box className="min-h-[90vh] flex-grow p-4">{children}</Box>
 
-          <Footer />
-        </Box>
-      </div>
+        <Footer />
+      </Box>
     </Box>
   );
 }

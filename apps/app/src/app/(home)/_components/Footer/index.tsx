@@ -29,7 +29,7 @@ export const Footer = () => {
   ];
 
   return (
-    <div className="absolute inset-x-0 bottom-0 z-50 flex h-20 bg-white shadow-2xl">
+    <div className="sticky inset-x-0 bottom-0 z-50 flex h-20 bg-white shadow-2xl">
       {items.map((item) => {
         const Icon = item.icon;
 
