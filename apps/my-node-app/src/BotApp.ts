@@ -12,7 +12,7 @@ export class BotApp {
   private static instance: BotApp;
   private bot = new Telegraf(env.BOT_TOKEN);
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): BotApp {
     if (!BotApp.instance) {
@@ -34,7 +34,20 @@ export class BotApp {
       )
     );
     bot.command(COMMANDS.start, async (ctx) => {
-      await ctx.reply(`Hello @${ctx.from?.username}!`);
+      await ctx.reply("👏 Welcome to the OCC!", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Mint OCC",
+                web_app: {
+                  url: "https://phantomk0308.github.io/g3-twa-epic/"
+                },
+              },
+            ],
+          ],
+        },
+      });
     });
   }
 
