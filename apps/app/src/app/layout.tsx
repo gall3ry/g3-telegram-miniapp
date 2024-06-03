@@ -1,6 +1,12 @@
 import { Theme } from "@radix-ui/themes";
 import "~/styles/globals.css";
 
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/mousewheel";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 import { cn } from "@repo/utils";
 import { Kanit } from "next/font/google";
 import Script from "next/script";

@@ -1,4 +1,5 @@
 import { Button } from "@radix-ui/themes";
+import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { QuestItem } from "./QuestItem";
 
 const Page = () => {
@@ -48,4 +49,12 @@ const Page = () => {
   );
 };
 
-export default Page;
+function PageWrapper() {
+  return (
+    <LoggedUserOnly>
+      <Page />
+    </LoggedUserOnly>
+  );
+}
+
+export default PageWrapper;

@@ -32,6 +32,10 @@ export const env = createEnv({
       .string()
       .url()
       .default("https://staging.miniapp.gall3ry.io/tonconnect-manifest.json"),
+    NEXT_PUBLIC_POSTHOG_KEY: z
+      .string()
+      .default("phc_iWwszv1jODV18AKPZcqRmXql2B5B4eOqJ3gmnRWMZmC"),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().default("https://us.i.posthog.com"),
   },
 
   /**
@@ -45,6 +49,8 @@ export const env = createEnv({
     NEXT_PUBLIC_G3_ENV: process.env.NEXT_PUBLIC_G3_ENV,
     NEXT_PUBLIC_TWA_RETURN_URL: process.env.NEXT_PUBLIC_TWA_RETURN_URL,
     NEXT_PUBLIC_TWA_MANIFEST_URL: process.env.NEXT_PUBLIC_TWA_MANIFEST_URL,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -65,4 +65,10 @@ export class AppService {
       }
     }
   }
+
+  @Cron('0 0 * * *') // At 00:00
+  async resetMapping() {
+    const { count } = await db.mapTonProofToPayload.deleteMany({});
+    this.logger.debug('[resetMapping] Deleted %d mappings', count);
+  }
 }

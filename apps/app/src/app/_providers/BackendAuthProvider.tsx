@@ -1,9 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import { useInitData } from "@tma.js/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect } from "react";
 import { api } from "../../trpc/react";
-import { useAuth, useAuthHydrated } from "./useAuth";
+import { useAuth, useAuthHydrated, useIsAuthenticated } from "./useAuth";
 
 const payloadTTLMS = 1000 * 60 * 9; // 9 minutes
 
@@ -24,7 +25,29 @@ export const BackendAuthProvider = ({
       enabled: false,
     },
   );
+  const { isAuthenticated } = useIsAuthenticated();
+  const { data, isSuccess } = api.auth.getCurrentUser.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
   const { mutateAsync: checkProof } = api.auth.checkProof.useMutation();
+  const { mutateAsync: updateDisplayName } =
+    api.auth.updateDisplayName.useMutation();
+  const initData = useInitData(true);
+
+  useEffect(() => {
+    if (isSuccess && initData) {
+      if (!initData?.user?.username) {
+        throw new Error("Username is missing");
+      }
+
+      if (!data.displayName) {
+        void updateDisplayName({ displayName: initData.user.username }).then(
+          () => utils.auth.invalidate(),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess, initData]);
 
   useQuery({
     queryKey: [

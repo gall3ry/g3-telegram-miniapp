@@ -6,6 +6,13 @@ class GetCurrentUserService {
   static readonly _defaultSelectUser = {
     id: true,
     point: true,
+    displayName: true,
+    avatarUrl: true,
+    _count: {
+      select: {
+        Occ: true,
+      },
+    },
   } satisfies Prisma.UserSelect;
 }
 

@@ -8,7 +8,9 @@ datasource db {
 }
 
 model User {
-    id Int @id @default(autoincrement())
+    id          Int     @id @default(autoincrement())
+    displayName String?
+    avatarUrl   String?
 
     point      Int          @default(0)
     RewardLogs RewardLogs[]
@@ -21,7 +23,8 @@ model OccTemplate {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name String
+    name        String
+    description String?
 
     Rewards Reward[]
     Occ     Occ[]

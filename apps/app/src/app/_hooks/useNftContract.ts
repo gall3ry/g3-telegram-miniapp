@@ -33,12 +33,14 @@ export function useNftContract() {
   return {
     address: nftContract?.address.toString(),
     sendMintNft: (args: mintArgs) => {
-      return nftContract?.sendMintNft(sender, {
+      if (!nftContract) throw new Error("Contract not initialized");
+
+      return nftContract.sendMintNft(sender, {
         value: toNano("0.02"),
         queryId: randomSeed,
         amount: toNano("0.014"),
         itemIndex: 0,
-        itemOwnerAddress: sender.address!!,
+        itemOwnerAddress: sender.address!,
         itemContent: setItemContentCell({
           name: args.name,
           description: args.description,

@@ -1,9 +1,21 @@
 "use client";
+import { cn } from "@repo/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { create } from "zustand";
 import { IconCreate } from "./IconCreate";
 import { IconQuests } from "./IconQuest";
 import { IconTrending } from "./IconTrending";
+
+type Footer = {
+  footer: React.ReactNode;
+  setFooter: (footer: React.ReactNode) => void;
+};
+
+export const useFooter = create<Footer>()((set) => ({
+  footer: null,
+  setFooter: (footer) => set({ footer }),
+}));
 
 export const Footer = () => {
   const pathname = usePathname();
@@ -27,29 +39,36 @@ export const Footer = () => {
       url: "/quests",
     },
   ];
+  const { footer } = useFooter();
 
   return (
-    <div className="sticky inset-x-0 bottom-0 z-50 flex h-20 bg-white shadow-2xl">
-      {items.map((item) => {
-        const Icon = item.icon;
+    footer ?? (
+      <footer
+        className={cn(
+          "sticky inset-x-0 bottom-0 z-50 flex h-20 bg-white shadow-2xl",
+        )}
+      >
+        {items.map((item) => {
+          const Icon = item.icon;
 
-        return (
-          <Link
-            key={item.url}
-            className="flex flex-1 flex-col items-center justify-center"
-            href={item.url}
-          >
-            <div className="size-8">
-              <Icon isActive={!!pathname.match(item.pattern)} />
-            </div>
-            <div className="mt-0.5">
-              <div className="w-[72px] text-center text-xs font-bold leading-[18px] text-slate-700">
-                {item.title}
+          return (
+            <Link
+              key={item.url}
+              className="flex flex-1 flex-col items-center justify-center"
+              href={item.url}
+            >
+              <div className="size-8">
+                <Icon isActive={!!pathname.match(item.pattern)} />
               </div>
-            </div>
-          </Link>
-        );
-      })}
-    </div>
+              <div className="mt-0.5">
+                <div className="w-[72px] text-center text-xs font-bold leading-[18px] text-slate-700">
+                  {item.title}
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </footer>
+    )
   );
 };

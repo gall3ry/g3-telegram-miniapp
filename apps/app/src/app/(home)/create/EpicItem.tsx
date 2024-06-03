@@ -1,11 +1,30 @@
 import { Avatar, Button } from "@radix-ui/themes";
+import { cn } from "@repo/utils";
 import Link from "next/link";
 
-export const EpicItem = () => {
+export const EpicItem = ({
+  name,
+  description,
+  occMinted,
+  hasYouMinted,
+  href,
+}: {
+  name: string;
+  description?: string | null;
+  occMinted: number;
+  hasYouMinted: boolean;
+  href: string;
+}) => {
   return (
     <Link
-      className="relative flex h-[132px] gap-4 rounded-xl bg-[#F8FFB7] p-4 transition hover:bg-opacity-70"
-      href="#"
+      className={cn(
+        "relative flex h-[132px] gap-4 rounded-xl p-4 transition hover:bg-opacity-70",
+        "bg-[#F2F6F9]",
+        {
+          "bg-[#F8FFB7]": hasYouMinted,
+        },
+      )}
+      href={href}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -14,18 +33,24 @@ export const EpicItem = () => {
         alt="epic"
       />
 
-      <div className="grow">
+      <div className="flex grow flex-col">
         <div className="flex items-center justify-between">
-          <div className="text-xl font-bold leading-7 text-slate-900">GM!</div>
-
-          <Button>Minted</Button>
-        </div>
-
-        <div className="mt-1.5">
-          <div className="text-sm font-light leading-tight tracking-tight text-slate-500">
-            Epic template description details goes here.
+          <div className="text-xl font-bold leading-7 text-slate-900">
+            {name}
           </div>
+
+          {hasYouMinted && <Button>Minted</Button>}
         </div>
+
+        {description && (
+          <div className="mt-1.5">
+            <div className="text-sm font-light leading-tight tracking-tight text-slate-500">
+              {description}
+            </div>
+          </div>
+        )}
+
+        <div className="flex-1"></div>
 
         <div className="mt-2.5">
           <div className="flex h-6 items-center gap-2">
@@ -42,7 +67,7 @@ export const EpicItem = () => {
             </div>
 
             <div className="text-base font-medium leading-normal tracking-tight text-slate-900">
-              {Intl.NumberFormat().format(4372)} minted
+              {Intl.NumberFormat().format(occMinted)} minted
             </div>
           </div>
         </div>

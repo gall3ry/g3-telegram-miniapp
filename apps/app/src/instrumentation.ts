@@ -1,3 +1,4 @@
+import { type Prisma } from "database";
 import { db } from "./server/db";
 
 export async function register() {
@@ -5,19 +6,18 @@ export async function register() {
 }
 
 export async function initializeMockOccEvent() {
-  const id = 99_999;
-  const name = "Demo OCC Event";
+  const params = {
+    id: 99_999,
+    name: "Demo OCC Event",
+  } satisfies Prisma.OccTemplateUncheckedCreateInput;
 
   await db.occTemplate.upsert({
     where: {
-      id,
+      id: params.id,
     },
-    create: {
-      id,
-      name,
-    },
+    create: params,
     update: {},
   });
 
-  console.log(`🌲 ${name} applied`);
+  console.log(`🌲 ${params.name} applied`);
 }

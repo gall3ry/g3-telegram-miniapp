@@ -1,41 +1,39 @@
 "use client";
-import { Avatar, DropdownMenu, Skeleton } from "@radix-ui/themes";
-import { useTonConnectUI } from "@tonconnect/ui-react";
-import toast from "react-hot-toast";
+import { Avatar, DropdownMenu } from "@radix-ui/themes";
+import Link from "next/link";
 import { z } from "zod";
 import { api } from "../../../../trpc/react";
 import { useIsAuthenticated } from "../../../_providers/useAuth";
-import { IconPoints } from "../../_icons/IconPoints";
 
 const pointSchema = z.number().nonnegative();
 
 function UserMenu() {
-  const [tonConnectUI] = useTonConnectUI();
+  const { isAuthenticated } = useIsAuthenticated();
+  const { data: user } = api.auth.getCurrentUser.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Avatar
-          className="h-10 w-10 rounded-[40px] border-2 border-[#DAF200]"
-          src="https://picsum.photos/200/200"
-          fallback="A"
-          alt="avatar"
-        />
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Content align="end">
-        <DropdownMenu.Item
-          onClick={() => {
-            tonConnectUI.disconnect().catch(() => {
-              toast.error("Failed to disconnect");
-            });
-          }}
-          color="red"
+    user?.displayName && (
+      <DropdownMenu.Root>
+        <Link
+          href="/profile"
+          className="flex cursor-pointer items-center gap-3"
         >
-          Logout
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+          <div className="flex items-center gap-3">
+            <div className="text-right text-xl font-bold text-slate-900">
+              {user.displayName}
+            </div>
+            <Avatar
+              className="h-10 w-10 rounded-[40px] border-2 border-[#DAF200]"
+              src="https://picsum.photos/200/200"
+              fallback="A"
+              alt="avatar"
+            />
+          </div>
+        </Link>
+      </DropdownMenu.Root>
+    )
   );
 }
 
@@ -48,7 +46,7 @@ export function LoggedButton() {
 
   return (
     <div className="flex items-center gap-3">
-      <div className="flex items-center gap-1.5">
+      {/* <div className="flex items-center gap-1.5">
         <div className="size-6">
           <IconPoints />
         </div>
@@ -58,7 +56,7 @@ export function LoggedButton() {
             {success && Intl.NumberFormat("en-US").format(point)}
           </div>
         </Skeleton>
-      </div>
+      </div> */}
 
       <UserMenu />
     </div>

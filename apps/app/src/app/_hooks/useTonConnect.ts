@@ -1,6 +1,6 @@
-import { CHAIN } from "@tonconnect/protocol";
-import { Sender, SenderArguments } from "ton-core";
+import { type CHAIN } from "@tonconnect/protocol";
 import { useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
+import { type Sender, type SenderArguments } from "ton-core";
 
 export function useTonConnect(): {
   sender: Sender;
@@ -14,7 +14,7 @@ export function useTonConnect(): {
   return {
     sender: {
       send: async (args: SenderArguments) => {
-        tonConnectUI.sendTransaction({
+        void tonConnectUI.sendTransaction({
           messages: [
             {
               address: args.to.toString(),

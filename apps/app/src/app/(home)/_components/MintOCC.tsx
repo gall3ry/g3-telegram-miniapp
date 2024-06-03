@@ -10,7 +10,7 @@ export function MintOCC() {
   const { network } = useTonConnect();
 
   return (
-    <Flex direction="column" gap="4">
+    <Flex direction="column" gap="4" mt="4">
       <Heading>MintOCC</Heading>
       <Text>
         Contract Address:
@@ -27,7 +27,7 @@ export function MintOCC() {
         type="submit"
         disabled={!connected}
         onClick={async () => {
-          sendMintNft({
+          void sendMintNft({
             name: "Name Of NFT",
             description: "NFT Description",
             image:

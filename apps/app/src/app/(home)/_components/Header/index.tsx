@@ -20,13 +20,15 @@ export const Header = () => {
       {isAuthenticated ? (
         <LoggedButton />
       ) : (
-        <Button size="3" onClick={open}>
-          <span>Connect wallet</span>
+        <>
+          <Button size="3" onClick={open}>
+            <span>Connect wallet</span>
 
-          <div className="size-5">
-            <IconLogin />
-          </div>
-        </Button>
+            <div className="size-5">
+              <IconLogin />
+            </div>
+          </Button>
+        </>
       )}
     </Flex>
   );

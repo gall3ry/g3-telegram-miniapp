@@ -74,6 +74,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+
   return (
     <Box
       className="xl:py-2"
@@ -84,7 +85,7 @@ export default function RootLayout({
       <Box className="container bg-white xl:rounded-lg" position="relative">
         {pathname !== "/" && <BackButton />}
 
-        <div className="p-4">
+        <div className="sticky top-0 z-50 bg-white p-4">
           <Header />
         </div>
 
