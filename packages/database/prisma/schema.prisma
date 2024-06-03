@@ -96,16 +96,32 @@ model Share {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    occ   Occ @relation(fields: [occId], references: [id])
+    occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
     occId Int
 
     superGroupUsername String
     messageId          String
 
     metadata          Json?
-    reactionMetadata  Json?
     reactionUpdatedAt DateTime?
     reactionCount     Int?
+
+    Reaction Reaction[]
+}
+
+model Reaction {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Fields
+    reactionType String
+    count        Int
+
+    share   Share @relation(fields: [shareId], references: [id], onDelete: Cascade)
+    shareId Int
+
+    unifiedCode String
 }
 
 model MapTonProofToPayload {

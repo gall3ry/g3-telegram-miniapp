@@ -9,7 +9,18 @@ export const getOcc = publicProcedure
     }),
   )
   .query(async ({ input: { id } }) => {
-    return db.occ.findUniqueOrThrow({
+    const totalReaction = await db.reaction.aggregate({
+      where: {
+        share: {
+          occId: id,
+        },
+      },
+      _sum: {
+        count: true,
+      },
+    });
+
+    const result = await db.occ.findUniqueOrThrow({
       where: { id },
       include: {
         user: {
@@ -26,4 +37,9 @@ export const getOcc = publicProcedure
         },
       },
     });
+
+    return {
+      ...result,
+      totalReaction: totalReaction._sum.count ?? 0,
+    };
   });

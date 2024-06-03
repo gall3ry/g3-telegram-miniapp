@@ -4,6 +4,7 @@ import { Cron } from '@nestjs/schedule';
 import { groupBy } from 'lodash-es';
 import { TelegramService } from './TelegramService.js';
 import { db } from './db.js';
+import { EmojiService } from './services/emoji.js';
 
 @Injectable()
 export class AppService {
@@ -12,7 +13,7 @@ export class AppService {
   // TODO: Make it run once per day
   @Cron('*/10 * * * * *')
   async updateEmotion() {
-    this.logger.debug('Called every 10 seconds');
+    this.logger.debug('Called every 30 seconds');
     const instance = await TelegramService.getInstance();
 
     const shareList = await db.share.findMany({
@@ -48,8 +49,6 @@ export class AppService {
           );
         }, 0);
 
-        const [reactionMetadata] = reaction;
-
         console.log(
           `Updating share ${share.id} with reaction count ${reactionCount}`,
         );
@@ -57,9 +56,42 @@ export class AppService {
         await db.share.update({
           where: { id: share.id },
           data: {
-            reactionMetadata,
+            Reaction: {
+              deleteMany: {},
+            },
+          },
+        });
+
+        await db.share.update({
+          where: { id: share.id },
+          data: {
             reactionCount,
             reactionUpdatedAt: new Date(),
+            Reaction: {
+              createMany: {
+                data: await Promise.all(
+                  reaction
+                    .map(({ reactions, msgId }) => {
+                      return Object.entries(reactions).map(
+                        async ([_, { count, reaction }]) => {
+                          const emoticon: string = (reaction as any)?.emoticon;
+
+                          return {
+                            reactionType: emoticon,
+                            count,
+                            unifiedCode: (
+                              await EmojiService.getInstance().getEmojiDataFromNative(
+                                emoticon,
+                              )
+                            ).unified,
+                          };
+                        },
+                      );
+                    })
+                    .flat(),
+                ),
+              },
+            },
           },
         });
       }

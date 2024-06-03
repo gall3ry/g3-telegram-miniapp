@@ -35,7 +35,11 @@ export class ReactionService {
         },
       },
       include: {
-        Share: true,
+        Share: {
+          include: {
+            Reaction: true,
+          },
+        },
       },
     });
 
@@ -45,19 +49,18 @@ export class ReactionService {
 
         const reactionByType = shareList.reduce(
           (acc, share) => {
-            const reactions = (share.reactionMetadata as any)
-              ?.reactions as any[];
+            const reactions = share.Reaction;
 
             if (!reactions) {
               return acc;
             }
 
-            for (const [key, value] of Object.entries(reactions)) {
-              if (!acc[key]) {
-                acc[key] = 0;
+            for (const value of reactions) {
+              if (!acc[value.unifiedCode]) {
+                acc[value.unifiedCode] = 0;
               }
 
-              acc[key] += value.count;
+              acc[value.unifiedCode] += value.count;
             }
 
             return acc;
@@ -71,46 +74,6 @@ export class ReactionService {
         };
       }),
       "occId",
-    );
-  }
-
-  async sumarizeReactionByShareIds(shareIds: number[]): Promise<
-    Dictionary<
-      {
-        shareId: number;
-        reactionByType: any;
-      }[]
-    >
-  > {
-    const shareList = await db.share.findMany({
-      where: {
-        id: {
-          in: shareIds,
-        },
-      },
-    });
-
-    return groupBy(
-      shareList.map((share) => {
-        const reactions = (share.reactionMetadata as any)?.reactions as any[];
-
-        const reactionByType: Record<string, number> = {};
-        for (const [key, value] of Object.entries(reactions)) {
-          console.log(key, value);
-
-          if (!reactionByType[key]) {
-            reactionByType[key] = 0;
-          }
-
-          reactionByType[key] += value.count;
-        }
-
-        return {
-          shareId: share.id,
-          reactionByType,
-        };
-      }),
-      "shareId",
     );
   }
 }

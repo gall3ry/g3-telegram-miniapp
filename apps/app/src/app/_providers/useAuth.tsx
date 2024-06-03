@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { api } from "../../trpc/react";
 
 export const useAuth = create<{
   accessToken: string | null;
@@ -45,8 +46,10 @@ export const useAuthHydrated = () => {
 
 export const useIsAuthenticated = () => {
   const { accessToken } = useAuth();
+  const { isLoading: isUserLoading } = api.auth.getCurrentUser.useQuery();
 
   return {
     isAuthenticated: !!accessToken,
+    isLoading: isUserLoading,
   };
 };

@@ -49,7 +49,7 @@ export const TemplateInfo = () => {
           <SwiperSlide key={index} className="rounded-xl bg-neutral-300">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="aspect-square rounded-xl"
+              className="aspect-square w-full rounded-xl"
               src={image}
               alt="Template Image"
             />
@@ -119,8 +119,7 @@ export const TemplateInfo = () => {
 
         <div className="flex flex-col items-center">
           <div className="text-center text-4xl font-bold leading-[44px] text-slate-900">
-            {/* {Intl.NumberFormat().format(1280)} */}
-            WIP
+            {isSuccess && Intl.NumberFormat().format(occ.totalReaction)}
           </div>
 
           <div className="flex h-5 items-center justify-start gap-1.5">

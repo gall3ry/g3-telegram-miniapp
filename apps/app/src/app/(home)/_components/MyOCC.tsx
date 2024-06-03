@@ -1,6 +1,7 @@
 "use client";
 import { Button, Heading, Section, Table } from "@radix-ui/themes";
 import { postEvent } from "@tma.js/sdk";
+import { Emoji, EmojiStyle } from "emoji-picker-react";
 import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { FaTelegram } from "react-icons/fa6";
@@ -24,9 +25,13 @@ export const MyOCC = () => {
       return "No reactions";
     }
 
-    return Object.entries(reactions)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join(", ");
+    return Object.entries(reactions).map(([key, value]) => (
+      <div key={key} className="flex items-center gap-1.5">
+        <Emoji emojiStyle={EmojiStyle.APPLE} unified={key} size={24} />
+
+        <div>{value}</div>
+      </div>
+    ));
   };
 
   return (

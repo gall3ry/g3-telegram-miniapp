@@ -1,12 +1,20 @@
 "use client";
-import { Button, Text } from "@radix-ui/themes";
+import { Button, Spinner, Text } from "@radix-ui/themes";
 import { useTonConnectModal } from "@tonconnect/ui-react";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { IconLogin } from "../_icons/IconLogin";
 
 export const LoggedUserOnly = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useIsAuthenticated();
+  const { isAuthenticated, isLoading } = useIsAuthenticated();
   const { open } = useTonConnectModal();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
