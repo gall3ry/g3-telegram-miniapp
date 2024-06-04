@@ -92,10 +92,12 @@ const Page = () => {
   );
 };
 
-export default function PageWrapper() {
+const PageWrapper = () => {
   return (
     <LoggedUserOnly>
       <Page />
     </LoggedUserOnly>
   );
-}
+};
+
+export default PageWrapper;

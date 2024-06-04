@@ -2,6 +2,7 @@
 import { cn } from "@repo/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { create } from "zustand";
 import { IconCreate } from "./IconCreate";
 import { IconQuests } from "./IconQuest";
@@ -40,6 +41,7 @@ export const Footer = () => {
     },
   ];
   const { footer } = useFooter();
+  const posthog = usePostHog();
 
   return (
     footer ?? (
@@ -56,6 +58,12 @@ export const Footer = () => {
               key={item.url}
               className="flex flex-1 flex-col items-center justify-center"
               href={item.url}
+              onClick={() => {
+                posthog.capture("footer_click", {
+                  title: item.title,
+                  url: item.url,
+                });
+              }}
             >
               <div className="size-8">
                 <Icon isActive={!!pathname.match(item.pattern)} />

@@ -1,8 +1,19 @@
 "use client";
+import { usePostHog } from "posthog-js/react";
 import { IMAGES } from "../_constants/image";
 import { LeaderboardItem } from "./LeaderboardItem";
 
 export const Leaderboard = () => {
+  const { featureFlags } = usePostHog();
+
+  const leaderboardEnabled = featureFlags.isFeatureEnabled("leaderboard", {
+    send_event: false,
+  });
+
+  if (leaderboardEnabled === false) {
+    return null;
+  }
+
   return Array.from({ length: 10 }).map((_, index) => (
     <LeaderboardItem
       key={index}

@@ -14,6 +14,7 @@
     "@orbs-network/ton-access": "^2.3.3",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^3.0.5",
+    "@repo/telegram": "workspace:*",
     "@repo/utils": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
@@ -41,6 +42,7 @@
     "nuqs": "^1.17.4",
     "postcss-import": "^16.1.0",
     "posthog-js": "^1.136.2",
+    "posthog-node": "^4.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -56,8 +58,7 @@
     "ton-crypto": "^3.2.0",
     "tweetnacl": "^1.0.3",
     "zod": "^3.23.3",
-    "zustand": "^4.5.2",
-    "@repo/telegram": "workspace:*"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",

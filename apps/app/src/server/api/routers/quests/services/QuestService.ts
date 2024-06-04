@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import PostHogClient, { Flag } from "../../../services/posthog";
 import { type IQuest, type QuestId } from "./BaseQuest";
 import { BindWalletAddressTask } from "./BindWalletAddressTask";
 import { JoinCommunityTask } from "./JoinCommunityQuest";
@@ -17,10 +18,15 @@ export class QuestService {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private readonly _tasks: IQuest[] = [
-    new JoinCommunityTask(),
-    new BindWalletAddressTask(),
-  ];
+  private async _getTasks() {
+    const _tasks: IQuest[] = [new BindWalletAddressTask()];
+    const client = PostHogClient();
+    if (await client.isFeatureEnabled(Flag.join_g3_community, "default")) {
+      _tasks.push(new JoinCommunityTask());
+    }
+
+    return _tasks;
+  }
 
   async getTasks({
     taskType,
@@ -29,16 +35,18 @@ export class QuestService {
     taskType: QuestStatus;
     userId: number;
   }) {
+    const _tasks = await this._getTasks();
+
     const _getTaskWithFilter = (taskType: QuestStatus) => {
       switch (taskType) {
         case QuestStatus.ALL:
-          return this._tasks;
+          return _tasks;
         case QuestStatus.COMPLETED:
-          return this._tasks.filter(async (task) => {
+          return _tasks.filter(async (task) => {
             return await task.isQuestCompleted({ userId });
           });
         case QuestStatus.INCOMPLETE:
-          return this._tasks.filter(async (task) => {
+          return _tasks.filter(async (task) => {
             return !(await task.isQuestCompleted({ userId }));
           });
         default:
@@ -72,7 +80,8 @@ export class QuestService {
     taskId: QuestId;
     userId: number;
   }): Promise<void> {
-    const task = this._tasks.find((task) => task.id === taskId);
+    const _tasks = await this._getTasks();
+    const task = _tasks.find((task) => task.id === taskId);
 
     if (!task) {
       throw new TRPCError({

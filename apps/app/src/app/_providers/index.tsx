@@ -10,9 +10,15 @@ import { env } from "../../env";
 import { TRPCReactProvider } from "../../trpc/react";
 import { BackendAuthProvider } from "./BackendAuthProvider";
 
-if (typeof window !== "undefined" && env.NEXT_PUBLIC_G3_ENV !== "development") {
+if (typeof window !== "undefined") {
   posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
     api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+    loaded: function (ph) {
+      if (env.NEXT_PUBLIC_G3_ENV === "development") {
+        ph.opt_out_capturing(); // opts a user out of event capture
+        ph.set_config({ disable_session_recording: true });
+      }
+    },
   });
 }
 
