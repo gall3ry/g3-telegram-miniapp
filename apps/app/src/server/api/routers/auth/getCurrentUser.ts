@@ -8,6 +8,7 @@ class GetCurrentUserService {
     point: true,
     displayName: true,
     avatarUrl: true,
+    telegramId: true,
     _count: {
       select: {
         Occ: true,

@@ -11,6 +11,7 @@ export const Leaderboard = () => {
       avatarUrl="https://via.placeholder.com/32x32"
       username="RonasFrank"
       shareCount={2078}
+      address="0:"
     />
   ));
 };

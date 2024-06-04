@@ -1,13 +1,15 @@
 "use client";
-import { Avatar, Button, IconButton } from "@radix-ui/themes";
-import { api } from "../../../trpc/react";
+import { Avatar, Button, IconButton, Skeleton } from "@radix-ui/themes";
+import { formatTonAddress } from "@repo/utils";
+import { toUserFriendlyAddress } from "@tonconnect/sdk";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
+import { useUser } from "../useUser";
 import { IconMore } from "./IconMore";
 import { useLogout } from "./useLogout";
 
 const Page = () => {
   const { logout } = useLogout();
-  const { data: user } = api.auth.getCurrentUser.useQuery();
+  const { data: user, tonProvider } = useUser();
 
   const items = [
     {
@@ -41,9 +43,13 @@ const Page = () => {
             <div className="text-2xl font-bold text-[#171B36]">
               {user?.displayName ?? "Loading..."}
             </div>
-            <div className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-[#717D00]">
-              UQCm1Y...-8RKzXd
-            </div>
+
+            <Skeleton loading={!tonProvider}>
+              <div className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-[#717D00]">
+                {tonProvider?.value &&
+                  formatTonAddress(toUserFriendlyAddress(tonProvider.value))}
+              </div>
+            </Skeleton>
           </div>
         </div>
 

@@ -47,6 +47,9 @@ importers:
       '@radix-ui/themes':
         specifier: ^3.0.5
         version: 3.0.5(@types/react-dom@18.2.19)(@types/react@18.2.61)(react-dom@18.2.0)(react@18.2.0)
+      '@repo/telegram':
+        specifier: workspace:*
+        version: link:../../packages/telegram
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -432,6 +435,21 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
+
+  packages/telegram:
+    dependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      telegraf:
+        specifier: ^4.16.3
+        version: 4.16.3
+      typescript:
+        specifier: latest
+        version: 5.4.5
+      zod:
+        specifier: ^3.23.3
+        version: 3.23.8
 
   packages/types:
     dependencies:

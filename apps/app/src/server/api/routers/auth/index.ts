@@ -22,17 +22,21 @@ export const authRouter = createTRPCRouter({
           .trim()
           .regex(/^[a-z0-9_]+$/)
           .optional(),
+        telegramId: z.number(),
       }),
     )
-    .mutation(async ({ ctx: { session }, input }) => {
-      const userId = session.userId;
-      await db.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          displayName: input.displayName,
-        },
-      });
-    }),
+    .mutation(
+      async ({ ctx: { session }, input: { telegramId, displayName } }) => {
+        const userId = session.userId;
+        await db.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            displayName: displayName,
+            telegramId: telegramId.toString(),
+          },
+        });
+      },
+    ),
 });

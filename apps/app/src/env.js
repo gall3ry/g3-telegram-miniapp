@@ -12,6 +12,7 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     JWT_SECRET: z.string(),
+    BOT_TOKEN: z.string(),
   },
 
   /**
@@ -36,6 +37,10 @@ export const env = createEnv({
       .string()
       .default("phc_iWwszv1jODV18AKPZcqRmXql2B5B4eOqJ3gmnRWMZmC"),
     NEXT_PUBLIC_POSTHOG_HOST: z.string().default("https://us.i.posthog.com"),
+    NEXT_PUBLIC_COMMUNITY_CHAT_ID: z
+      .string()
+      .regex(/@.+/)
+      .default("@testabc1234578"),
   },
 
   /**
@@ -51,6 +56,8 @@ export const env = createEnv({
     NEXT_PUBLIC_TWA_MANIFEST_URL: process.env.NEXT_PUBLIC_TWA_MANIFEST_URL,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    BOT_TOKEN: process.env.BOT_TOKEN,
+    NEXT_PUBLIC_COMMUNITY_CHAT_ID: process.env.NEXT_PUBLIC_COMMUNITY_CHAT_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

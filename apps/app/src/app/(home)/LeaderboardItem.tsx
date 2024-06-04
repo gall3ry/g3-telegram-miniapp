@@ -1,26 +1,6 @@
 "use client";
 import { Skeleton } from "@radix-ui/themes";
-import { toUserFriendlyAddress } from "@tonconnect/sdk";
-import { useMemo } from "react";
-import { api } from "../../trpc/react";
-import { useIsAuthenticated } from "../_providers/useAuth";
-
-const useUser = () => {
-  const { isAuthenticated } = useIsAuthenticated();
-
-  const result = api.auth.getCurrentUser.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
-
-  const tonProvider = useMemo(() => {
-    return result.data?.Provider.find((p) => p.type === "TON_WALLET");
-  }, [result.data?.Provider]);
-
-  return {
-    ...result,
-    tonProvider,
-  };
-};
+import { formatTonAddress } from "@repo/utils";
 
 export const LeaderboardItem = ({
   rank,
@@ -28,15 +8,15 @@ export const LeaderboardItem = ({
   avatarUrl,
   username,
   shareCount,
+  address,
 }: {
   rank: number;
   occImageUrl: string;
   avatarUrl: string;
   username: string;
   shareCount: number;
+  address: string;
 }) => {
-  const { tonProvider } = useUser();
-
   return (
     <div className="flex items-center gap-6">
       <div className="relative">
@@ -67,7 +47,7 @@ export const LeaderboardItem = ({
                 {username}
               </div>
               <div className="text-xs font-light leading-[18px] tracking-tight text-slate-500">
-                {tonProvider?.value && toUserFriendlyAddress(tonProvider.value)}
+                {formatTonAddress(address)}
               </div>
             </Skeleton>
           </div>

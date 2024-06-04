@@ -26,10 +26,10 @@ if (typeof window !== "undefined" && env.NEXT_PUBLIC_G3_ENV === "development") {
       [
         "user",
         JSON.stringify({
-          id: 99281932,
+          id: "1216103870",
           first_name: "Andrew",
-          last_name: "Rogue",
-          username: "rogue",
+          last_name: "Tin",
+          username: "pnpminstall",
           language_code: "en",
           is_premium: true,
           allows_write_to_pm: true,

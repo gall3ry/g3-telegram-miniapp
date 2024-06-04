@@ -34,7 +34,7 @@ export const RewardLogList = () => {
             {isSuccess &&
               data.items.map((item) => (
                 <Table.Row key={item.id}>
-                  <Table.Cell>{item.rewardType}</Table.Cell>
+                  <Table.Cell>{item.taskId}</Table.Cell>
                   <Table.Cell>
                     {format(item.createdAt, "yyyy-MM-dd HH:mm:ss")}
                   </Table.Cell>

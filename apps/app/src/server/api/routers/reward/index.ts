@@ -1,7 +1,7 @@
-import { type RewardType } from "database";
 import { z } from "zod";
 import { db } from "../../../db";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import { type QuestId } from "../quests/services/BaseQuest";
 
 export class RewardService {
   private static instance: RewardService;
@@ -17,24 +17,25 @@ export class RewardService {
     return RewardService.instance;
   }
 
-  static readonly _MAP_REWARD_TYPE_TO_POINT: Record<RewardType, number> = {
+  static readonly _MAP_REWARD_TYPE_TO_POINT: Record<QuestId, number> = {
+    JOIN_COMMUNITY: 200,
     BIND_WALLET_ADDRESS: 100,
   };
 
   public static async rewardUser({
     userId,
-    rewardType,
+    taskId,
   }: {
     userId: number;
-    rewardType: RewardType;
+    taskId: QuestId;
   }) {
-    const point = RewardService._MAP_REWARD_TYPE_TO_POINT[rewardType];
+    const point = RewardService._MAP_REWARD_TYPE_TO_POINT[taskId];
     await db.$transaction(async (db) => {
       await Promise.all([
         db.rewardLogs.create({
           data: {
             userId,
-            rewardType,
+            taskId,
             point,
           },
         }),
@@ -49,25 +50,6 @@ export class RewardService {
           },
         }),
       ]);
-    });
-  }
-
-  public async rewardForBindWalletAddress({ userId }: { userId: number }) {
-    const isRewardAlreadyGiven = await db.rewardLogs.findFirst({
-      where: {
-        userId,
-        rewardType: "BIND_WALLET_ADDRESS",
-      },
-    });
-
-    if (isRewardAlreadyGiven) {
-      // Do nothing here
-      return;
-    }
-
-    await RewardService.rewardUser({
-      userId,
-      rewardType: "BIND_WALLET_ADDRESS",
     });
   }
 }

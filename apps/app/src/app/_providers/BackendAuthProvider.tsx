@@ -40,10 +40,11 @@ export const BackendAuthProvider = ({
         throw new Error("Username is missing");
       }
 
-      if (!data.displayName) {
-        void updateDisplayName({ displayName: initData.user.username }).then(
-          () => utils.auth.invalidate(),
-        );
+      if (!data.displayName || !data.telegramId) {
+        void updateDisplayName({
+          displayName: initData.user.username,
+          telegramId: initData.user.id,
+        }).then(() => utils.auth.invalidate());
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

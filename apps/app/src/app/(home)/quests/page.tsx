@@ -1,28 +1,24 @@
+"use client";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Button } from "@radix-ui/themes";
+import { TRPCClientError } from "@trpc/client";
+import toast from "react-hot-toast";
+import { QuestStatus } from "~/server/api/routers/quests/services/QuestStatus";
+import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { QuestItem } from "./QuestItem";
 
 const Page = () => {
-  const items = [
-    {
-      title: "Bind wallet address",
-      description: "Quest description and instruction details goes here.",
-      points: 100,
-      isClaimable: true,
+  const { data: items, isSuccess } = api.quests.getQuests.useQuery({
+    type: QuestStatus.ALL,
+  });
+  const [parent] = useAutoAnimate();
+  const utils = api.useUtils();
+  const { mutateAsync: completeTask } = api.quests.completeTask.useMutation({
+    onSuccess: () => {
+      void utils.quests.getQuests.invalidate();
     },
-    {
-      title: "Join community",
-      description: "Quest description and instruction details goes here.",
-      points: 200,
-      text: "Join now",
-    },
-    {
-      title: "Unlock GM! template",
-      description: "Quest description and instruction details goes here.",
-      points: 100,
-      text: "Unlock now",
-    },
-  ];
+  });
 
   return (
     <div>
@@ -33,17 +29,30 @@ const Page = () => {
         </Button>
       </div>
 
-      <div className="mt-4 space-y-3">
-        {items.map((item, i) => (
-          <QuestItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            points={item.points}
-            text={item.text}
-            isClaimable={item.isClaimable}
-          />
-        ))}
+      <div className="mt-4 space-y-3" ref={parent}>
+        {isSuccess &&
+          items.map((item, i) => (
+            <QuestItem
+              key={i}
+              title={item.title}
+              description={item.description}
+              points={item.points}
+              text={item.text}
+              isClaimable={item.isClaimable}
+              onClick={() => {
+                void toast.promise(completeTask({ taskId: item.id }), {
+                  loading: "Completing task...",
+                  success: "Task completed!",
+                  error: (error) => {
+                    if (error instanceof TRPCClientError) {
+                      return error.message;
+                    }
+                    return "An error occurred";
+                  },
+                });
+              }}
+            />
+          ))}
       </div>
     </div>
   );

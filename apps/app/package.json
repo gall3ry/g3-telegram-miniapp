@@ -56,7 +56,8 @@
     "ton-crypto": "^3.2.0",
     "tweetnacl": "^1.0.3",
     "zod": "^3.23.3",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "@repo/telegram": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",

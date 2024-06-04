@@ -1,0 +1,13 @@
+{
+  "name": "@repo/telegram",
+  "version": "0.0.1",
+  "dependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "telegraf": "^4.16.3",
+    "typescript": "latest",
+    "zod": "^3.23.3"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
