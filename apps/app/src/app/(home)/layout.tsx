@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { env } from "../../env";
 import { Footer } from "./_components/Footer";
 import { Header } from "./_components/Header";
+
 const BackButton = dynamic(
   () => import("@twa-dev/sdk/react").then((mod) => mod.BackButton),
   {
@@ -89,7 +90,7 @@ export default function RootLayout({
           <Header />
         </div>
 
-        <Box className="min-h-[90vh] flex-grow p-4">{children}</Box>
+        <div className="flex min-h-[80vh] flex-col p-4">{children}</div>
 
         <Footer />
       </Box>

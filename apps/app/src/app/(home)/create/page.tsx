@@ -50,6 +50,7 @@ const Page = () => {
               await toast.promise(
                 mutateAsync({
                   occTemplateId: 99999, // TODO: remove this whole component
+                  txHash: "0x123",
                 }),
                 {
                   loading: "Creating OCC...",

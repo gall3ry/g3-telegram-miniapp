@@ -13,6 +13,13 @@ class GetCurrentUserService {
         Occ: true,
       },
     },
+    Provider: {
+      select: {
+        id: true,
+        type: true,
+        value: true,
+      },
+    },
   } satisfies Prisma.UserSelect;
 }
 
