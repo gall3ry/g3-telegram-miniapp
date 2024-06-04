@@ -1,11 +1,14 @@
 "use client";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Button } from "@radix-ui/themes";
+import { IconButton } from "@radix-ui/themes";
 import { TRPCClientError } from "@trpc/client";
 import toast from "react-hot-toast";
 import { QuestStatus } from "~/server/api/routers/quests/services/QuestStatus";
 import { api } from "../../../trpc/react";
+import { IMAGES } from "../../_constants/image";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
+import { IconPoints } from "../_icons/IconPoints";
+import { IconTime } from "./IconTime";
 import { QuestItem } from "./QuestItem";
 
 const Page = () => {
@@ -22,18 +25,13 @@ const Page = () => {
 
   return (
     <div>
-      <div className="flex justify-center gap-2">
-        <Button>Daily quests</Button>
-        <Button color="gray" variant="outline">
-          Basic quests
-        </Button>
-      </div>
+      <CurrentPoint />
 
       <div className="mt-4 space-y-3" ref={parent}>
         {isSuccess &&
-          items.map((item, i) => (
+          items.map((item) => (
             <QuestItem
-              key={i}
+              key={item.id}
               title={item.title}
               description={item.description}
               points={item.points}
@@ -67,3 +65,44 @@ function PageWrapper() {
 }
 
 export default PageWrapper;
+
+export const CurrentPoint = () => {
+  return (
+    <div
+      className="relative rounded-xl bg-red-400 px-4 pb-[22px] pt-4"
+      style={{
+        backgroundImage: `url(${IMAGES.balance_bg})`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <div className="text-base font-medium leading-normal tracking-tight text-white opacity-80">
+          CURRENT POINTS
+        </div>
+        <IconButton
+          variant="soft"
+          radius="large"
+          onClick={() => {
+            toast("Coming soon!");
+          }}
+        >
+          <div className="size-5">
+            <IconTime />
+          </div>
+        </IconButton>
+      </div>
+
+      <div className="flex items-center">
+        <div className="h-10 w-10">
+          <IconPoints />
+        </div>
+        <div className="ml-4 text-5xl font-bold leading-[64px] text-white">
+          6,789
+        </div>
+        <div className="mb-4 ml-3 text-right text-2xl font-medium leading-9 tracking-tight text-white opacity-80">
+          EPIC
+        </div>
+      </div>
+    </div>
+  );
+};
