@@ -1,13 +1,17 @@
 "use client";
-import { IconButton, Skeleton } from "@radix-ui/themes";
+import { IconButton, Spinner } from "@radix-ui/themes";
 import toast from "react-hot-toast";
 import { IMAGES } from "../../_constants/image";
+import { useIsAuthenticated } from "../../_providers/useAuth";
 import { IconPoints } from "../_icons/IconPoints";
 import { useUser } from "../useUser";
 import { IconTime } from "./IconTime";
 
 export const CurrentPoint = () => {
-  const { data, isSuccess } = useUser();
+  const { data, isSuccess, isPending } = useUser();
+  const { isAuthenticated } = useIsAuthenticated();
+
+  if (!isAuthenticated) return null;
 
   return (
     <div
@@ -34,19 +38,21 @@ export const CurrentPoint = () => {
         </IconButton>
       </div>
 
-      <div className="flex items-center">
-        <div className="h-10 w-10">
-          <IconPoints />
-        </div>
-        <Skeleton loading={!isSuccess} width="100px" height="44px">
-          <div className="ml-4 text-5xl font-bold leading-[64px] text-white">
-            {isSuccess && Intl.NumberFormat().format(data.point)}
+      <Spinner loading={isPending} className="text-white">
+        <div className="flex items-center">
+          <div className="h-10 w-10">
+            <IconPoints />
           </div>
-        </Skeleton>
-        <div className="mb-4 ml-3 text-right text-2xl font-medium leading-9 tracking-tight text-white opacity-80">
-          EPIC
+          {isSuccess && (
+            <div className="ml-4 text-5xl font-bold leading-[64px] text-white">
+              {Intl.NumberFormat().format(data.point)}
+            </div>
+          )}
+          <div className="mb-4 ml-3 text-right text-2xl font-medium leading-9 tracking-tight text-white opacity-80">
+            EPIC
+          </div>
         </div>
-      </div>
+      </Spinner>
     </div>
   );
 };

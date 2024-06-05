@@ -29,11 +29,8 @@ COPY . .
 
 FROM base as installer
 WORKDIR /app
-ENV APP_NAME=worker
-ENV APP_NAME2=my-node-app
 
-RUN npm install -g pnpm
-RUN npm install -g turbo
+RUN npm install -g pnpm turbo
 
 # First install dependencies (as they change less often)
 # COPY .gitignore .gitignore
@@ -53,7 +50,7 @@ RUN pnpm install
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN turbo run build --filter=${APP_NAME}... --filter=${APP_NAME2}...
+RUN turbo run build --filter=worker --filter=crawler --filter my-node-app...
 
 FROM base AS worker
 WORKDIR /app
@@ -81,6 +78,29 @@ RUN npm install -g pnpm
 
 # USER expressjs
 COPY --from=installer /app .
+
+# TODO: Maybe use the npm script?
+CMD pnpm --filter "${APP_NAME}" run start
+
+FROM base AS crawler
+WORKDIR /app
+ENV APP_NAME=crawler
+RUN npm install -g pnpm
+
+# Don't run production as root
+# RUN addgroup --system --gid 1001 expressjs
+# RUN adduser --system --uid 1001 expressjs
+
+# USER expressjs
+COPY --from=installer /app .
+
+
+# COREPACK_ENABLE_STRICT
+ENV COREPACK_ENABLE_STRICT=0
+
+# install playwright
+RUN pnpx playwright install
+RUN pnpx playwright install-deps
 
 # TODO: Maybe use the npm script?
 CMD pnpm --filter "${APP_NAME}" run start

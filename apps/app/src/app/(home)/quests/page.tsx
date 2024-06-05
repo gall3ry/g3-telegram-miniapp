@@ -134,7 +134,7 @@ const Page = () => {
 
       <div className="mt-6 space-y-3" ref={parent}>
         <div className="text-xl font-bold leading-7 text-slate-900">
-          Incomplete quest
+          Incomplete quests
         </div>
 
         <Spinner loading={isPending} size="3" className="mx-auto mt-8">
@@ -148,7 +148,7 @@ const Page = () => {
 
       <div className="mt-6 space-y-3" ref={parent2}>
         <div className="text-xl font-bold leading-7 text-slate-900">
-          Completed quest
+          Completed quests
         </div>
 
         <Spinner loading={!isCompletedQuestsSuccess} size="3" className="mt-8">

@@ -51,11 +51,11 @@ export const Leaderboard = () => {
   return (
     <>
       {data?.pages
-        ?.map(({ data: page }) =>
+        ?.map(({ data: page }, pageIndex) =>
           page.map((item, index) => (
             <LeaderboardItem
               key={index}
-              rank={index + 1}
+              rank={pageIndex * LIMIT + index + 1}
               occImageUrl={(IMAGES.MOCK_OCC as any)[(index % 5) + 1]}
               avatarUrl={item.user.avatarUrl}
               username={item.user.displayName ?? "?"}

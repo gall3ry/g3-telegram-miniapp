@@ -9,6 +9,7 @@ primary_region = 'sin'
 [processes]
 bot = "pnpm --filter my-node-app run start"
 worker = "pnpm --filter worker run start"
+crawler = "pnpm --filter crawler run start"
 
 [build]
 
@@ -26,3 +27,10 @@ memory = '1gb'
 cpu_kind = 'shared'
 cpus = 1
 processes = ['bot']
+
+[http_service]
+processes = ["crawler"]    # this service only applies to the web process
+internal_port = 3400
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true

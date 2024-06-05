@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "dotenv -- tsup --watch --onSuccess \"node dist/index.js\"",
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "get-string-session": "tsup ./src/scripts/get-string-session.ts --onSuccess \"node dist/get-string-session.js\""
   },
   "devDependencies": {
@@ -19,12 +19,17 @@
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/swagger-ui-express": "^4.1.6",
+    "@zodios/core": "^10.9.6",
+    "@zodios/express": "^10.6.1",
+    "@zodios/openapi": "^10.5.0",
     "database": "workspace:*",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "input": "^1.0.1",
     "lodash-es": "^4.17.21",
     "playwright": "^1.44.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "swagger-ui-express": "^5.0.1",
     "telegraf": "^4.16.3",
     "telegram": "^2.21.2",

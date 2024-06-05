@@ -20,7 +20,7 @@ export const LeaderboardItem = ({
   return (
     <div className="flex items-center gap-6">
       <div className="relative">
-        <div className="absolute flex h-8 w-8 items-center justify-center rounded-lg border-4 border-white bg-[#DAF200] text-center text-xl font-bold leading-7 text-slate-900">
+        <div className="absolute flex h-8 min-w-8 items-center justify-center rounded-lg border-4 border-white bg-[#DAF200] px-0.5 text-center text-xl font-bold leading-7 text-slate-900">
           {rank}
         </div>
 
