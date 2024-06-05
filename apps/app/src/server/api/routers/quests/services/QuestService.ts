@@ -21,6 +21,7 @@ export class QuestService {
 
   private async _getTasks({ userId }: { userId: number }) {
     const _tasks: IQuest[] = [new BindWalletAddressTask()];
+
     const client = PostHogClient();
     if (await client.isFeatureEnabled(Flag.join_g3_community, "default")) {
       _tasks.push(new JoinCommunityTask());

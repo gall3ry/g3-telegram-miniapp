@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { db } from "../../../db";
-import PostHogClient from "../../services/posthog";
+import { capture } from "../../services/posthog";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { type QuestId } from "../quests/services/QuestId";
 
@@ -31,16 +31,6 @@ export class RewardService {
     taskId: QuestId;
   }) {
     const point = RewardService._MAP_REWARD_TYPE_TO_POINT[taskId];
-    const client = PostHogClient();
-    client.capture({
-      distinctId: userId.toString(),
-      event: "reward_user",
-      properties: {
-        taskId,
-        point,
-      },
-    });
-    await client.shutdown();
 
     await db.$transaction(async (db) => {
       await Promise.all([
@@ -62,6 +52,15 @@ export class RewardService {
           },
         }),
       ]);
+    });
+
+    void capture({
+      distinctId: userId.toString(),
+      event: "reward_user",
+      properties: {
+        taskId,
+        point,
+      },
     });
   }
 }

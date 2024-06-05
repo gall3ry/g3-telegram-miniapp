@@ -14,3 +14,11 @@ export default function PostHogClient() {
   });
   return posthogClient;
 }
+
+export const capture = async (args: Parameters<PostHog["capture"]>[0]) => {
+  const client = PostHogClient();
+
+  client.capture(args);
+
+  await client.shutdown();
+};

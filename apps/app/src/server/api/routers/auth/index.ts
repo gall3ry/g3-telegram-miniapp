@@ -1,7 +1,7 @@
 import { type Prisma } from "database";
 import { z } from "zod";
 import { db } from "../../../db";
-import PostHogClient from "../../services/posthog";
+import { capture } from "../../services/posthog";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { checkProof } from "./checkProof";
 import { generatePayload } from "./generatePayload";
@@ -29,15 +29,13 @@ export const authRouter = createTRPCRouter({
       }) => {
         const userId = session.userId;
 
-        const client = PostHogClient();
-        client.capture({
+        void capture({
           distinctId: userId.toString(),
           event: "update_display_name",
           properties: {
             displayName: displayName,
           },
         });
-        await client.shutdown();
 
         const toUpdate = {
           displayName: displayName,
