@@ -1,5 +1,5 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { authRouter } from "./routers/auth";
+import { authRouter } from "./routers/auth/authRouter";
 import { occRouter } from "./routers/occ";
 import { tasksRouter } from "./routers/quests";
 import { rewardRouter } from "./routers/reward";

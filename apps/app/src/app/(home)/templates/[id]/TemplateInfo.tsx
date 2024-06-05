@@ -11,6 +11,10 @@ export const TemplateInfo = () => {
   return (
     <div className={styles.swiper}>
       <Swiper
+        style={{
+          width: "100%",
+          aspectRatio: "1 / 1",
+        }}
         spaceBetween={50}
         slidesPerView={1}
         modules={[Navigation, Pagination, Mousewheel]}

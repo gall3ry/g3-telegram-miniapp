@@ -43,7 +43,7 @@ const Footer = () => {
         variant="outline"
         size="4"
         onClick={() => {
-          router.push("/");
+          router.back();
         }}
       >
         Close

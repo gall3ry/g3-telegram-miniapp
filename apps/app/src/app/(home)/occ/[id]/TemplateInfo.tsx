@@ -1,10 +1,13 @@
 "use client";
-import { Avatar, Skeleton } from "@radix-ui/themes";
+import { Avatar, Button, Skeleton } from "@radix-ui/themes";
 import { format } from "date-fns";
+import { Emoji, EmojiStyle } from "emoji-picker-react";
 import { useParams } from "next/navigation";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import { Mousewheel, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { api } from "../../../../trpc/react";
+import { Drawer, DrawerContent, DrawerFooter } from "../../_components/Drawer";
 import styles from "./TemplateInfo.module.scss";
 import { IconTime } from "./_components/IconTime";
 import { IconUser } from "./_components/IconUser";
@@ -22,6 +25,10 @@ export const TemplateInfo = () => {
     {
       enabled: isFinite(parseInt(id)),
     },
+  );
+  const [reactionOpen, setReactionOpen] = useQueryState(
+    "reactionOpen",
+    parseAsBoolean.withDefault(false),
   );
 
   const images = Array.from({ length: 5 }, (_, i) => i + 1).map(
@@ -97,9 +104,66 @@ export const TemplateInfo = () => {
         </Skeleton>
       </div>
 
-      <div className="mt-5 text-center text-xl font-bold leading-7 text-slate-900">
-        Achievements
+      <div className="mt-5 flex justify-between">
+        <div className="text-center text-xl font-bold leading-7 text-slate-900">
+          Achievements
+        </div>
+        <Button
+          className="text-right text-base font-medium leading-normal tracking-tight text-blue-500"
+          variant="ghost"
+          color="blue"
+          onClick={() => {
+            void setReactionOpen(true);
+          }}
+        >
+          View details
+        </Button>
       </div>
+
+      <Drawer open={reactionOpen} onOpenChange={setReactionOpen}>
+        <DrawerContent>
+          <DrawerFooter>
+            <div className="text-center text-2xl font-bold leading-9 text-slate-900">
+              Reactions received
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-center justify-items-center gap-2">
+              {isSuccess &&
+                occ.reactions.map((reaction) => (
+                  <div
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-[32px] bg-slate-100 px-4 pb-[7px] pt-[5px]"
+                    key={reaction.unifiedCode}
+                  >
+                    <div className="text-center text-xl font-medium leading-7 text-slate-900">
+                      <Emoji
+                        unified={reaction.unifiedCode}
+                        size={20}
+                        emojiStyle={EmojiStyle.APPLE}
+                      />
+                    </div>
+                    <div className="text-center text-xl font-medium leading-7 text-slate-900">
+                      {reaction._count.count}
+                    </div>
+                  </div>
+                ))}
+            </div>
+
+            <Button
+              mt="32px"
+              radius="full"
+              color="gray"
+              variant="soft"
+              size="4"
+              className="bg-[#E5E7EC]"
+              onClick={() => {
+                void setReactionOpen(false);
+              }}
+            >
+              Close
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
 
       <div className="mt-1 flex *:flex-1">
         <div className="flex flex-col items-center">

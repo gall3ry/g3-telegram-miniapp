@@ -1,6 +1,5 @@
 "use client";
 import { Leaderboard } from "./Leaderboard";
-import { MintOCC } from "./_components/MintOCC";
 import { Top } from "./_components/Top";
 
 export default function Home() {
@@ -12,7 +11,7 @@ export default function Home() {
         <Leaderboard />
       </div>
 
-      <MintOCC />
+      {/* <MintOCC /> */}
     </div>
   );
 }

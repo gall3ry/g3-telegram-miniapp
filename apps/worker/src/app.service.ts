@@ -13,7 +13,7 @@ export class AppService {
   // 2 minutes for testing
   @Cron('0 */2 * * * *')
   async updateEmotion() {
-    this.logger.debug('Called every 30 seconds');
+    this.logger.debug(`[updateEmotion] Start`);
     const instance = await TelegramService.getInstance();
 
     const shareList = await db.share.findMany({

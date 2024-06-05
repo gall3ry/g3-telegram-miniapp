@@ -1,11 +1,13 @@
 "use client";
-import { IconButton } from "@radix-ui/themes";
+import { IconButton, Skeleton } from "@radix-ui/themes";
 import toast from "react-hot-toast";
 import { IMAGES } from "../../_constants/image";
 import { IconPoints } from "../_icons/IconPoints";
+import { useUser } from "../useUser";
 import { IconTime } from "./IconTime";
 
 export const CurrentPoint = () => {
+  const { data, isSuccess } = useUser();
   return (
     <div
       className="relative rounded-xl px-4 pb-[22px] pt-4"
@@ -35,9 +37,11 @@ export const CurrentPoint = () => {
         <div className="h-10 w-10">
           <IconPoints />
         </div>
-        <div className="ml-4 text-5xl font-bold leading-[64px] text-white">
-          6,789
-        </div>
+        <Skeleton loading={!isSuccess} width="100px" height="44px">
+          <div className="ml-4 text-5xl font-bold leading-[64px] text-white">
+            {isSuccess && Intl.NumberFormat().format(data.point)}
+          </div>
+        </Skeleton>
         <div className="mb-4 ml-3 text-right text-2xl font-medium leading-9 tracking-tight text-white opacity-80">
           EPIC
         </div>

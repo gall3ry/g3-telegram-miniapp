@@ -77,7 +77,7 @@ export default function RootLayout({
 
   return (
     <Box
-      className="xl:py-2"
+      className="min-h-screen xl:py-2"
       style={{
         background: "var(--black-a10)",
       }}
@@ -89,7 +89,7 @@ export default function RootLayout({
           <Header />
         </div>
 
-        <div className="flex min-h-[80vh] flex-col p-4">{children}</div>
+        <div className="flex min-h-[82vh] flex-col p-4">{children}</div>
 
         <Footer />
       </Box>
