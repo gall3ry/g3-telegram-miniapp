@@ -6,7 +6,7 @@ import { useTonConnect } from "../../_hooks/useTonConnect";
 
 export function MintOCC() {
   const { connected } = useTonConnect();
-  const { address, sendMintNft } = useNftContract();
+  const { address, sendMintNft, sendMintNftFromFaucet } = useNftContract();
   const { network } = useTonConnect();
 
   return (
@@ -27,8 +27,8 @@ export function MintOCC() {
         type="submit"
         disabled={!connected}
         onClick={async () => {
-          void sendMintNft({
-            name: "Name Of NFT",
+          await sendMintNftFromFaucet({
+            name: "Name Of NFT #6",
             description: "NFT Description",
             image:
               "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",

@@ -7,6 +7,7 @@ import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { MyOCC } from "../_components/MyOCC";
 import { EpicItem } from "./EpicItem";
+import { MintOCC } from "../_components/MintOCC";
 
 const Page = () => {
   const LIMIT = 10;
@@ -68,7 +69,7 @@ const Page = () => {
             Create OCC (Test)
           </Button>
         </div>
-
+        <MintOCC />
         <Suspense>
           <MyOCC />
         </Suspense>

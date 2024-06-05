@@ -1,10 +1,12 @@
 import { CHAIN } from "@tonconnect/protocol";
-import { Address, toNano } from "ton-core";
+import { Address, beginCell, toNano } from "ton-core";
 import NftCollection from "../contracts/NftCollection";
 import { setItemContentCell } from "../contracts/nftContent/onChain";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
+import { useTonConnectUI } from "@tonconnect/ui-react";
+import { getTxByBOC } from "../utils/ton";
 
 const randomSeed = Math.floor(Math.random() * 10000);
 
@@ -17,6 +19,7 @@ export type mintArgs = {
 export function useNftContract() {
   const { client } = useTonClient();
   const { sender, network, wallet } = useTonConnect();
+  const [tonConnectUI] = useTonConnectUI();
 
   const nftContract = useAsyncInitialize(async () => {
     if (!client) return;
@@ -50,5 +53,36 @@ export function useNftContract() {
         }),
       });
     },
+    sendMintNftFromFaucet: async (args: mintArgs) => {
+      if (!nftContract) throw new Error("Nft contract not initialized");
+      if (!wallet) throw new Error("Wallet not initialized");
+      const nftMessage = beginCell();
+      nftMessage.storeAddress(Address.parse(wallet))
+      nftMessage.storeRef(setItemContentCell({
+        name: args.name,
+        description: args.description,
+        image: args.image,
+      }))
+      const body = beginCell()
+        .storeUint(1, 32)  // operation
+        .storeUint(randomSeed, 64)
+        .storeUint(0, 64)
+        .storeCoins(toNano("0.014"))
+        .storeRef(nftMessage)  // body
+        .endCell();
+      const boc = await tonConnectUI.sendTransaction({
+        messages: [
+          {
+            address: nftContract.address.toString(),
+            amount: toNano("0.02").toString(),
+            payload: body.toBoc().toString("base64"),
+          },
+        ],
+        validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
+      });
+      const txhash = await getTxByBOC(boc.boc, wallet)
+      console.log('txhash', txhash);
+      return txhash;
+    }
   };
 }
