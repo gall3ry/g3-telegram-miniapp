@@ -40,11 +40,7 @@ const DrawerContent: typeof DrawerPrimitive.Content = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
-    <DrawerOverlay
-      onClick={(e) => {
-        console.log(`e`, e);
-      }}
-    />
+    <DrawerOverlay />
     <Theme>
       <DrawerPrimitive.Content
         ref={ref}

@@ -32,8 +32,6 @@ export const getOcc = publicProcedure
       },
     });
 
-    console.log(reactions);
-
     const result = await db.occ.findUniqueOrThrow({
       where: { id },
       include: {
