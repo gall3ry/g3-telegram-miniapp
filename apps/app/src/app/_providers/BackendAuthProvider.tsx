@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useInitData } from "@tma.js/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect } from "react";
-import { api } from "../../trpc/react";
+import { RouterInputs, api } from "../../trpc/react";
 import { useAuth, useAuthHydrated, useIsAuthenticated } from "./useAuth";
 
 const payloadTTLMS = 1000 * 60 * 9; // 9 minutes
@@ -40,12 +40,17 @@ export const BackendAuthProvider = ({
         throw new Error("Username is missing");
       }
 
-      if (!data.displayName || !data.telegramId) {
-        void updateDisplayName({
-          displayName: initData.user.username,
-          telegramId: initData.user.id,
-        }).then(() => utils.auth.invalidate());
+      const _data = {
+        displayName: initData.user.username,
+        avatarUrl: initData.user.photoUrl,
+        telegramId: initData.user.id,
+      } satisfies RouterInputs["auth"]["updateDisplayName"] as RouterInputs["auth"]["updateDisplayName"];
+
+      if (data.displayName) {
+        delete _data.displayName;
       }
+
+      void updateDisplayName(_data).then(() => utils.auth.invalidate());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, initData]);

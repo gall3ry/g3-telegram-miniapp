@@ -1,35 +1,16 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Avatar,
-  Button,
-  IconButton,
-  Skeleton,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
-import { cn, formatTonAddress } from "@repo/utils";
+import { Avatar, Button, IconButton, Skeleton } from "@radix-ui/themes";
+import { formatTonAddress } from "@repo/utils";
 import { toUserFriendlyAddress } from "@tonconnect/sdk";
-import { parseAsBoolean, useQueryState } from "nuqs";
-import { useEffect } from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { Drawer as VauleDrawer } from "vaul";
-import { z } from "zod";
-import { updateInputNameSchema } from "../../../server/api/routers/auth/_shared/updateInputNameSchema";
+import { memo, useState } from "react";
 import { api } from "../../../trpc/react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerTitle,
-} from "../_components/Drawer";
+import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { useUser } from "../useUser";
 import { IconMore } from "./IconMore";
 import { IconSignOut } from "./IconSignOut";
-import { IconEdit } from "./_icon/IconEdit";
-import { IconPicture } from "./_icon/IconPicture";
+import { ProfileDrawer } from "./ProfileDrawer";
+import { useEditQueryState } from "./useEditQueryState";
 import { useLogout } from "./useLogout";
 
 const Page = () => {
@@ -37,20 +18,21 @@ const Page = () => {
   const { data: user, tonProvider } = useUser();
   const { data: stats, isSuccess } = api.auth.getMyStats.useQuery();
   const { setEditProfileOpen } = useEditQueryState();
+  const [signOutDrawerOpen, setSignOutDrawerOpen] = useState(false);
 
   const items = isSuccess
     ? [
         {
           title: "Shares",
-          value: stats.totalShare,
+          value: Intl.NumberFormat().format(stats.totalShare),
         },
         {
           title: "Reactions",
-          value: stats.totalReaction,
+          value: Intl.NumberFormat().format(stats.totalReaction),
         },
         {
           title: "Minted",
-          value: stats.totalMinted,
+          value: Intl.NumberFormat().format(stats.totalMinted),
         },
       ]
     : [];
@@ -120,8 +102,19 @@ const Page = () => {
 
       <ProfileDrawer />
 
+      <SignOutDrawer
+        open={signOutDrawerOpen}
+        onOpenChange={setSignOutDrawerOpen}
+      />
+
       <div className="mt-4">
-        <Button onClick={logout} className="w-full bg-[#DAF200]" size="4">
+        <Button
+          onClick={() => {
+            setSignOutDrawerOpen(true);
+          }}
+          className="w-full bg-[#DAF200]"
+          size="4"
+        >
           <div className="text-xl font-bold leading-7 text-slate-900">
             Sign out
           </div>
@@ -134,217 +127,67 @@ const Page = () => {
   );
 };
 
-export const ProfileDrawer = () => {
-  const {
-    editProfileOpen,
-    setEditProfileOpen,
-    setEditDisplayNameOpen,
-    setEditPictureOpen,
-  } = useEditQueryState();
+const SignOutDrawer = memo(
+  ({
+    open,
+    onOpenChange,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }) => {
+    const { logout } = useLogout();
 
-  const items = [
-    {
-      icon: <IconEdit className="size-8" />,
-      title: "Edit user name",
-      onClick: () => {
-        void setEditDisplayNameOpen(true);
-      },
-    },
-    {
-      icon: <IconPicture className="size-8" />,
-      title: "Edit picture",
-      onClick: () => {
-        void setEditPictureOpen(true);
-      },
-    },
-  ];
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          <div className="text-center text-2xl font-bold leading-9 text-slate-900">
+            You are about to sign out
+          </div>
 
-  return (
-    <Drawer
-      open={editProfileOpen}
-      onOpenChange={(open) => {
-        void setEditProfileOpen(open);
-      }}
-    >
-      <DrawerContent>
-        <div>
-          {items.map((item) => (
-            <button
-              className="flex w-full cursor-pointer items-center justify-start gap-3 px-5 py-3 hover:bg-gray-100"
-              key={item.title}
-              onClick={item.onClick}
+          <DrawerFooter>
+            <Button
+              radius="full"
+              size="4"
+              onClick={() => {
+                void logout();
+              }}
             >
-              {item.icon}
-              <div className="text-xl font-medium leading-7 text-slate-700">
-                {item.title}
+              <div className="text-xl font-bold leading-7 text-slate-900">
+                Sign out
               </div>
-            </button>
-          ))}
-        </div>
 
-        <EditDisplayNameDrawer />
+              <div className="size-6">
+                <IconSignOut />
+              </div>
+            </Button>
 
-        <DrawerFooter>
-          <Button
-            radius="full"
-            color="gray"
-            variant="soft"
-            size="4"
-            className="bg-[#E5E7EC]"
-            onClick={() => {
-              void setEditProfileOpen(false);
-            }}
-          >
-            Close
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
+            <Button
+              radius="full"
+              color="gray"
+              variant="soft"
+              size="4"
+              onClick={() => {
+                onOpenChange(false);
+              }}
+            >
+              <div className="text-xl font-bold leading-7 text-slate-900">
+                Cancel
+              </div>
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  },
+);
+
+SignOutDrawer.displayName = "SignOutDrawer";
 
 const PageWrapper = () => {
   return (
     <LoggedUserOnly>
       <Page />
     </LoggedUserOnly>
-  );
-};
-
-const useEditQueryState = () => {
-  const [editProfileOpen, setEditProfileOpen] = useQueryState(
-    "editProfileOpen",
-    parseAsBoolean.withDefault(false),
-  );
-  const [editDisplayNameOpen, setEditDisplayNameOpen] = useQueryState(
-    "editDisplayNameOpen",
-    parseAsBoolean.withDefault(false),
-  );
-  const [editPictureOpen, setEditPictureOpen] = useQueryState(
-    "editPictureOpen",
-    parseAsBoolean.withDefault(false),
-  );
-
-  return {
-    editProfileOpen,
-    setEditProfileOpen,
-    editDisplayNameOpen,
-    setEditDisplayNameOpen,
-    editPictureOpen,
-    setEditPictureOpen,
-  };
-};
-
-const EditDisplayNameDrawer = () => {
-  const { editDisplayNameOpen, setEditDisplayNameOpen, setEditProfileOpen } =
-    useEditQueryState();
-  const { mutateAsync: updateDisplayName } =
-    api.auth.updateDisplayName.useMutation();
-  const form = useForm<z.infer<typeof updateInputNameSchema>>({
-    resolver: zodResolver(updateInputNameSchema),
-  });
-  const { data: user } = useUser();
-
-  useEffect(() => {
-    if (user?.displayName) {
-      form.reset({
-        displayName: user.displayName,
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.displayName]);
-  const utils = api.useUtils();
-
-  return (
-    <VauleDrawer.NestedRoot
-      open={editDisplayNameOpen}
-      onOpenChange={(open) => {
-        void setEditDisplayNameOpen(open);
-      }}
-    >
-      <DrawerContent>
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(async (data) => {
-              await toast.promise(
-                updateDisplayName({
-                  displayName: data.displayName,
-                }),
-                {
-                  loading: "Updating...",
-                  success: "Updated",
-                  error: "Failed to update",
-                },
-              );
-
-              await utils.auth.getCurrentUser.invalidate();
-
-              await setEditDisplayNameOpen(false);
-              await setEditProfileOpen(false);
-            })}
-          >
-            <DrawerTitle>Edit user name</DrawerTitle>
-
-            <DrawerFooter>
-              <Controller
-                name="displayName"
-                render={({ field, fieldState }) => (
-                  <>
-                    <TextField.Root
-                      placeholder="Enter your name"
-                      className={cn(
-                        "h-[48px] rounded-lg px-4 py-3 text-base font-medium leading-normal tracking-tight text-slate-900 outline-[#DAF200]",
-                        {
-                          "outline-red-500 ring-1 ring-red-500":
-                            fieldState.error,
-                        },
-                      )}
-                      {...field}
-                    >
-                      <TextField.Slot side="right">
-                        <div className="text-right text-base font-light leading-normal tracking-tight text-slate-500">
-                          {field.value?.length ?? 0} / 20
-                        </div>
-                      </TextField.Slot>
-                    </TextField.Root>
-
-                    {fieldState.error && (
-                      <Text color="red" size="2" className="mt-1">
-                        {fieldState.error.message}
-                      </Text>
-                    )}
-                  </>
-                )}
-              />
-
-              <div className="flex gap-2 *:flex-1">
-                <Button
-                  radius="large"
-                  color="gray"
-                  variant="soft"
-                  size="4"
-                  className="bg-[#E5E7EC]"
-                  onClick={() => {
-                    void setEditDisplayNameOpen(false);
-                  }}
-                  type="button"
-                >
-                  <div className="text-xl font-bold leading-7 text-slate-900">
-                    Cancel
-                  </div>
-                </Button>
-                <Button radius="large" size="4" type="submit">
-                  <div className="text-xl font-bold leading-7 text-slate-900">
-                    Save
-                  </div>
-                </Button>
-              </div>
-            </DrawerFooter>
-          </form>
-        </FormProvider>
-      </DrawerContent>
-    </VauleDrawer.NestedRoot>
   );
 };
 

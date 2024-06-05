@@ -23,7 +23,8 @@ export interface IQuest {
    */
   isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean>;
   isRewardAlreadyGiven({ userId }: { userId: number }): Promise<boolean>;
-  getQuestMetadata({
+
+  getQuestMetadata?({
     userId,
   }: {
     userId: number;
@@ -39,8 +40,8 @@ export abstract class BaseQuest implements IQuest {
 
   async isQuestCompleted({ userId }: { userId: number }): Promise<boolean> {
     return (
-      (await this.isUserFinishedQuest({ userId })) &&
-      !(await this.isRewardAlreadyGiven({ userId }))
+      !(await this.isRewardAlreadyGiven({ userId })) &&
+      (await this.isUserFinishedQuest({ userId }))
     );
   }
   async completeQuestOrThrow({ userId }: { userId: number }): Promise<void> {
@@ -74,7 +75,8 @@ export abstract class BaseQuest implements IQuest {
   }: {
     userId: number;
   }): Promise<boolean>;
-  abstract getQuestMetadata({
+
+  abstract getQuestMetadata?({
     userId,
   }: {
     userId: number;

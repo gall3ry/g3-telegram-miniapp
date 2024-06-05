@@ -3,6 +3,7 @@ import { cn } from "@repo/utils";
 import Link from "next/link";
 import { useMemo } from "react";
 import { IconPoints } from "../_icons/IconPoints";
+import { IconCheck } from "./_icon/IconCheck";
 
 type QuestItemProps = {
   title: string;
@@ -12,6 +13,7 @@ type QuestItemProps = {
   isClaimable?: boolean;
   onClick?: () => void;
   disabled?: boolean;
+  isCompleted?: boolean;
 };
 
 export const QuestItem = ({
@@ -22,15 +24,45 @@ export const QuestItem = ({
   isClaimable,
   onClick,
   disabled,
+  isCompleted,
 }: QuestItemProps) => {
-  const _text = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if (isClaimable || !text) {
-      return "Claim";
+  const _button = useMemo(() => {
+    const _text = _getText();
+
+    if (isCompleted) {
+      return (
+        <Button
+          size="2"
+          onClick={onClick}
+          disabled={disabled}
+          className="bg-white"
+        >
+          <IconCheck width={16} height={16} />
+          <div className="text-base font-bold leading-normal text-[#54D669]">
+            Completed
+          </div>
+        </Button>
+      );
     }
 
-    return text;
-  }, [isClaimable, text]);
+    return wrapText(_text);
+
+    function wrapText(text: string) {
+      return (
+        <Button size="2" onClick={onClick} disabled={disabled}>
+          {text}
+        </Button>
+      );
+    }
+    function _getText() {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      if (isClaimable || !text) {
+        return "Claim";
+      }
+
+      return text;
+    }
+  }, [isCompleted]);
 
   return (
     <Link
@@ -58,9 +90,7 @@ export const QuestItem = ({
           </span>
         </div>
 
-        <Button size="2" onClick={onClick} disabled={disabled}>
-          {_text}
-        </Button>
+        {_button}
       </div>
     </Link>
   );

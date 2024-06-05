@@ -1,10 +1,7 @@
-"use client";
-import { Button, Flex, Skeleton } from "@radix-ui/themes";
+import { Button, Flex } from "@radix-ui/themes";
 import Image from "next/image";
-import { api } from "../../../trpc/react";
 import { IMAGES } from "../../_constants/image";
-import { useIsAuthenticated } from "../../_providers/useAuth";
-import { IconPoints } from "../_icons/IconPoints";
+import { CurrentPoint } from "../quests/CurrentPoint";
 
 export const Top = () => {
   return (
@@ -93,44 +90,5 @@ export const Top = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export const CurrentPoint = () => {
-  const { isAuthenticated } = useIsAuthenticated();
-  const {
-    data,
-    isPending: getCurrentUserPending,
-    isSuccess,
-  } = api.auth.getCurrentUser.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
-
-  return (
-    isAuthenticated && (
-      <div>
-        <div className="text-xl font-bold leading-7 text-slate-900">
-          Current point
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="h-11 w-11">
-            <IconPoints />
-          </div>
-
-          <Skeleton width="100px" height="40px" loading={getCurrentUserPending}>
-            {isSuccess && (
-              <div className="text-right text-[56px] font-bold leading-[72px] text-[#BACF00]">
-                {Intl.NumberFormat().format(data.point)}
-              </div>
-            )}
-          </Skeleton>
-
-          <div className="mb-6 text-right text-2xl font-medium leading-9 tracking-tight text-slate-700">
-            EPIC
-          </div>
-        </div>
-      </div>
-    )
   );
 };

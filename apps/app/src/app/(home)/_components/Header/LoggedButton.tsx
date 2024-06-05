@@ -33,8 +33,8 @@ function UserMenu() {
             </div>
             <Avatar
               className="h-10 w-10 rounded-[40px] border-2 border-[#DAF200]"
-              src="https://picsum.photos/200/200"
-              fallback="A"
+              src={user.avatarUrl ?? undefined}
+              fallback={user.displayName?.[0] ?? "?"}
               alt="avatar"
             />
           </div>

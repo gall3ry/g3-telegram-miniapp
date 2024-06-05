@@ -19,14 +19,52 @@ export class QuestService {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private async _getTasks() {
+  private async _getTasks({ userId }: { userId: number }) {
     const _tasks: IQuest[] = [new BindWalletAddressTask()];
     const client = PostHogClient();
     if (await client.isFeatureEnabled(Flag.join_g3_community, "default")) {
       _tasks.push(new JoinCommunityTask());
     }
 
-    return _tasks;
+    return Promise.all(
+      _tasks.map(async (task) => {
+        const [isRewardAlreadyGiven, metadata] = await Promise.all([
+          task.isRewardAlreadyGiven({ userId }),
+          task.getQuestMetadata?.({ userId }),
+        ]);
+
+        return {
+          task,
+          isRewardAlreadyGiven,
+          metadata,
+        };
+      }),
+    );
+  }
+
+  private async _getTaskWithFilter({
+    taskType,
+    userId,
+  }: {
+    taskType: QuestStatus;
+    userId: number;
+  }) {
+    const _tasks = await this._getTasks({
+      userId,
+    });
+
+    switch (taskType) {
+      case QuestStatus.ALL:
+        return _tasks;
+      case QuestStatus.COMPLETED: {
+        return _tasks.filter((task) => task.isRewardAlreadyGiven);
+      }
+      case QuestStatus.INCOMPLETE: {
+        return _tasks.filter((task) => !task.isRewardAlreadyGiven);
+      }
+      default:
+        return [];
+    }
   }
 
   async getTasks({
@@ -36,42 +74,25 @@ export class QuestService {
     taskType: QuestStatus;
     userId: number;
   }) {
-    const _tasks = await this._getTasks();
-
-    const _getTaskWithFilter = (taskType: QuestStatus) => {
-      switch (taskType) {
-        case QuestStatus.ALL:
-          return _tasks;
-        case QuestStatus.COMPLETED:
-          return _tasks.filter(async (task) => {
-            return await task.isQuestCompleted({ userId });
-          });
-        case QuestStatus.INCOMPLETE:
-          return _tasks.filter(async (task) => {
-            return !(await task.isQuestCompleted({ userId }));
-          });
-        default:
-          return [];
-      }
-    };
+    const filteredTasks = await this._getTaskWithFilter({
+      taskType,
+      userId,
+    });
 
     return Promise.all(
-      _getTaskWithFilter(taskType).map(async (task) => {
-        const [isClaimed, isFinishedQuest] = await Promise.all([
-          task.isRewardAlreadyGiven({ userId }).catch(() => false),
-          task.isUserFinishedQuest({ userId }).catch(() => false),
-        ]);
+      filteredTasks.map(async ({ task, isRewardAlreadyGiven, metadata }) => {
+        // Avoid calling isFinishedQuest if the task is already claimed
+        const isFinishedQuest =
+          isRewardAlreadyGiven || (await task.isUserFinishedQuest({ userId }));
 
         return {
           id: task.id,
           points: task.points,
-          metadata: await task.getQuestMetadata({
-            userId,
-          }),
+          metadata: metadata,
           title: task.title,
           description: task.description,
           text: task.text,
-          isClaimed,
+          isClaimed: isRewardAlreadyGiven,
           isFinishedQuest,
         };
       }),
@@ -85,8 +106,9 @@ export class QuestService {
     taskId: QuestId;
     userId: number;
   }): Promise<void> {
-    const _tasks = await this._getTasks();
-    const task = _tasks.find((task) => task.id === taskId);
+    const _tasks = await this._getTasks({ userId });
+    const result = _tasks.find(({ task }) => task.id === taskId);
+    const { task } = result ?? {};
 
     if (!task) {
       throw new TRPCError({

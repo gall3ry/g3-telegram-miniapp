@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "../../trpc";
 import { createOCC } from "./createOCC";
+import { getLeaderboard } from "./getLeaderboard";
 import { getMyOccs } from "./getMyOccs";
 import { getOcc } from "./getOcc";
 import { getOccTemplate, getOccTemplates } from "./getOccTemplates";
@@ -11,4 +12,5 @@ export const occRouter = createTRPCRouter({
   getEpicTemplates: getOccTemplates,
   getEpicTemplate: getOccTemplate,
   getOcc: getOcc,
+  getLeaderboard,
 });

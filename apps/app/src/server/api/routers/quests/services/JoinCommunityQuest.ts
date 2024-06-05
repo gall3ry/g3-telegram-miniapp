@@ -59,7 +59,7 @@ export class JoinCommunityTask extends BaseQuest {
     return !!result;
   }
 
-  async getQuestMetadata(): Promise<Record<string, unknown>> {
+  async getQuestMetadata() {
     return {
       chatId: env.NEXT_PUBLIC_COMMUNITY_CHAT_ID,
     };

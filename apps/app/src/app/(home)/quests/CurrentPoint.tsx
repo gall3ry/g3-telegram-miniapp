@@ -8,6 +8,7 @@ import { IconTime } from "./IconTime";
 
 export const CurrentPoint = () => {
   const { data, isSuccess } = useUser();
+
   return (
     <div
       className="relative rounded-xl px-4 pb-[22px] pt-4"

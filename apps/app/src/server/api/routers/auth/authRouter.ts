@@ -19,10 +19,14 @@ export const authRouter = createTRPCRouter({
       z.object({
         displayName: z.string().min(5).max(50).trim().optional(),
         telegramId: z.number().optional(),
+        avatarUrl: z.string().url().optional(),
       }),
     )
     .mutation(
-      async ({ ctx: { session }, input: { telegramId, displayName } }) => {
+      async ({
+        ctx: { session },
+        input: { telegramId, displayName, avatarUrl },
+      }) => {
         const userId = session.userId;
 
         const client = PostHogClient();
@@ -38,6 +42,7 @@ export const authRouter = createTRPCRouter({
         const toUpdate = {
           displayName: displayName,
           telegramId: telegramId?.toString(),
+          avatarUrl,
         } satisfies Prisma.UserUpdateInput;
 
         if (!telegramId) {

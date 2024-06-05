@@ -9,6 +9,7 @@ import { QuestId } from "~/server/api/routers/quests/services/QuestId";
 import { QuestStatus } from "~/server/api/routers/quests/services/QuestStatus";
 import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
+import { AllQuestsCompleted } from "./AllQuestsCompleted";
 import { CurrentPoint } from "./CurrentPoint";
 import { QuestItem } from "./QuestItem";
 
@@ -21,13 +22,25 @@ const Page = () => {
     isPending,
   } = api.quests.getQuests.useQuery(
     {
-      type: QuestStatus.ALL,
+      type: QuestStatus.INCOMPLETE,
     },
     {
       refetchOnWindowFocus: true,
     },
   );
+  const { data: completedQuests, isSuccess: isCompletedQuestsSuccess } =
+    api.quests.getQuests.useQuery(
+      {
+        type: QuestStatus.COMPLETED,
+      },
+      {
+        refetchOnWindowFocus: true,
+      },
+    );
+
   const [parent] = useAutoAnimate();
+  const [parent2] = useAutoAnimate();
+
   const utils = api.useUtils();
   const { mutateAsync: completeTask } = api.quests.completeTask.useMutation({
     onSuccess: () => {
@@ -44,6 +57,7 @@ const Page = () => {
             .safeParse(item.metadata);
 
           if (!success) {
+            console.error("Invalid metadata", item.metadata);
             return null;
           }
 
@@ -79,6 +93,7 @@ const Page = () => {
                   },
                 });
               }}
+              isCompleted={item.isClaimed}
             />
           );
         }
@@ -105,6 +120,7 @@ const Page = () => {
                   },
                 });
               }}
+              isCompleted={item.isClaimed}
             />
           );
       }
@@ -116,9 +132,28 @@ const Page = () => {
     <div>
       <CurrentPoint />
 
-      <div className="mt-4 space-y-3" ref={parent}>
-        <Spinner loading={isPending}>
-          {isSuccess && items.map((item) => renderItem(item))}
+      <div className="mt-6 space-y-3" ref={parent}>
+        <div className="text-xl font-bold leading-7 text-slate-900">
+          Incomplete quest
+        </div>
+
+        <Spinner loading={isPending} size="3" className="mx-auto mt-8">
+          {isSuccess && items.length === 0 ? (
+            <AllQuestsCompleted />
+          ) : (
+            items?.map((item) => renderItem(item))
+          )}
+        </Spinner>
+      </div>
+
+      <div className="mt-6 space-y-3" ref={parent2}>
+        <div className="text-xl font-bold leading-7 text-slate-900">
+          Completed quest
+        </div>
+
+        <Spinner loading={!isCompletedQuestsSuccess} size="3" className="mt-8">
+          {isCompletedQuestsSuccess &&
+            completedQuests.map((item) => renderItem(item))}
         </Spinner>
       </div>
     </div>
