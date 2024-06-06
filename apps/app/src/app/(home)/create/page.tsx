@@ -2,12 +2,10 @@
 import { Button, Spinner } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
-import toast from "react-hot-toast";
 import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { MyOCC } from "../_components/MyOCC";
 import { EpicItem } from "./EpicItem";
-import { MintOCC } from "../_components/MintOCC";
 
 const Page = () => {
   const LIMIT = 10;
@@ -44,32 +42,6 @@ const Page = () => {
             ))}
         </Spinner>
 
-        <div className="my-4">
-          <Button
-            loading={isCreatingOCC}
-            onClick={async () => {
-              await toast.promise(
-                mutateAsync({
-                  occTemplateId: 99999, // TODO: remove this whole component
-                  txHash: "0x123",
-                }),
-                {
-                  loading: "Creating OCC...",
-                  success: (data) => {
-                    router.push(`/occ/${data.id}`);
-
-                    return "OCC created";
-                  },
-                  error: "Failed to create OCC",
-                },
-              );
-            }}
-            size="3"
-          >
-            Create OCC (Test)
-          </Button>
-        </div>
-        <MintOCC />
         <Suspense>
           <MyOCC />
         </Suspense>
