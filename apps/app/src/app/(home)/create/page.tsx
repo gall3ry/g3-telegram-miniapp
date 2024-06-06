@@ -1,6 +1,5 @@
 "use client";
 import { Button, Spinner } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { api } from "../../../trpc/react";
 import { LoggedUserOnly } from "../_components/LoggedUserOnly";
@@ -14,9 +13,6 @@ const Page = () => {
     limit: LIMIT,
     page: PAGE,
   });
-  const { mutateAsync, isPending: isCreatingOCC } =
-    api.occ.createOCC.useMutation();
-  const router = useRouter();
 
   return (
     <div>

@@ -1,4 +1,6 @@
+import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
+import { Prisma } from "database";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/utils/ton";
 import { env } from "../../../../env";
@@ -8,30 +10,24 @@ import { protectedProcedure } from "../../trpc";
 // move to worker (later)
 export const createOCC = protectedProcedure
   .input(
-    z
-      .object({
-        occTemplateId: z.number(),
-        txHash: z.string(),
-      })
-      .superRefine(({ txHash }, ctx) => {
-        if (txHash.length !== 64) {
-          ctx.addIssue({
-            code: "custom",
-            message: "Invalid transaction hash",
-          });
-        }
-      }),
+    z.object({
+      occTemplateId: z.number(),
+      txHash: z.string().min(64).max(64),
+    }),
   )
   .mutation(async ({ ctx: { session }, input: { occTemplateId, txHash } }) => {
     // validate txHash
-    const rawData = await getNFTIdAndOwnerFromTx(txHash, env.TON_API_KEY).catch(
-      () => {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Transaction not found",
-        });
-      },
-    );
+    const rawData = await tryNTimes({
+      toTry: () =>
+        getNFTIdAndOwnerFromTx(txHash, env.TON_API_KEY).catch(() => {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Transaction not found",
+          });
+        }),
+      interval: 1,
+      times: 5,
+    });
 
     const _schema = z
       .object({
@@ -50,11 +46,19 @@ export const createOCC = protectedProcedure
               userId: session.userId,
             },
           })
-          .catch(() => {
-            ctx.addIssue({
-              code: "custom",
-              message: "Owner not found",
-            });
+          .catch((e) => {
+            if (
+              e instanceof Prisma.PrismaClientKnownRequestError &&
+              e.code === "P2025"
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Owner not found",
+                path: ["txHash"],
+              });
+            } else {
+              throw e;
+            }
           });
 
         if (!provider) {
@@ -64,7 +68,7 @@ export const createOCC = protectedProcedure
         if (provider.value !== owner) {
           ctx.addIssue({
             code: "custom",
-            message: "Owner not found",
+            message: `Owner mismatch: ${provider.value} !== ${owner}`,
           });
         }
       });
