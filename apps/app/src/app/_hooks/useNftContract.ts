@@ -37,7 +37,6 @@ export function useNftContract() {
     address: nftContract?.address.toString(),
     sendMintNft: (args: mintArgs) => {
       if (!nftContract) throw new Error("Contract not initialized");
-
       if (!wallet) throw new Error("Wallet not initialized");
 
       return nftContract.sendMintNft(sender, {
