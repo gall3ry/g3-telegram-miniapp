@@ -3,6 +3,7 @@ import { Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import { CHAIN } from "@tonconnect/protocol";
 import { useNftContract } from "../../_hooks/useNftContract";
 import { useTonConnect } from "../../_hooks/useTonConnect";
+import { getNFTIdAndOwnerFromTx } from "../../utils/ton";
 
 export function MintOCC() {
   const { connected } = useTonConnect();
@@ -36,6 +37,16 @@ export function MintOCC() {
         }}
       >
         Mint OCC
+      </Button>
+
+      <Button
+        onClick={async () => {
+          void getNFTIdAndOwnerFromTx(
+            `588f65ef97cb28f3409be8ebba8dbcf9f8c7558d298357b08201dcc709a972f7`,
+          ).then((res) => console.log(res));
+        }}
+      >
+        Test get tx info
       </Button>
     </Flex>
   );

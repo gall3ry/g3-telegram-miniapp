@@ -1,12 +1,12 @@
 import { CHAIN } from "@tonconnect/protocol";
+import { useTonConnectUI } from "@tonconnect/ui-react";
 import { Address, beginCell, toNano } from "ton-core";
 import NftCollection from "../contracts/NftCollection";
 import { setItemContentCell } from "../contracts/nftContent/onChain";
+import { getTxByBOC } from "../utils/ton";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
-import { useTonConnectUI } from "@tonconnect/ui-react";
-import { getTxByBOC } from "../utils/ton";
 
 const randomSeed = Math.floor(Math.random() * 10000);
 
@@ -57,18 +57,20 @@ export function useNftContract() {
       if (!nftContract) throw new Error("Nft contract not initialized");
       if (!wallet) throw new Error("Wallet not initialized");
       const nftMessage = beginCell();
-      nftMessage.storeAddress(Address.parse(wallet))
-      nftMessage.storeRef(setItemContentCell({
-        name: args.name,
-        description: args.description,
-        image: args.image,
-      }))
+      nftMessage.storeAddress(Address.parse(wallet));
+      nftMessage.storeRef(
+        setItemContentCell({
+          name: args.name,
+          description: args.description,
+          image: args.image,
+        }),
+      );
       const body = beginCell()
-        .storeUint(1, 32)  // operation
+        .storeUint(1, 32) // operation
         .storeUint(randomSeed, 64)
         .storeUint(0, 64)
         .storeCoins(toNano("0.014"))
-        .storeRef(nftMessage)  // body
+        .storeRef(nftMessage) // body
         .endCell();
       const boc = await tonConnectUI.sendTransaction({
         messages: [
@@ -80,9 +82,10 @@ export function useNftContract() {
         ],
         validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
       });
-      const txhash = await getTxByBOC(boc.boc, wallet)
-      console.log('txhash', txhash);
+      const txhash = await getTxByBOC(boc.boc, wallet);
+      console.log("txhash", txhash);
+
       return txhash;
-    }
+    },
   };
 }

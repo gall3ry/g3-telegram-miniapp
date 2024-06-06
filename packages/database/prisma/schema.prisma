@@ -40,6 +40,8 @@ model RewardLogs {
     taskId String? // should not optional
     point  Int
     userId Int
+
+    @@index([userId])
 }
 
 enum ProviderType {
@@ -74,7 +76,11 @@ model Occ {
     shareCount Int     @default(0)
     Share      Share[]
 
+    nftAddress String? // TODO: should not optional
+
     metadata Json?
+
+    @@index([userId])
 }
 
 model Share {

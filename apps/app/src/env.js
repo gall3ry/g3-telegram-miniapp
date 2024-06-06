@@ -13,6 +13,11 @@ export const env = createEnv({
       .default("development"),
     JWT_SECRET: z.string(),
     BOT_TOKEN: z.string(),
+    TON_API_KEY: z
+      .string()
+      .default(
+        "AF6GGCODMULLAEYAAAAEE6TZ6PWQRJIDMH4MAPBEOJGLQMAFGQS7C7UZRG7NZT64PL4SRMQ",
+      ),
   },
 
   /**
@@ -41,6 +46,11 @@ export const env = createEnv({
       .string()
       .regex(/@.+/)
       .default("@testabc1234578"),
+    NEXT_PUBLIC_TON_API_KEY_FRONTEND: z
+      .string()
+      .default(
+        "AF6GGCODOGMETNQAAAAM75NIXLA466TL7EESFD7Q7JBZH6DPK3AZYQOUAABLCI4ONMZFL2Y",
+      ),
   },
 
   /**
@@ -58,6 +68,9 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     BOT_TOKEN: process.env.BOT_TOKEN,
     NEXT_PUBLIC_COMMUNITY_CHAT_ID: process.env.NEXT_PUBLIC_COMMUNITY_CHAT_ID,
+    NEXT_PUBLIC_TON_API_KEY_FRONTEND:
+      process.env.NEXT_PUBLIC_TON_API_KEY_FRONTEND,
+    TON_API_KEY: process.env.TON_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
