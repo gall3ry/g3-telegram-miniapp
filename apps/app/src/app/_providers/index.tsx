@@ -15,6 +15,7 @@ if (typeof window !== "undefined") {
     api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
     loaded: function (ph) {
       if (env.NEXT_PUBLIC_G3_ENV === "development") {
+        console.log(`Removing PostHog session recording`);
         ph.opt_out_capturing(); // opts a user out of event capture
         ph.set_config({ disable_session_recording: true });
       }

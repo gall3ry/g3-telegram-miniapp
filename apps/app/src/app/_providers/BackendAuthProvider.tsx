@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useInitData } from "@tma.js/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect } from "react";
-import { RouterInputs, api } from "../../trpc/react";
+import { api, type RouterInputs } from "../../trpc/react";
 import { useAuth, useAuthHydrated, useIsAuthenticated } from "./useAuth";
 
 const payloadTTLMS = 1000 * 60 * 9; // 9 minutes

@@ -43,8 +43,11 @@ const Page = () => {
 
   const utils = api.useUtils();
   const { mutateAsync: completeTask } = api.quests.completeTask.useMutation({
-    onSuccess: () => {
-      void utils.quests.getQuests.invalidate();
+    onSuccess: async () => {
+      await Promise.all([
+        utils.quests.getQuests.invalidate(),
+        utils.auth.getCurrentUser.invalidate(),
+      ]);
     },
   });
 

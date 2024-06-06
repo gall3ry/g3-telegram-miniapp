@@ -2,7 +2,7 @@ import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
 import { Prisma } from "database";
 import { z } from "zod";
-import { getNFTIdAndOwnerFromTx } from "../../../../app/utils/ton";
+import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
 import { env } from "../../../../env";
 import { db } from "../../../db";
 import { protectedProcedure } from "../../trpc";
