@@ -123,15 +123,16 @@ export async function getNFTIdAndOwnerFromTx(
   const owner = transaction.account.address;
   const nftAddress = children[0]!.children[0]!.transaction.account.address;
 
-  const toBounceable = (address: string, unbounceAble?: boolean) => {
-    const _address = new TonWeb.utils.Address(address);
-
-    return _address.toString(true, true, !unbounceAble, false);
-  };
   const result = {
-    owner: toBounceable(owner, true),
-    nftAddress: toBounceable(nftAddress),
+    owner,
+    nftAddress,
   };
 
   return result;
 }
+
+export const toBounceable = (address: string, unbounceAble?: boolean) => {
+  const _address = new TonWeb.utils.Address(address);
+
+  return _address.toString(true, true, !unbounceAble, false);
+};

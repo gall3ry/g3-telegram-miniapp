@@ -26,7 +26,7 @@ export function useNftContract() {
     const contract = new NftCollection(
       Address.parse(
         network === CHAIN.MAINNET
-          ? "EQDLcS-wf4j9KFN5jtJ_sAOxnrv_x9rE6GCctQgkC2an6jQY"
+          ? "EQDse2YhJlXweEKkbAWvkyla36VXUywdapUXyvvlWBHl7aPQ"
           : "EQDzkXSigq_FQzQ6VYU-e84VgyRLk5avV2NxRiA5INjyepBe",
       ),
     );
