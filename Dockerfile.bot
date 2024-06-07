@@ -30,12 +30,13 @@ COPY --from=builder /app/out/full/ .
 RUN pnpm build --filter=my-node-app...
 
 FROM base AS runner
-WORKDIR /app
+
+COPY --from=installer . .
+WORKDIR /app/app
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
 USER nestjs
-
-COPY --from=installer . .
 
 EXPOSE 3100
 CMD ["pnpm", "--filter=my-node-app", "start"]
