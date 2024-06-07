@@ -34,6 +34,8 @@ WORKDIR /app
 
 COPY --from=installer . .
 
+WORKDIR /app/apps/worker
+
 RUN pnpm playwright install-deps && \
     pnpm playwright install --with-deps chromium 
 
