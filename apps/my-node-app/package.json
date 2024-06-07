@@ -10,6 +10,7 @@
     "get-string-session": "tsup ./src/scripts/get-string-session.ts --onSuccess \"node dist/get-string-session.js\""
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "@types/express": "^4.17.17",
     "@types/lodash-es": "^4.17.12",
     "dotenv-cli": "^7.4.2",

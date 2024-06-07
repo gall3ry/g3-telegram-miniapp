@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main    # change to main if needed
+      - tin/setup-fly
 jobs:
   deploy:
     name: Deploy app
@@ -11,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" --build-target=worker
-      - run: flyctl deploy --remote-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" --build-target=my-node-app
+      - run: flyctl deploy --local-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ../../fly.worker.toml
+      - run: flyctl deploy --local-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ../../fly.bot.toml
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

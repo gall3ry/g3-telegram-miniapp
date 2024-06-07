@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
@@ -53,6 +53,5 @@
     "UPSTASH_REDIS_REST_URL",
     "UPSTASH_QSTASH_TOKEN",
     "WORKER_PUBLIC_URL"
-  ],
-  "globalDotEnv": [".env"]
+  ]
 }

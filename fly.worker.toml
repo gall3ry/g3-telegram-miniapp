@@ -3,31 +3,19 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'telegram-miniapp'
+app = 'g3-stg-telegram-worker'
 primary_region = 'sin'
 
-[processes]
-bot = "pnpm --filter my-node-app run start"
-worker = "pnpm --filter worker run start"
 
 [build]
-build-target = "worker"
-
+dockerfile = "./Dockerfile.worker"
 
 [env]
-PORT = '8080'
 
 [[vm]]
 memory = '1gb'
 cpu_kind = 'shared'
 cpus = 1
-processes = ['worker']
-
-[[vm]]
-memory = '1gb'
-cpu_kind = 'shared'
-cpus = 1
-processes = ['bot']
 
 # worker webservice
 [http_service]
@@ -37,7 +25,3 @@ force_https = true
 auto_stop_machines = false
 auto_start_machines = false
 min_machines_running = 0
-[http_service.concurrency]
-type = "requests"
-soft_limit = 200
-hard_limit = 250
