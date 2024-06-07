@@ -34,5 +34,8 @@ WORKDIR /app
 
 COPY --from=installer . .
 
+RUN pnpm playwright install-deps && \
+    pnpm playwright install --with-deps chromium 
+
 EXPOSE 3100
 CMD ["pnpm", "--filter=worker", "start"]
