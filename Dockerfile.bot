@@ -38,6 +38,6 @@ USER nestjs
 COPY --from=installer . .
 
 EXPOSE 3100
-CMD ["pnpm", "--filter=worker", "start"]
+CMD ["pnpm", "--filter=my-node-app", "start"]
 
 # CMD ["tail", "-f", "/dev/null"]
