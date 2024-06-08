@@ -6,9 +6,9 @@ on:
       - tin/setup-fly
 
 # Concurrency can be used at workflow level or job leve
-concurrency:
-  group: ${{ github.head_ref || github.ref_name }} 
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.head_ref || github.ref_name }} 
+#   cancel-in-progress: true
 
 jobs:
   deploy-worker:
