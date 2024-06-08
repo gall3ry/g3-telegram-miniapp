@@ -4,7 +4,7 @@
   "scripts": {
     "build": "dotenv -- turbo build",
     "dev": "dotenv -- turbo dev",
-    "lint": "turbo lint",
+    "lint": "dotenv -- turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:studio": "dotenv -- turbo db:studio",
     "db:migrate": "dotenv -- turbo db:migrate",
