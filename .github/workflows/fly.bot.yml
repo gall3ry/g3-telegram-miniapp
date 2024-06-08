@@ -1,4 +1,4 @@
-name: Bot Fly Deploy
+name: Deploy telegram bot
 on:
   push:
     branches:

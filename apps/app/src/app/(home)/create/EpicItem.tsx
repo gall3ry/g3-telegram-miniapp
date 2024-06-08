@@ -63,7 +63,7 @@ export const EpicItem = ({
         <div className="mt-2.5">
           <div className="flex h-6 items-center gap-2">
             <div className="flex">
-              {participants.map((p, i) => (
+              {participants.slice(0, 4).map((p, i) => (
                 <Avatar
                   className="-ml-2 first:ml-0"
                   key={i}

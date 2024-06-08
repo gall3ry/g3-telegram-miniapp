@@ -1,4 +1,4 @@
-name: Worker file deploy
+name: Deploy worker
 on:
   push:
     branches:
