@@ -31,4 +31,3 @@ pnpm db:migrate -- --name map_payload_to_tonproof
 ```
 pnpm db:reset
 ```
-
