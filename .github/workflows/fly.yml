@@ -5,16 +5,17 @@ on:
       - main    # change to main if needed
       - tin/setup-fly
 
-# Concurrency can be used at workflow level or job leve
-# concurrency:
-#   group: ${{ github.head_ref || github.ref_name }} 
-#   cancel-in-progress: true
+concurrency:
+  # Cancels pending runs when a PR gets updated.
+  group: ${{ github.head_ref || github.run_id }}-${{ github.actor }}
+  cancel-in-progress: true
+
 
 jobs:
   deploy-worker:
     name: Deploy worker
     runs-on: ubuntu-latest
-    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    concurrency: deploy-worker    # optional: ensure only one action runs at a time
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,7 +79,7 @@ jobs:
   deploy-bot:
     name: Deploy bot
     runs-on: ubuntu-latest
-    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    concurrency: deploy-bot
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
