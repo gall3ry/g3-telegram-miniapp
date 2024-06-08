@@ -34,13 +34,15 @@ export const BackendAuthProvider = ({
     api.auth.updateDisplayName.useMutation();
   const initData = useInitData(true);
 
+  // Reset session
   useEffect(() => {
-    if (isLoading && !isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       reset();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
 
+  // Update display name
   useEffect(() => {
     if (isSuccess && initData) {
       if (!initData?.user?.username) {
@@ -61,6 +63,7 @@ export const BackendAuthProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, initData]);
 
+  // Fetch proof payload
   useQuery({
     queryKey: [
       "custom",
@@ -93,6 +96,7 @@ export const BackendAuthProvider = ({
     refetchInterval: payloadTTLMS,
   });
 
+  // On login success, check proof and set access token
   useEffect(() => {
     if (!tonConnectUI || !isHydrated) {
       // check setAccessToken is to make sure store is initialized

@@ -1,4 +1,5 @@
 "use client";
+import { useIsConnectionRestored } from "@tonconnect/ui-react";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -47,10 +48,11 @@ export const useAuthHydrated = () => {
 export const useIsAuthenticated = () => {
   const { accessToken } = useAuth();
   const isHydrated = useAuthHydrated();
+  const isConnectionRestored = useIsConnectionRestored();
   const { isLoading: isUserLoading } = api.auth.getCurrentUser.useQuery();
 
   return {
     isAuthenticated: !!accessToken && isHydrated,
-    isLoading: isUserLoading || !isHydrated,
+    isLoading: isUserLoading || !isHydrated || !isConnectionRestored,
   };
 };
