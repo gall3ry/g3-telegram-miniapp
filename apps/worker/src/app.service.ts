@@ -32,11 +32,11 @@ export class AppService {
 
     for (const [groupName, share] of Object.entries(groupedShare)) {
       console.log(
-        `Processing group ${groupName}, share count: ${share.length}`,
+        `Processing group ${groupName}, share count: ${(share as any).length}`,
       );
       const reactions = await instance.getReactionsByIds({
         groupName: groupName,
-        ids: share.map((s) => +s.messageId),
+        ids: (share as any).map((s) => +s.messageId),
       });
 
       for (const [msgId, reaction] of Object.entries(reactions)) {

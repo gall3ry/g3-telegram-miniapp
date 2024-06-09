@@ -13,13 +13,15 @@
     "turbo": "dotenv -- turbo run",
     "prepare": "husky"
   },
+  "dependencies": {
+    "husky": "^9.0.11",
+    "dotenv-cli": "^7.4.2"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "commitizen": "^4.3.0",
-    "dotenv-cli": "^7.4.2",
     "git-cz": "^4.9.0",
-    "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
     "turbo": "^2.0.3"
