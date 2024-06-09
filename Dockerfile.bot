@@ -35,8 +35,7 @@ FROM base
 WORKDIR /app
 
 COPY --from=builder /app .
-COPY --from=builder /usr/bin/openssl /bin
-RUN apt-get update && apt-get install --assume-yes --no-install-recommends --quiet openssl
+RUN apt-get update && apt-get install -y openssl
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nestjs
 USER nestjs
