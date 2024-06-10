@@ -12,7 +12,11 @@ export const getOcc = publicProcedure
     const totalReaction = await db.reaction.aggregate({
       where: {
         share: {
-          occId: id,
+          Sticker: {
+            GMSymbolOCC: {
+              occId: id,
+            },
+          },
         },
       },
       _sum: {
@@ -24,7 +28,11 @@ export const getOcc = publicProcedure
       by: ["unifiedCode"],
       where: {
         share: {
-          occId: id,
+          Sticker: {
+            GMSymbolOCC: {
+              occId: id,
+            },
+          },
         },
       },
       _count: {
@@ -46,18 +54,25 @@ export const getOcc = publicProcedure
             },
           },
         },
+      },
+    });
 
-        _count: {
-          select: {
-            Share: true,
+    const partnerShare = await db.share.count({
+      where: {
+        Sticker: {
+          GMSymbolOCC: {
+            occId: id,
           },
         },
       },
     });
+    const shareCount = result.shareCount;
+    const totalShare = partnerShare + shareCount;
 
     return {
       ...result,
       totalReaction: totalReaction._sum.count ?? 0,
       reactions,
+      totalShare,
     };
   });

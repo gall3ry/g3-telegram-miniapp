@@ -13,11 +13,10 @@ import { protectedProcedure } from "../../trpc";
 export const createOCC = protectedProcedure
   .input(
     z.object({
-      occTemplateId: z.number(),
       txHash: z.string().min(64).max(64),
     }),
   )
-  .mutation(async ({ ctx: { session }, input: { occTemplateId, txHash } }) => {
+  .mutation(async ({ ctx: { session }, input: { txHash } }) => {
     // validate txHash
     const rawData = await tryNTimes({
       toTry: () =>
@@ -95,7 +94,7 @@ export const createOCC = protectedProcedure
     const uuid = uuidv4();
     const occ = await db.occ.create({
       data: {
-        occTemplateId,
+        txHash,
         providerId,
         nftAddress,
         uuid,

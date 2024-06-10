@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@akord/akord-js": "^5.8.2",
     "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^3.5.0",
     "@orbs-network/ton-access": "^2.3.3",

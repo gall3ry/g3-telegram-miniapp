@@ -175,7 +175,7 @@ export const TemplateInfo = () => {
         <div className="flex flex-col items-center">
           <Skeleton loading={isPending} width="100px" height="44px">
             <div className="text-center text-4xl font-bold leading-[44px] text-slate-900">
-              {isSuccess && Intl.NumberFormat().format(occ._count.Share)}
+              {isSuccess && Intl.NumberFormat().format(occ.totalShare)}
             </div>
           </Skeleton>
 

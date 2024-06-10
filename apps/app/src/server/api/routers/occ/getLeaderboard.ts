@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { ProviderType } from "database";
 import { z } from "zod";
 import { db } from "../../../db";
 import { callOrGetFromCache, Key } from "../../services/upstash";
@@ -20,39 +21,42 @@ export class LeaderboardService {
 
   public async getLeaderboard() {
     return callOrGetFromCache(Key.LEADERBOARD, async () => {
-      const result = await db.occ.findMany({
-        include: {
-          _count: {
-            select: {
-              Share: true,
-            },
-          },
-          Provider: {
-            select: {
-              User: {
-                select: {
-                  displayName: true,
-                  avatarUrl: true,
-                  Provider: {
-                    where: {
-                      type: "TON_WALLET",
-                    },
-                  },
-                  id: true,
-                },
-              },
-            },
-          },
-        },
-      });
-
-      const sortByShareCount = result.sort(
-        (a, b) =>
-          b.shareCount + b._count.Share - (a.shareCount + a._count.Share),
-      );
+      const sortByShareCount = await db.$queryRaw<
+        {
+          id: number;
+          shareCount: bigint;
+          totalShareCount: bigint;
+          userId: number;
+          displayName: string;
+          avatarUrl: string;
+          address: string;
+        }[]
+      >`
+            SELECT 
+              "Sticker".id,
+              COUNT("Share".id) as "shareCount",
+              ("Sticker"."shareCount" + COUNT("Share".id)) as "totalShareCount",
+              "User".id as "userId",
+              "User"."displayName" as "displayName",
+              "User"."avatarUrl" as "avatarUrl",
+              "Provider"."value" as "address"
+            FROM "Sticker" 
+            JOIN "Share" ON "Sticker".id = "Share"."stickerId" 
+            JOIN "GMSymbolOCC" ON "Sticker"."gMSymbolOCCId" = "GMSymbolOCC".id 
+            JOIN "Occ" ON "GMSymbolOCC"."occId" = "Occ".id 
+            JOIN "Provider" ON "Occ"."providerId" = "Provider".id 
+            JOIN "User" ON "Provider"."userId" = "User".id 
+            WHERE "Provider"."value" IS NOT NULL AND "Provider"."type" = ${ProviderType.TON_WALLET}::"ProviderType"
+            GROUP BY "Sticker".id, "User".id, "Provider"."value"
+            ORDER BY "totalShareCount" DESC`;
 
       return {
-        data: sortByShareCount,
+        data: sortByShareCount.map((item) => ({
+          ...item,
+          // map from bigint to number
+          shareCount: Number(item.shareCount),
+          totalShareCount: Number(item.totalShareCount),
+        })),
         total: sortByShareCount.length,
       };
     });
@@ -61,9 +65,7 @@ export class LeaderboardService {
   public async getMyCurrentLeaderboardPosition({ userId }: { userId: number }) {
     const leaderboard = await this.getLeaderboard();
 
-    const rank = leaderboard.data.findIndex(
-      (occ) => occ.Provider.User.id === userId,
-    );
+    const rank = leaderboard.data.findIndex((occ) => occ.userId === userId);
 
     if (rank === -1) {
       throw new TRPCError({
@@ -73,7 +75,7 @@ export class LeaderboardService {
     }
 
     const item = leaderboard.data[rank]!;
-    const address = item.Provider.User.Provider[0]?.value;
+    const address = item.address;
 
     if (!address) {
       throw new TRPCError({
@@ -84,11 +86,11 @@ export class LeaderboardService {
 
     return {
       occId: item.id,
-      avatarUrl: item.Provider.User.avatarUrl,
+      avatarUrl: item.avatarUrl,
       occImageUrl: "",
       rank: rank + 1,
-      shareCount: item._count.Share,
-      username: item.Provider.User.displayName ?? "?",
+      shareCount: item.totalShareCount,
+      username: item.displayName,
       address,
     };
   }

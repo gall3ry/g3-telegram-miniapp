@@ -56,7 +56,7 @@ const Footer = () => {
         onClick={() => {
           if (!occ) return;
           postEvent("web_app_switch_inline_query", {
-            query: `${occ.occTemplateId}-${id}`,
+            query: `${id}`,
             chat_types: ["channels", "groups", "users"],
           });
         }}

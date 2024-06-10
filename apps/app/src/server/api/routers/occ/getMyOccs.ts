@@ -1,4 +1,4 @@
-import { type Prisma } from "database";
+import { Prisma } from "database";
 import { groupBy } from "lodash-es";
 import { z } from "zod";
 import { db } from "../../../db";
@@ -20,11 +20,13 @@ export class ReactionService {
     return ReactionService.instance;
   }
 
-  async sumarizeReactions(occIds: number[]): Promise<
-    Dictionary<
+  async getReactions(occIds: number[]): Promise<
+    Record<
+      number,
       {
         occId: number;
-        reactionByType: Record<string, number>;
+        unifiedCode: string;
+        count: number;
       }[]
     >
   > {
@@ -35,47 +37,45 @@ export class ReactionService {
         },
       },
       include: {
-        Share: {
-          include: {
-            Reaction: true,
+        GMSymbolOCC: {
+          select: {
+            Sticker: {
+              include: {
+                Share: {
+                  include: {
+                    Reaction: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
     });
 
-    return groupBy(
-      occList.map((occ) => {
-        const shareList = occ.Share;
+    if (occList.length === 0) {
+      return {};
+    }
 
-        const reactionByType = shareList.reduce(
-          (acc, share) => {
-            const reactions = share.Reaction;
+    const result = await db.$queryRaw<
+      Record<
+        string,
+        {
+          occId: number;
+          unifiedCode: string;
+          count: number;
+        }
+      >
+    >`
+      SELECT "occId", "unifiedCode", SUM(count) as count FROM "Reaction"
+      JOIN "Share" ON "Reaction"."shareId" = "Share"."id"
+      JOIN "Sticker" ON "Share"."stickerId" = "Sticker"."id"
+      JOIN "GMSymbolOCC" ON "Sticker"."gMSymbolOCCId" = "GMSymbolOCC"."id"
+      WHERE "occId" IN (${Prisma.join(occIds)})
+      GROUP BY "occId", "unifiedCode"
+    `;
 
-            if (!reactions) {
-              return acc;
-            }
-
-            for (const value of reactions) {
-              if (!acc[value.unifiedCode]) {
-                acc[value.unifiedCode] = 0;
-              }
-
-              acc[value.unifiedCode] =
-                (acc[value.unifiedCode] ?? 0) + value.count;
-            }
-
-            return acc;
-          },
-          {} as Record<string, number>,
-        );
-
-        return {
-          occId: occ.id,
-          reactionByType,
-        };
-      }),
-      "occId",
-    );
+    return groupBy(result, "occId");
   }
 }
 
@@ -96,29 +96,38 @@ export const getMyOccs = protectedProcedure
         take: input.limit,
         skip: (input.page - 1) * input.limit,
         where,
-        include: {
-          _count: {
-            select: {
-              Share: true,
-            },
-          },
-        },
       }),
       db.occ.count({ where }),
     ]);
 
-    const summaries = await ReactionService.getInstance().sumarizeReactions(
+    const reactions = await ReactionService.getInstance().getReactions(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       occs.map((occ) => occ.id),
     );
 
     return {
-      occs: occs.map((occ) => {
-        return {
-          ...occ,
-          sumarizedReactions: summaries[occ.id]?.[0]?.reactionByType,
-        };
-      }),
+      occs: await Promise.all(
+        occs.map(async (occ) => {
+          const totalShare = await db.share.aggregate({
+            _count: {
+              _all: true,
+            },
+            where: {
+              Sticker: {
+                GMSymbolOCC: {
+                  occId: occ.id,
+                },
+              },
+            },
+          });
+
+          return {
+            ...occ,
+            reactions: reactions[occ.id],
+            totalShare: totalShare._count._all,
+          };
+        }),
+      ),
       total,
     };
   });

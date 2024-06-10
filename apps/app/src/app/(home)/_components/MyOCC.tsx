@@ -15,20 +15,6 @@ export const MyOCC = () => {
     page,
   });
 
-  const summarizeReaction = (reactions: Record<string, number> | undefined) => {
-    if (!reactions) {
-      return "No reactions";
-    }
-
-    return Object.entries(reactions).map(([key, value]) => (
-      <div key={key} className="flex items-center gap-1.5">
-        <Emoji emojiStyle={EmojiStyle.APPLE} unified={key} size={24} />
-
-        <div>{value}</div>
-      </div>
-    ));
-  };
-
   return (
     <Section>
       <Heading>My OCCs</Heading>
@@ -49,9 +35,22 @@ export const MyOCC = () => {
             <Table.Row key={occ.id}>
               <Table.Cell>{occ.id}</Table.Cell>
               <Table.ColumnHeaderCell>{occ.shareCount}</Table.ColumnHeaderCell>
-              <Table.Cell>{occ._count.Share}</Table.Cell>
+              <Table.Cell>{occ.totalShare}</Table.Cell>
               <Table.Cell align="right">
-                {summarizeReaction(occ.sumarizedReactions)}
+                {occ.reactions?.map((reaction) => (
+                  <div
+                    key={reaction.unifiedCode}
+                    className="flex items-center gap-1.5"
+                  >
+                    <Emoji
+                      emojiStyle={EmojiStyle.APPLE}
+                      unified={reaction.unifiedCode}
+                      size={24}
+                    />
+
+                    <div>{reaction.count}</div>
+                  </div>
+                ))}
               </Table.Cell>
 
               <Table.Cell align="right">
@@ -64,7 +63,7 @@ export const MyOCC = () => {
                   variant="outline"
                   onClick={() => {
                     postEvent("web_app_switch_inline_query", {
-                      query: `${occ.occTemplateId}-${occ.id}`,
+                      query: `${occ.id}`,
                       chat_types: ["channels", "groups", "users"],
                     });
                   }}

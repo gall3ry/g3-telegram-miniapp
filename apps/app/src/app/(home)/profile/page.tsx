@@ -2,7 +2,6 @@
 import { Avatar, Button, IconButton, Skeleton } from "@radix-ui/themes";
 import { formatTonAddress } from "@repo/utils";
 import { toUserFriendlyAddress } from "@tonconnect/sdk";
-import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 import { api } from "../../../trpc/react";
 import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
@@ -191,10 +190,6 @@ const PageWrapper = () => {
   return (
     <LoggedUserOnly>
       <Page />
-
-      <Button asChild size="4" mt="4" color="orange">
-        <Link href="/rive">Animation with Rive (Test only)</Link>
-      </Button>
     </LoggedUserOnly>
   );
 };

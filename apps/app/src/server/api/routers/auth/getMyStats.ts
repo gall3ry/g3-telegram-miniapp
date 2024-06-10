@@ -9,9 +9,13 @@ export const getMyStats = protectedProcedure.query(
     const [totalShare, totalReaction, totalMinted] = await Promise.all([
       db.share.count({
         where: {
-          occ: {
-            Provider: {
-              userId: userId,
+          Sticker: {
+            GMSymbolOCC: {
+              Occ: {
+                Provider: {
+                  userId,
+                },
+              },
             },
           },
         },
@@ -19,9 +23,13 @@ export const getMyStats = protectedProcedure.query(
       db.share
         .aggregate({
           where: {
-            occ: {
-              Provider: {
-                userId: userId,
+            Sticker: {
+              GMSymbolOCC: {
+                Occ: {
+                  Provider: {
+                    userId: userId,
+                  },
+                },
               },
             },
           },

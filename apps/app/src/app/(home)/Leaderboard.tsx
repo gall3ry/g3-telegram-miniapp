@@ -58,10 +58,10 @@ export const Leaderboard = () => {
               key={index}
               rank={pageIndex * LIMIT + index + 1}
               occImageUrl={(IMAGES.MOCK_OCC as any)[(index % 5) + 1]}
-              avatarUrl={item.Provider.User.avatarUrl}
-              username={item.Provider.User.displayName ?? "?"}
-              shareCount={item._count.Share}
-              address={item.Provider.User.Provider[0]?.value}
+              avatarUrl={item.avatarUrl}
+              username={item.displayName ?? "?"}
+              shareCount={item.totalShareCount}
+              address={item.address}
             />
           )),
         )

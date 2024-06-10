@@ -36,6 +36,9 @@ export const env = createEnv({
       .string()
       .url()
       .default("https://g3-stg-telegram-worker.fly.dev"),
+
+    AKORD_EMAIL: z.string().default("tin@platfarm.net"),
+    AKORD_PASSWORD: z.string().default("PlatFarm123!@#"),
   },
 
   /**
@@ -93,6 +96,8 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     UPSTASH_QSTASH_TOKEN: process.env.UPSTASH_QSTASH_TOKEN,
     WORKER_PUBLIC_URL: process.env.WORKER_PUBLIC_URL,
+    AKORD_EMAIL: process.env.AKORD_EMAIL,
+    AKORD_PASSWORD: process.env.AKORD_PASSWORD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

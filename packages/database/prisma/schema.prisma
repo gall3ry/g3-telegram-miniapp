@@ -18,17 +18,6 @@ model User {
     Provider   Provider[]
 }
 
-model OccTemplate {
-    id        Int      @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    name        String
-    description String?
-
-    Occ Occ[]
-}
-
 model RewardLogs {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
@@ -47,6 +36,7 @@ enum ProviderType {
     TON_WALLET
 }
 
+// Main provider will be the first creation provider and cannot be deleted
 model Provider {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
@@ -58,6 +48,7 @@ model Provider {
 
     value String
 
+    // Provider can has OCC
     Occ Occ[]
 
     @@unique([type, value])
@@ -68,21 +59,18 @@ model Occ {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    occTemplate   OccTemplate @relation(fields: [occTemplateId], references: [id])
-    occTemplateId Int
-
-    shareCount Int     @default(0)
-    Share      Share[]
-
+    shareCount Int    @default(0)
     nftAddress String
-
-    metadata Json?
+    metadata   Json?
+    txHash     String
 
     Provider   Provider @relation(fields: [providerId], references: [id])
     providerId Int
 
     uuid     String  @unique @default(uuid())
     imageUrl String?
+
+    GMSymbolOCC GMSymbolOCC?
 }
 
 model Share {
@@ -90,8 +78,8 @@ model Share {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
-    occId Int
+    Sticker   Sticker? @relation(fields: [stickerId], references: [id])
+    stickerId Int?
 
     superGroupUsername String
     messageId          String
@@ -124,4 +112,27 @@ model MapTonProofToPayload {
     updatedAt DateTime @updatedAt
 
     payload String
+}
+
+model GMSymbolOCC {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Sticker Sticker[]
+
+    Occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
+    occId Int @unique
+}
+
+model Sticker {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    shareCount Int     @default(0)
+    Share      Share[]
+
+    GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id])
+    gMSymbolOCCId Int?
 }
