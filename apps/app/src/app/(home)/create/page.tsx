@@ -26,7 +26,7 @@ export default function PageWrapper() {
   );
 }
 
-export const MintOCC = () => {
+const MintOCC = () => {
   const { sendMintNftFromFaucet } = useNftContract();
   const router = useRouter();
   const { mutateAsync } = api.occ.createOCC.useMutation();
