@@ -2,7 +2,7 @@ import { sha256 } from "@ton/crypto";
 import { Address, Cell, contractAddress, loadStateInit } from "@ton/ton";
 import { Buffer } from "buffer";
 import { randomBytes, sign } from "tweetnacl";
-import { env } from "../../env";
+import { env } from "../../../env";
 import { type CheckProofRequestDto } from "../_dto/check-proof-request-dto";
 import { tryParsePublicKey } from "../_wrappers/wallets-data";
 

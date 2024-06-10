@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import ShortUniqueId from "short-unique-id";
-import { TonProofService } from "../../../_services/ton-proof-service";
-import { createPayloadToken } from "../../../_utils/jwt";
 import { db } from "../../../db";
+import { TonProofService } from "../../../ton/_services/ton-proof-service";
+import { createPayloadToken } from "../../../ton/_utils/jwt";
 import { publicProcedure } from "../../trpc";
 
 const { randomUUID } = new ShortUniqueId({ length: 20 });

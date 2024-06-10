@@ -1,10 +1,10 @@
 import { TRPCError } from "@trpc/server";
 import { type z } from "zod";
-import { CheckProofRequest } from "../../../_dto/check-proof-request-dto";
-import { TonApiService } from "../../../_services/ton-api-service";
-import { TonProofService } from "../../../_services/ton-proof-service";
-import { createAuthToken, verifyToken } from "../../../_utils/jwt";
 import { db } from "../../../db";
+import { CheckProofRequest } from "../../../ton/_dto/check-proof-request-dto";
+import { TonApiService } from "../../../ton/_services/ton-api-service";
+import { TonProofService } from "../../../ton/_services/ton-proof-service";
+import { createAuthToken, verifyToken } from "../../../ton/_utils/jwt";
 import PostHogClient from "../../services/posthog";
 import { publicProcedure } from "../../trpc";
 

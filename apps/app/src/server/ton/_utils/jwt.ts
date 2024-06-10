@@ -1,6 +1,6 @@
 import { type CHAIN } from "@tonconnect/sdk";
 import { SignJWT, decodeJwt, jwtVerify, type JWTPayload } from "jose";
-import { env } from "../../env";
+import { env } from "../../../env";
 
 /**
  * Secret key for the token.
