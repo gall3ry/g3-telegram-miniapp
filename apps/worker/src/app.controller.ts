@@ -9,8 +9,10 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return 'Hello World!';
+  getHello() {
+    return {
+      message: 'Hello World!',
+    };
   }
 
   private _captureGifSchema = z.object({

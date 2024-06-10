@@ -1,12 +1,12 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
-import axios from "axios";
 import { Prisma } from "database";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
 import { env } from "../../../../env";
 import { db } from "../../../db";
+import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { protectedProcedure } from "../../trpc";
 
 // move to worker (later)
@@ -102,20 +102,14 @@ export const createOCC = protectedProcedure
       },
     });
 
-    const urlToFetch = `https://qstash.upstash.io/v2/publish/${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
-
-    await axios.post(
-      urlToFetch,
-      {
-        occUUID: uuid,
+    const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
+    await pushToQueue(QUEUE_NAME.OCC_CAPTURE_GIF, {
+      url: urlToFetch,
+      body: { occUUID: uuid },
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${env.UPSTASH_QSTASH_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    });
 
     return {
       id: occ.id,

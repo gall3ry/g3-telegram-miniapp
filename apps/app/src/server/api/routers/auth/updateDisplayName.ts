@@ -27,15 +27,17 @@ export const updateDisplayName = protectedProcedure
       let avatarUrl: string | null = null;
 
       if (telegramId) {
-        avatarUrl = await telegramInstance.getUserProfilePhoto({
-          telegramUserId: telegramId,
-        });
+        avatarUrl = await telegramInstance
+          .getUserProfilePhoto({
+            telegramUserId: telegramId,
+          })
+          .catch(() => null);
       }
 
       const toUpdate = {
         displayName: displayName,
         telegramId: telegramId?.toString(),
-        avatarUrl,
+        avatarUrl: avatarUrl ?? undefined,
       } satisfies Prisma.UserUpdateInput;
 
       if (!telegramId) {
@@ -44,6 +46,10 @@ export const updateDisplayName = protectedProcedure
 
       if (!displayName) {
         delete toUpdate.displayName;
+      }
+
+      if (!toUpdate.avatarUrl) {
+        delete toUpdate.avatarUrl;
       }
 
       await db.user.update({

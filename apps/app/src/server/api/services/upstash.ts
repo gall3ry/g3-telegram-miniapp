@@ -1,4 +1,10 @@
+import {
+  Client,
+  type PublishRequest,
+  type PublishToUrlResponse,
+} from "@upstash/qstash";
 import { Redis } from "@upstash/redis";
+import axios from "axios";
 import { env } from "../../../env";
 
 export enum Key {
@@ -12,6 +18,10 @@ const mapCacheKeyToTimeExpiry: Record<Key, number> = {
 const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL,
   token: env.UPSTASH_REDIS_REST_TOKEN,
+});
+
+const qstash = new Client({
+  token: env.UPSTASH_QSTASH_TOKEN,
 });
 
 export const callOrGetFromCache = async <T>(
@@ -32,3 +42,29 @@ export const callOrGetFromCache = async <T>(
   await redis.setex(cacheKey, mapCacheKeyToTimeExpiry[key], value);
   return value;
 };
+
+export const pushToQueue = async <T>(
+  queueName: QUEUE_NAME,
+  request: PublishRequest<T>,
+) => {
+  if (env.NODE_ENV === "development") {
+    if (!request?.url) {
+      throw new Error("request.url is required");
+    }
+
+    await axios.post(request.url, request.body);
+
+    return `mocked-message-id-${Math.random()}`;
+  }
+
+  const queue = qstash.queue({ queueName });
+  const { messageId } = (await queue.enqueueJSON<T>(
+    request,
+  )) as PublishToUrlResponse;
+
+  return messageId;
+};
+
+export enum QUEUE_NAME {
+  OCC_CAPTURE_GIF = "occ-capture-gif",
+}

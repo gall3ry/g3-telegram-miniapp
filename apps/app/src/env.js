@@ -27,7 +27,6 @@ export const env = createEnv({
       .default(
         "AZz6ASQgMzQ5NmRmNGYtNTBiMC00MWE0LTkyNDktOGMxODFmNWQyMmI4MGY5MjVjZmY3N2RhNDg4NzgzNmM0MDNkYjA3Nzg3ODU=",
       ),
-
     UPSTASH_QSTASH_TOKEN: z
       .string()
       .default(
@@ -36,7 +35,7 @@ export const env = createEnv({
     WORKER_PUBLIC_URL: z
       .string()
       .url()
-      .default("https://telegram-miniapp.fly.dev"),
+      .default("https://g3-stg-telegram-worker.fly.dev"),
   },
 
   /**
