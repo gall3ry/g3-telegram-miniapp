@@ -33,7 +33,7 @@ ENV TURBO_TEAM=$TURBO_TEAM
 
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=$TURBO_TOKEN
-RUN pnpm build --filter=worker...
+RUN pnpm turbo build --filter='worker...[HEAD^1]' --dry=json
 
 FROM base AS runner
 WORKDIR /app
