@@ -3,9 +3,15 @@
   "version": "0.0.1",
   "dependencies": {
     "typescript": "latest",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "database": "workspace:*"
   },
-  "exports": {
-    ".": "./src/index.ts"
-  }
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs"
 }

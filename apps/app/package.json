@@ -75,7 +75,8 @@
     "vaul": "^0.9.1",
     "webp-converter": "^2.3.3",
     "zod": "^3.23.3",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "@repo/types": "workspace:*"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",

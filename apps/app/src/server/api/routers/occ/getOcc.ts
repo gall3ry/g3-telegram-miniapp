@@ -1,20 +1,25 @@
-import { z } from "zod";
 import { db } from "../../../db";
-import { publicProcedure } from "../../trpc";
+import { protectedProcedure } from "../../trpc";
 
-export const getOcc = publicProcedure
-  .input(
-    z.object({
-      id: z.number(),
-    }),
-  )
-  .query(async ({ input: { id } }) => {
+export const getOcc = protectedProcedure.query(
+  async ({
+    ctx: {
+      session: { userId },
+    },
+  }) => {
+    const { id: providerId } = await db.provider.findFirstOrThrow({
+      where: { userId, type: "TON_WALLET" },
+      orderBy: { createdAt: "desc" },
+    });
+
     const totalReaction = await db.reaction.aggregate({
       where: {
         share: {
           Sticker: {
             GMSymbolOCC: {
-              occId: id,
+              Occ: {
+                providerId,
+              },
             },
           },
         },
@@ -30,7 +35,9 @@ export const getOcc = publicProcedure
         share: {
           Sticker: {
             GMSymbolOCC: {
-              occId: id,
+              Occ: {
+                providerId,
+              },
             },
           },
         },
@@ -40,8 +47,10 @@ export const getOcc = publicProcedure
       },
     });
 
-    const result = await db.occ.findUniqueOrThrow({
-      where: { id },
+    const result = await db.occ.findFirstOrThrow({
+      where: {
+        providerId,
+      },
       include: {
         Provider: {
           select: {
@@ -61,7 +70,9 @@ export const getOcc = publicProcedure
       where: {
         Sticker: {
           GMSymbolOCC: {
-            occId: id,
+            Occ: {
+              providerId,
+            },
           },
         },
       },
@@ -75,4 +86,5 @@ export const getOcc = publicProcedure
       reactions,
       totalShare,
     };
-  });
+  },
+);

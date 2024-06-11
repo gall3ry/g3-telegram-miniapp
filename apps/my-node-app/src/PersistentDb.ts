@@ -3,8 +3,7 @@ import { Chat } from "telegraf/types";
 type UserId = number;
 
 type Data = {
-  occEventId?: number;
-  occId?: number;
+  stickerId?: number;
   chatType?: "sender" | Chat["type"];
 };
 
@@ -30,7 +29,11 @@ export class PersistentDb {
   public appendUserData(userId: UserId, data: Data) {
     const userData = this.getUserData(userId);
     this.userData.set(userId, { ...userData, ...data });
+  }
 
-    console.log(`updated`, this.userData);
+  public resetUserData(userId: UserId) {
+    this.userData.delete(userId);
   }
 }
+
+export const persistentDb = PersistentDb.getInstance();

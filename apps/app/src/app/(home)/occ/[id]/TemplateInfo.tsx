@@ -23,14 +23,9 @@ export const TemplateInfo = () => {
     data: occ,
     isSuccess,
     isPending,
-  } = api.occ.getOcc.useQuery(
-    {
-      id: parseInt(id),
-    },
-    {
-      enabled: isFinite(parseInt(id)),
-    },
-  );
+  } = api.occ.getOcc.useQuery(undefined, {
+    enabled: isFinite(parseInt(id)),
+  });
   const [reactionOpen, setReactionOpen] = useQueryState(
     "reactionOpen",
     parseAsBoolean.withDefault(false),

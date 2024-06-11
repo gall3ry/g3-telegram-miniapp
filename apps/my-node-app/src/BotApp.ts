@@ -1,11 +1,13 @@
+import { mapStickerTypeToStickerTemplate } from "@repo/types";
 import { Prisma } from "database";
 import { Telegraf } from "telegraf";
-import { InlineQueryResult, InputTextMessageContent } from "telegraf/types";
+import { InputTextMessageContent } from "telegraf/types";
 import { z } from "zod";
-import { PersistentDb } from "./PersistentDb";
+import { persistentDb, PersistentDb } from "./PersistentDb";
 import { COMMANDS, MAP_COMMAND_TO_DESCRIPTION } from "./commands";
 import { isChatTypeSupported } from "./constants";
 import { env } from "./env";
+import { parseInlineQuerySchema } from "./schema/parseInlineQuerySchema";
 import { db } from "./utils/db";
 
 export class BotApp {
@@ -40,132 +42,141 @@ export class BotApp {
 
   private _initializeListeners() {
     const bot = this.bot;
-    bot.on("callback_query", async (ctx) => {
-      console.log(`Received callback query`, ctx.callbackQuery);
 
-      // Explicit usage
-      await ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
-
-      // Using context shortcut
-      await ctx.answerCbQuery();
-    });
     bot.on("inline_query", async (ctx) => {
       try {
         // TODO: split to handlers
-        const { query } = ctx.inlineQuery;
-        const regexp = new RegExp(/(\d+)-(\d+)/);
-        const [occEventId, occId] = regexp.exec(query)?.slice(1) || [
-          undefined,
-          undefined,
-        ];
+        const { query, from, chat_type } = ctx.inlineQuery;
+        const [_id, _telegramUserId] = query.split(" ");
 
-        if (!occEventId || !occId) {
-          return;
-        }
-
-        const [occTemplate, occ] = await Promise.all([
-          db.occTemplate.findUniqueOrThrow({
-            where: { id: +occEventId },
-          }),
-          db.occ.findUniqueOrThrow({
-            where: { id: +occId },
-          }),
-        ]).catch(() => {
-          throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+        console.log({
+          _id,
+          _telegramUserId,
         });
 
-        const result: InlineQueryResult[] = [
-          {
-            type: "article",
-            id: `${occEventId}-${occId}`,
-            title: `OCC event ${occTemplate.name}`,
-            thumbnail_url:
-              "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png",
-            description: `Join OCC ${occTemplate.name}`,
-            input_message_content: {
-              message_text: `
-@${ctx.inlineQuery.from.username}: Good morning 🌞, join OCC ${occTemplate.name} now\\! 🚀
-                    `,
-              link_preview_options: {
-                prefer_large_media: true,
-                prefer_small_media: false,
-                show_above_text: false,
-                url:
-                  occ.imageUrl ??
-                  "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTQydmU1ZmQ2ejcwY2h1cXp4ODg3eWNvaGc4YjlhMjNldnBzbmF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/njXxKcoVWY5hiEBS2w/giphy.gif",
-              },
-              parse_mode: "MarkdownV2",
-            } as InputTextMessageContent,
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "Play",
-                    url: `https://t.me/${process.env.TELEGRAM_BOT_USERNAME || "g3stgbot"}/appname`,
-                  },
-                ],
-              ],
-            },
-          },
-        ];
+        const { stickerId, telegramUserId } = parseInlineQuerySchema({
+          stickerId: _id,
+          telegramUserId: _telegramUserId,
+        });
 
-        if (!ctx.inlineQuery.from.username || !ctx.inlineQuery.chat_type) {
-          // Do nothing
+        if (telegramUserId !== from.id) {
+          console.log(
+            `[MY NODE APP] telegramUserId not match, ID: ${telegramUserId}, from.id: ${from.id}`
+          );
           return;
         }
 
-        if (isChatTypeSupported(ctx.inlineQuery.chat_type)) {
-          // update user data
-          const storage = PersistentDb.getInstance();
-          storage.appendUserData(ctx.inlineQuery.from.id, {
-            occEventId: +occEventId,
-            occId: +occId,
-            chatType: ctx.inlineQuery.chat_type,
-          });
+        const sticker = await db.sticker.findUnique({
+          where: { id: stickerId },
+        });
+
+        if (!sticker) {
+          console.log(`[MY NODE APP] Sticker not found, ID: ${stickerId}`);
+          return;
         }
 
+        const { stickerType, imageUrl } = sticker;
+
+        if (!from.username || !chat_type) {
+          // This will not happen
+          return;
+        }
+
+        // update user data
+        console.log(`[MY NODE APP] Append user data`, {
+          stickerId,
+          chatType: chat_type,
+        });
+        persistentDb.appendUserData(ctx.inlineQuery.from.id, {
+          stickerId,
+          chatType: ctx.inlineQuery.chat_type,
+        });
+
         // Explicit usage
-        await ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
+        await ctx.telegram.answerInlineQuery(
+          ctx.inlineQuery.id,
+          [
+            {
+              type: "article",
+              id: `${stickerId} ${from.id}`,
+              title: mapStickerTypeToStickerTemplate[stickerType].title,
+              thumbnail_url:
+                "https://www.gall3ry.io/assets/landing/union/gall3ry-logo-squared.png",
+              description:
+                mapStickerTypeToStickerTemplate[stickerType].description,
+
+              input_message_content: {
+                message_text: "Good morning",
+                link_preview_options: {
+                  prefer_large_media: true,
+                  prefer_small_media: false,
+                  show_above_text: false,
+                  url:
+                    imageUrl ??
+                    "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTQydmU1ZmQ2ejcwY2h1cXp4ODg3eWNvaGc4YjlhMjNldnBzbmF2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/njXxKcoVWY5hiEBS2w/giphy.gif",
+                },
+                parse_mode: "MarkdownV2",
+              } as InputTextMessageContent,
+              // reply_markup: {
+              //   inline_keyboard: [
+              //     [
+              //       {
+              //         text: "Play",
+              //         url: `https://t.me/${process.env.TELEGRAM_BOT_USERNAME || "g3stgbot"}/appname`,
+              //       },
+              //     ],
+              //   ],
+              // },
+            },
+          ],
+          {
+            cache_time: 1,
+          }
+        );
       } catch (error) {
         console.error(error);
       }
     });
     bot.on("chosen_inline_result", async (ctx) => {
-      const [occEventId, occId] =
-        new RegExp(/(\d+)-(\d+)/)
-          .exec(ctx.chosenInlineResult.query)
-          ?.slice(1) || [];
+      const { query } = ctx.chosenInlineResult;
+      const [_id, _telegramUserId] = query.split(" ");
 
-      if (!occEventId || !occId) {
+      const { stickerId, telegramUserId } = parseInlineQuerySchema({
+        stickerId: _id,
+        telegramUserId: _telegramUserId,
+      });
+
+      if (telegramUserId !== ctx.chosenInlineResult.from.id) {
+        console.log(
+          `[MY NODE APP] telegramUserId not match, ID: ${telegramUserId}, from.id: ${ctx.chosenInlineResult.from.id}`
+        );
         return;
       }
 
-      await Promise.all([
-        db.occTemplate.findUniqueOrThrow({
-          where: { id: +occEventId },
-        }),
-        db.occ.findUniqueOrThrow({
-          where: { id: +occId },
-        }),
-      ]).catch(() => {
-        throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+      const sticker = await db.sticker.findUnique({
+        where: { id: stickerId },
       });
 
-      const storage = PersistentDb.getInstance();
+      if (!sticker) {
+        console.log(`[MY NODE APP] Sticker not found, ID: ${stickerId}`);
+        return;
+      }
 
+      const storage = PersistentDb.getInstance();
       const { chatType } = storage.getUserData(ctx.chosenInlineResult.from.id);
+
       if (!isChatTypeSupported(chatType)) {
         return;
       }
 
       storage.appendUserData(ctx.chosenInlineResult.from.id, {
-        occEventId: +occEventId,
-        occId: +occId,
+        stickerId,
+        chatType,
       });
 
       // increase share
-      await db.occ.update({
-        where: { id: +occId },
+      await db.sticker.update({
+        where: { id: stickerId },
         data: {
           shareCount: {
             increment: 1,
@@ -176,54 +187,42 @@ export class BotApp {
     bot.on("message", async (ctx) => {
       // delay 1s to make sure this callback will run after the chosen_inline_result
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const { message } = ctx;
 
       switch (true) {
         case message.chat.type === "supergroup": {
           // get from db
           const storage = PersistentDb.getInstance();
-          const userData = storage.getUserData(message.from.id);
+          const { chatType, stickerId } = storage.getUserData(message.from.id);
 
-          const { occEventId, occId } = userData;
-
-          if (!occId || !occEventId) {
+          if (!chatType || !stickerId) {
+            console.log(
+              `[onMessage] chatType or stickerId not found in storage`
+            );
             return;
           }
 
-          await Promise.all([
-            db.occTemplate.findUniqueOrThrow({
-              where: { id: occEventId },
-            }),
-            db.occ.findUniqueOrThrow({
-              where: { id: occId },
-            }),
-          ]).catch(() => {
-            throw new Error(`[MY NODE APP] OCC template or OCC not found`);
+          const sticker = await db.sticker.findUnique({
+            where: { id: stickerId },
           });
 
-          // remove from storage
-          storage.appendUserData(message.from.id, {
-            occEventId: undefined,
-            occId: undefined,
-          });
+          if (!sticker) {
+            console.log(`[MY NODE APP] Sticker not found, ID: ${stickerId}`);
+            return;
+          }
 
+          storage.resetUserData(message.from.id);
           const superGroupUsername = z.string().parse(message.chat.username);
 
-          await Promise.all([
-            // ctx.reply(
-            //   `Getting user data: ${occTemplate.name} (ID: ${occTemplate.id}), OCC ID: ${occ.id}`
-            // ),
+          await db.share.create({
+            data: {
+              metadata: message as unknown as Prisma.JsonObject,
+              messageId: message.message_id.toString(),
+              superGroupUsername: superGroupUsername,
+              stickerId,
+            },
+          });
 
-            db.share.create({
-              data: {
-                occId,
-                metadata: message as unknown as Prisma.JsonObject,
-                messageId: message.message_id.toString(),
-                superGroupUsername: superGroupUsername,
-              },
-            }),
-          ]);
           break;
         }
       }

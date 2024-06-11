@@ -125,6 +125,10 @@ model GMSymbolOCC {
     occId Int @unique
 }
 
+enum StickerType {
+    Sample1
+}
+
 model Sticker {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
@@ -135,4 +139,7 @@ model Sticker {
 
     GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id])
     gMSymbolOCCId Int?
+
+    imageUrl    String?
+    stickerType StickerType
 }

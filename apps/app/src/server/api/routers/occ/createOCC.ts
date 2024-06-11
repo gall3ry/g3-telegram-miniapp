@@ -8,12 +8,15 @@ import { env } from "../../../../env";
 import { db } from "../../../db";
 import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { protectedProcedure } from "../../trpc";
+import { OccType } from "./OccType";
 
 // move to worker (later)
 export const createOCC = protectedProcedure
   .input(
     z.object({
       txHash: z.string().min(64).max(64),
+      // TODO: Update type here when we have more than one OCC type
+      type: z.nativeEnum(OccType),
     }),
   )
   .mutation(async ({ ctx: { session }, input: { txHash } }) => {
@@ -98,17 +101,23 @@ export const createOCC = protectedProcedure
         providerId,
         nftAddress,
         uuid,
+        // TODO: Update this when we have more than one OCC type
+        GMSymbolOCC: {
+          create: {},
+        },
       },
     });
 
-    const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
-    await pushToQueue(QUEUE_NAME.OCC_CAPTURE_GIF, {
-      url: urlToFetch,
-      body: { occUUID: uuid },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    if (env.NODE_ENV !== "development") {
+      const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
+      await pushToQueue(QUEUE_NAME.OCC_CAPTURE_GIF, {
+        url: urlToFetch,
+        body: { occUUID: uuid },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
 
     return {
       id: occ.id,

@@ -3,6 +3,7 @@ import { authRouter } from "./routers/auth";
 import { occRouter } from "./routers/occ";
 import { tasksRouter } from "./routers/quests";
 import { rewardRouter } from "./routers/reward";
+import { stickerRouter } from "./routers/sticker";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   reward: rewardRouter,
   occ: occRouter,
   quests: tasksRouter,
+  sticker: stickerRouter,
 });
 
 // export type definition of API
