@@ -129,6 +129,7 @@ export const MintGMOCC = () => {
   const router = useRouter();
   const { mutateAsync } = api.occ.createOCC.useMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const { data: topOccs } = api.occ.getTopOccs.useQuery({ limit: 5 });
 
   return (
     <div>
@@ -172,12 +173,18 @@ export const MintGMOCC = () => {
           </div>
         </div>
 
-        <div className="mt-4">
-          <LeaderboardAvatar
-            occId={1}
-            occImageUrl="https://via.placeholder.com/335x335"
-            rank={1}
-          />
+        <div className="mt-4 flex">
+          {topOccs?.occs.map(
+            (item, index) =>
+              item.imageUrl && (
+                <LeaderboardAvatar
+                  key={index}
+                  occId={item.id}
+                  occImageUrl={item.imageUrl}
+                  rank={index + 1}
+                />
+              ),
+          )}
         </div>
       </div>
 
