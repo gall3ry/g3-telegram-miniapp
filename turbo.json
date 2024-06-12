@@ -32,7 +32,8 @@
       "cache": false
     },
     "db:migrate": {
-      "cache": false
+      "cache": false,
+      "interactive": true
     },
     "db:migrate:reset": {
       "cache": false

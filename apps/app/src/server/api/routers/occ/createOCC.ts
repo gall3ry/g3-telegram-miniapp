@@ -1,6 +1,6 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
-import { Prisma, StickerType } from "database";
+import { Prisma } from "database";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
@@ -9,7 +9,6 @@ import { db } from "../../../db";
 import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { protectedProcedure } from "../../trpc";
 import { OccType } from "./OccType";
-import { StickerService } from "./StickerService";
 
 export const createOCC = protectedProcedure
   .input(
@@ -118,11 +117,6 @@ export const createOCC = protectedProcedure
         },
       });
     }
-
-    await StickerService.getInstance().unlockSticker({
-      occId: occ.id,
-      stickerType: StickerType.Sample1,
-    });
 
     return {
       id: occ.id,

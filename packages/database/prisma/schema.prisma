@@ -121,10 +121,26 @@ model GMSymbolOCC {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    Sticker Sticker[]
+    Sticker     Sticker[]
+    selectedNFT GMNFT[]
 
     Occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
     occId Int @unique
+}
+
+model GMNFT {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    GMSymbolOCC   GMSymbolOCC @relation(fields: [gMSymbolOCCId], references: [id], onDelete: Cascade)
+    gMSymbolOCCId Int
+
+    imageUrl String?
+    metadata Json?
+
+    nftAddress String    @unique
+    Sticker    Sticker[]
 }
 
 enum StickerType {
@@ -139,9 +155,14 @@ model Sticker {
     shareCount Int     @default(0)
     Share      Share[]
 
-    GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id])
+    GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id], onDelete: Cascade)
     gMSymbolOCCId Int?
 
     imageUrl    String?
     stickerType StickerType
+
+    GMNFT      GMNFT  @relation(fields: [nftAddress], references: [nftAddress], onDelete: Cascade)
+    nftAddress String
+
+    @@unique([stickerType, nftAddress])
 }
