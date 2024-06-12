@@ -337,6 +337,7 @@ export const MintGMOCC = () => {
     parseAsBoolean.withDefault(false),
   );
   const utils = api.useUtils();
+  const { data: topOccs } = api.occ.getTopOccs.useQuery({ limit: 5 });
 
   return (
     <div>
@@ -374,23 +375,28 @@ export const MintGMOCC = () => {
           </div>
         </div>
 
-        <div className="mt-4 w-full overflow-x-auto">
-          <div>
-            <LeaderboardAvatar
-              occId={1}
-              occImageUrl="https://via.placeholder.com/335x335"
-              rank={1}
-            />
-
-            <div className="ml-3 mt-1.5 flex items-center gap-1.5">
-              <div className="text-xl font-bold leading-7 text-green-600">
-                2,213
-              </div>
-              <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
-                shares
-              </div>
-            </div>
-          </div>
+        <div className="mt-4 flex">
+          {topOccs?.occs.map(
+            (item, index) =>
+              item.imageUrl && (
+                <div key={item.id}>
+                  <LeaderboardAvatar
+                    key={index}
+                    occId={item.id}
+                    occImageUrl={item.imageUrl}
+                    rank={index + 1}
+                  />
+                  <div className="ml-3 mt-1.5 flex items-center gap-1.5">
+                    <div className="text-xl font-bold leading-7 text-green-600">
+                      {item.shareCount}
+                    </div>
+                    <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
+                      shares
+                    </div>
+                  </div>
+                </div>
+              ),
+          )}
         </div>
       </div>
 

@@ -131,3 +131,23 @@ export const getMyOccs = protectedProcedure
       total,
     };
   });
+
+export const getTopOccs = protectedProcedure
+  .input(
+    z.object({
+      page: z.number().min(1).default(1),
+      limit: z.number().default(10),
+    }),
+  )
+  .query(async ({ input }) => {
+    console.log(`getTopOccs: ${input.page} ${input.limit}`);
+    const occs = await db.occ.findMany({
+      take: input.limit,
+      skip: (input.page - 1) * input.limit,
+      orderBy: {
+        shareCount: "desc",
+      },
+    });
+    console.log(`getTopOccs: ${occs.length}`);
+    return { occs };
+  });
