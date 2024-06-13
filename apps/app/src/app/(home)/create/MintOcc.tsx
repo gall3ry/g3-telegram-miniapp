@@ -179,73 +179,7 @@ export const MintOCC = () => {
         <SelectedAssets />
       </div>
 
-      <Spinner mx="auto" loading={isStickersPending}>
-        {stickers?.length === 0 && (
-          <div className="my-8 flex flex-col items-center">
-            <Image
-              src="/images/select-asset.png"
-              alt="Select asset"
-              width={200}
-              height={176}
-            />
-
-            <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-              Mint and say GM!
-              <br />
-              with your assets
-            </div>
-            <div className="mt-1 text-center text-base font-light leading-normal tracking-tight text-slate-500">
-              Select your assets to start creating.
-            </div>
-
-            <div className="mt-6">
-              <Button
-                size="3"
-                radius="large"
-                onClick={() => {
-                  void setSelectAssetsDrawer(true);
-                }}
-              >
-                Select assets
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {stickers && stickers.length > 0 && (
-          <div className="mt-5">
-            <div className="text-xl font-bold leading-7 text-slate-900">
-              All variants
-            </div>
-
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {stickers.map((sticker) => (
-                <div
-                  key={sticker.id}
-                  onClick={() => {
-                    void setStickerId(sticker.id);
-                  }}
-                  className="relative aspect-square w-full rounded-xl"
-                >
-                  {sticker.imageUrl && (
-                    <div className="aspect-square cursor-pointer">
-                      {mapStickerTypeToTemplateComponent(sticker.stickerType, {
-                        imageUrl: sticker.imageUrl,
-                      })}
-                    </div>
-                  )}
-
-                  <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
-                    <div className="text-center text-sm font-bold leading-tight text-slate-900">
-                      {sticker.shareCount} shares
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </Spinner>
+      <AllStickers />
 
       <SelectAssetDrawer />
 
@@ -727,3 +661,85 @@ export const RevealSoonDrawer = memo(
 );
 
 RevealSoonDrawer.displayName = "RevealSoonDrawer";
+
+export const AllStickers = memo(() => {
+  const { isAuthenticated } = useIsAuthenticated();
+  const { data: stickersData, isPending: isStickersPending } =
+    api.sticker.getStickers.useQuery(undefined, {
+      enabled: isAuthenticated,
+    });
+  const stickers = stickersData?.items;
+  const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
+
+  return (
+    <Spinner mx="auto" loading={isStickersPending}>
+      {stickers?.length === 0 && (
+        <div className="my-8 flex flex-col items-center">
+          <Image
+            src="/images/select-asset.png"
+            alt="Select asset"
+            width={200}
+            height={176}
+          />
+
+          <div className="text-center text-2xl font-bold leading-9 text-slate-900">
+            Mint and say GM!
+            <br />
+            with your assets
+          </div>
+          <div className="mt-1 text-center text-base font-light leading-normal tracking-tight text-slate-500">
+            Select your assets to start creating.
+          </div>
+
+          <div className="mt-6">
+            <Button
+              size="3"
+              radius="large"
+              onClick={() => {
+                void setSelectAssetsDrawer(true);
+              }}
+            >
+              Select assets
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {stickers && stickers.length > 0 && (
+        <div className="mt-5">
+          <div className="text-xl font-bold leading-7 text-slate-900">
+            All variants
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {stickers.map((sticker) => (
+              <div
+                key={sticker.id}
+                onClick={() => {
+                  void setStickerId(sticker.id);
+                }}
+                className="relative aspect-square w-full rounded-xl"
+              >
+                {sticker.imageUrl && (
+                  <div className="aspect-square cursor-pointer">
+                    {mapStickerTypeToTemplateComponent(sticker.stickerType, {
+                      imageUrl: sticker.imageUrl,
+                    })}
+                  </div>
+                )}
+
+                <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
+                  <div className="text-center text-sm font-bold leading-tight text-slate-900">
+                    {sticker.shareCount} shares
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </Spinner>
+  );
+});
+
+AllStickers.displayName = "AllStickers";
