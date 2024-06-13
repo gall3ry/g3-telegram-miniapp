@@ -2,10 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 // @ts-ignore
 import { groupBy } from 'lodash-es';
+import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
 import { TelegramService } from './TelegramService.js';
 import { db } from './db.js';
+import { env } from './env.js';
 import { EmojiService } from './services/emoji.js';
 
 @Injectable()
@@ -113,38 +115,58 @@ export class AppService {
     this.logger.debug('[resetMapping] Deleted %d mappings', count);
   }
 
-  getGif(payload: { url: string }) {
+  async getGif(payload: { stickerIds: number[] }) {
     return z
       .function()
       .args(
         z.object({
-          url: z.string(),
+          stickerIds: z.array(z.number()),
         }),
       )
-      .implement(async ({ url }) => {
+      .implement(async ({ stickerIds }) => {
         let browser: Browser | null = null;
-
         try {
-          browser = await chromium.launch({});
-          const page = await browser.newPage();
+          const pqueue = new PQueue({ concurrency: 2 });
+          browser = await chromium.launch();
 
-          await page.goto(url);
-          // add event listener (gif)
-          const base64 = await page.evaluate(() => {
-            return new Promise<string>((resolve, reject) => {
-              window.addEventListener('gif', (e: any) => {
-                const gif = e as CustomEvent<string>;
-
-                resolve(gif.detail);
-              });
-
-              setTimeout(() => {
-                reject(new Error('Timeout'));
-              }, 30 * 1000);
-            });
+          const stickers = await db.sticker.findMany({
+            where: {
+              id: {
+                in: stickerIds,
+              },
+            },
           });
 
-          return this._uploadGif({ base64 });
+          const result = await pqueue.addAll(
+            stickers.map(({ id }) => async () => {
+              const page = await browser.newPage();
+              const url = `${env.FRONTEND_URL}/stickers/${id}?record=true`;
+
+              await page.goto(url);
+              // add event listener (gif)
+              const base64 = await page.evaluate(() => {
+                return new Promise<string>((resolve, reject) => {
+                  window.addEventListener('gif', (e: any) => {
+                    const gif = e as CustomEvent<string>;
+
+                    resolve(gif.detail);
+                  });
+
+                  setTimeout(() => {
+                    reject(new Error('Timeout'));
+                  }, 30 * 1000);
+                });
+              });
+              const { url: cdnUrl } = await this._uploadGif({ base64 });
+
+              return {
+                stickerId: id,
+                cdnUrl,
+              };
+            }),
+          );
+
+          return result;
         } catch (e) {
           console.error(e);
           throw e;
@@ -180,7 +202,7 @@ export class AppService {
         const result = await response.json();
         const url = result.cloud.url;
 
-        return url;
+        return { url: url as string };
       })(payload);
   }
 }

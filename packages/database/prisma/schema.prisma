@@ -69,7 +69,6 @@ model Occ {
     Provider   Provider @relation(fields: [providerId], references: [id])
     providerId Int
 
-    uuid     String  @unique @default(uuid())
     imageUrl String?
 
     GMSymbolOCC GMSymbolOCC?

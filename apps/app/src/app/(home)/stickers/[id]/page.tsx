@@ -12,18 +12,18 @@ export async function generateMetadata({
   };
 }) {
   unstable_noStore();
-  const occ = await db.occ.findUniqueOrThrow({
+  const sticker = await db.sticker.findUniqueOrThrow({
     where: {
       id: +params.id,
     },
   });
 
-  const title = `OCC #${occ.id}`;
+  const title = `Sticker #${sticker.id}`;
   const images = [];
 
-  if (occ.imageUrl) {
+  if (sticker.imageUrl) {
     images.push({
-      url: occ.imageUrl,
+      url: sticker.imageUrl,
     });
   }
 

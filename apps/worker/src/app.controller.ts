@@ -2,7 +2,6 @@ import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { z, ZodError } from 'zod';
 import { AppService } from './app.service.js';
 import { db } from './db.js';
-import { env } from './env.js';
 
 @Controller()
 export class AppController {
@@ -16,37 +15,31 @@ export class AppController {
   }
 
   private _captureGifSchema = z.object({
-    occUUID: z.string(),
+    stickerIds: z.array(z.number()),
   });
 
-  @Post('/webhook/occ/capture-gif')
+  @Post('/webhook/sticker/capture-gif')
   async getGif(@Body() body: any) {
     try {
       // TODO: validate upstash signature
-      const { occUUID } = this._captureGifSchema.parse(body);
+      const { stickerIds } = this._captureGifSchema.parse(body);
 
-      const occ = await db.occ.findUniqueOrThrow({
-        where: {
-          uuid: occUUID,
-        },
+      const result = await this.appService.getGif({
+        stickerIds,
       });
 
-      const imageUrl = await this.appService.getGif({
-        url: `${env.FRONTEND_URL}/occ/${occ.id}?record=true`,
-      });
-
-      await db.occ.update({
-        where: {
-          id: occ.id,
-        },
-        data: {
-          imageUrl,
-        },
-      });
-
-      return {
-        url: imageUrl,
-      };
+      return Promise.all(
+        result.map(async (sticker) => {
+          return db.sticker.update({
+            where: {
+              id: sticker.stickerId,
+            },
+            data: {
+              imageUrl: sticker.cdnUrl,
+            },
+          });
+        }),
+      );
     } catch (error) {
       if (error instanceof ZodError) {
         throw new HttpException(error.errors, 400);

@@ -66,5 +66,5 @@ export const pushToQueue = async <T>(
 };
 
 export enum QUEUE_NAME {
-  OCC_CAPTURE_GIF = "occ-capture-gif",
+  STICKER_CAPTURE_GIF = "sticker-capture-gif",
 }

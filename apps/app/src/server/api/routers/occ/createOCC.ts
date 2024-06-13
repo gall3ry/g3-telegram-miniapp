@@ -1,12 +1,10 @@
 import { tryNTimes } from "@repo/utils";
 import { TRPCError } from "@trpc/server";
 import { Prisma } from "database";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getNFTIdAndOwnerFromTx } from "../../../../app/_utils/ton";
 import { env } from "../../../../env";
 import { db } from "../../../db";
-import { pushToQueue, QUEUE_NAME } from "../../services/upstash";
 import { protectedProcedure } from "../../trpc";
 import { OccType } from "./OccType";
 
@@ -93,30 +91,17 @@ export const createOCC = protectedProcedure
       });
     }
 
-    const uuid = uuidv4();
     const occ = await db.occ.create({
       data: {
         txHash,
         providerId,
         nftAddress,
-        uuid,
         // TODO: Update this when we have more than one OCC type
         GMSymbolOCC: {
           create: {},
         },
       },
     });
-
-    if (env.NODE_ENV !== "development") {
-      const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/occ/capture-gif`;
-      await pushToQueue(QUEUE_NAME.OCC_CAPTURE_GIF, {
-        url: urlToFetch,
-        body: { occUUID: uuid },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    }
 
     return {
       id: occ.id,

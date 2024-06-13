@@ -32,11 +32,6 @@ export const Top = memo(() => {
                 </div>
               </div>
             </div>
-
-            <div className="mt-2 text-center text-sm font-light leading-tight tracking-tight text-slate-700">
-              More product details - No one shall be subjected to arbitrary
-              arrest, detention or exile.
-            </div>
           </div>
         </Flex>
       )}

@@ -477,8 +477,8 @@ export const MintGMOCC = () => {
                   setIsLoading(false);
                 }
               }}
-              disabled={isLoading}
               className="w-full"
+              loading={isLoading}
             >
               Confirm to mint
             </Button>
