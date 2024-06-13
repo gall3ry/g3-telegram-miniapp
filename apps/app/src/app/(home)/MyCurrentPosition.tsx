@@ -20,7 +20,7 @@ export const MyCurrentPosition = () => {
               occId={data.occId}
               avatarUrl={data.avatarUrl}
               occImageUrl={(IMAGES.MOCK_OCC as any)[data.rank % 5]}
-              rank={data.rank}
+              rank={2}
               shareCount={data.shareCount}
               username={data.username}
               address={data.address}

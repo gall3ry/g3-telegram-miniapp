@@ -16,13 +16,9 @@ export const getMyCurrentLeaderboardPosition = protectedProcedure
   )
   .query(async ({ ctx: { session } }) => {
     const {
-      address,
-      avatarUrl,
-      occImageUrl,
       rank,
-      shareCount,
-      username,
-      occId,
+      occImageUrl,
+      item: { address, avatarUrl, shareCount, displayName, id: occId },
     } = await LeaderboardService.getInstance().getMyCurrentLeaderboardPosition({
       userId: session.userId,
     });
@@ -33,7 +29,7 @@ export const getMyCurrentLeaderboardPosition = protectedProcedure
       occImageUrl,
       rank,
       shareCount,
-      username,
+      username: displayName,
       address,
     };
   });

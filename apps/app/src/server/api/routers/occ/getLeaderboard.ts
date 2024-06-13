@@ -1,9 +1,15 @@
-import { TRPCError } from "@trpc/server";
-import { ProviderType } from "database";
 import { z } from "zod";
-import { db } from "../../../db";
-import { callOrGetFromCache, Key } from "../../services/upstash";
+import { IMAGES } from "../../../../app/_constants/image";
 import { publicProcedure } from "../../trpc";
+
+type LeaderboardItemType = {
+  shareCount: number;
+  id: number;
+  userId: number;
+  displayName: string;
+  avatarUrl: string;
+  address: string;
+};
 
 export class LeaderboardService {
   // singleton
@@ -19,77 +25,143 @@ export class LeaderboardService {
     return LeaderboardService.instance;
   }
 
-  public async getLeaderboard() {
-    return callOrGetFromCache(Key.LEADERBOARD, async () => {
-      const sortByShareCount = await db.$queryRaw<
-        {
-          id: number;
-          shareCount: bigint;
-          userId: number;
-          displayName: string;
-          avatarUrl: string;
-          address: string;
-        }[]
-      >`
-            SELECT 
-              "Sticker".id,
-              COUNT("Share".id) as "shareCount",
-              "User".id as "userId",
-              "User"."displayName" as "displayName",
-              "User"."avatarUrl" as "avatarUrl",
-              "Provider"."value" as "address"
-            FROM "Sticker" 
-            JOIN "Share" ON "Sticker".id = "Share"."stickerId" 
-            JOIN "GMSymbolOCC" ON "Sticker"."gMSymbolOCCId" = "GMSymbolOCC".id 
-            JOIN "Occ" ON "GMSymbolOCC"."occId" = "Occ".id 
-            JOIN "Provider" ON "Occ"."providerId" = "Provider".id 
-            JOIN "User" ON "Provider"."userId" = "User".id 
-            WHERE "Provider"."value" IS NOT NULL AND "Provider"."type" = ${ProviderType.TON_WALLET}::"ProviderType"
-            GROUP BY "Sticker".id, "User".id, "Provider"."value"
-            ORDER BY "shareCount" DESC`;
+  public async getLeaderboard(): Promise<{
+    data: LeaderboardItemType[];
+    total: number;
+  }> {
+    const mockData = [
+      {
+        displayName: "RonasFrank",
+        shareCount: 2213,
+        id: 1,
+        userId: 1,
+        address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
+        avatarUrl: IMAGES.MOCK_OCC[1],
+      },
+      {
+        displayName: "PhantomBlade",
+        shareCount: 2078,
+        id: 2,
+        userId: 2,
+        address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
+        avatarUrl: IMAGES.MOCK_OCC[2],
+      },
+      {
+        displayName: "CyberWarrior",
+        shareCount: 1836,
+        id: 3,
+        userId: 3,
+        address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
+        avatarUrl: IMAGES.MOCK_OCC[3],
+      },
 
-      return {
-        data: sortByShareCount.map((item) => ({
-          ...item,
-          // map from bigint to number
-          shareCount: Number(item.shareCount),
-        })),
-        total: sortByShareCount.length,
-      };
-    });
-  }
-
-  public async getMyCurrentLeaderboardPosition({ userId }: { userId: number }) {
-    const leaderboard = await this.getLeaderboard();
-
-    const rank = leaderboard.data.findIndex((occ) => occ.userId === userId);
-
-    if (rank === -1) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User not found",
-      });
-    }
-
-    const item = leaderboard.data[rank]!;
-    const address = item.address;
-
-    if (!address) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User does not have a TON address",
-      });
-    }
+      {
+        displayName: "DarkMatter",
+        shareCount: 1652,
+        id: 4,
+        userId: 4,
+        address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
+        avatarUrl: IMAGES.MOCK_OCC[4],
+      },
+      {
+        displayName: "FrostBite",
+        shareCount: 1512,
+        id: 5,
+        userId: 5,
+        address: "UQBIUXf9B4qfK2TobZ437S6i-YOGm-EKkzp1fTgAPBmL_Swd",
+        avatarUrl: IMAGES.MOCK_OCC[5],
+      },
+    ];
 
     return {
-      occId: item.id,
-      avatarUrl: item.avatarUrl,
-      occImageUrl: "",
-      rank: rank + 1,
-      shareCount: item.shareCount,
-      username: item.displayName,
-      address,
+      data: mockData,
+      total: mockData.length,
     };
+
+    // return callOrGetFromCache(Key.LEADERBOARD, async () => {
+    //   const sortByShareCount = await db.$queryRaw<
+    //     {
+    //       id: number;
+    //       shareCount: bigint;
+    //       userId: number;
+    //       displayName: string;
+    //       avatarUrl: string;
+    //       address: string;
+    //     }[]
+    //   >`
+    //         SELECT
+    //           "Sticker".id,
+    //           COUNT("Share".id) as "shareCount",
+    //           "User".id as "userId",
+    //           "User"."displayName" as "displayName",
+    //           "User"."avatarUrl" as "avatarUrl",
+    //           "Provider"."value" as "address"
+    //         FROM "Sticker"
+    //         JOIN "Share" ON "Sticker".id = "Share"."stickerId"
+    //         JOIN "GMSymbolOCC" ON "Sticker"."gMSymbolOCCId" = "GMSymbolOCC".id
+    //         JOIN "Occ" ON "GMSymbolOCC"."occId" = "Occ".id
+    //         JOIN "Provider" ON "Occ"."providerId" = "Provider".id
+    //         JOIN "User" ON "Provider"."userId" = "User".id
+    //         WHERE "Provider"."value" IS NOT NULL AND "Provider"."type" = ${ProviderType.TON_WALLET}::"ProviderType"
+    //         GROUP BY "Sticker".id, "User".id, "Provider"."value"
+    //         ORDER BY "shareCount" DESC`;
+
+    //   return {
+    //     data: sortByShareCount.map((item) => ({
+    //       ...item,
+    //       // map from bigint to number
+    //       shareCount: Number(item.shareCount),
+    //     })),
+    //     total: sortByShareCount.length,
+    //   };
+    // });
+  }
+
+  public async getMyCurrentLeaderboardPosition({
+    userId,
+  }: {
+    userId: number;
+  }): Promise<{
+    item: LeaderboardItemType;
+    rank: number;
+    occImageUrl: string;
+  }> {
+    const leaderboard = await this.getLeaderboard();
+
+    return {
+      item: leaderboard.data[0]!,
+      rank: 1,
+      occImageUrl: IMAGES.MOCK_OCC[1],
+    };
+
+    // const rank = leaderboard.data.findIndex((occ) => occ.userId === userId);
+
+    // if (rank === -1) {
+    //   throw new TRPCError({
+    //     code: "NOT_FOUND",
+    //     message: "User not found",
+    //   });
+    // }
+
+    // const item = leaderboard.data[rank]!;
+    // const address = item.address;
+
+    // if (!address) {
+    //   throw new TRPCError({
+    //     code: "NOT_FOUND",
+    //     message: "User does not have a TON address",
+    //   });
+    // }
+
+    // return {
+    //   occId: item.id,
+    //   avatarUrl: item.avatarUrl,
+    //   occImageUrl: "",
+    //   rank: rank + 1,
+    //   shareCount: item.shareCount,
+    //   username: item.displayName,
+    //   address,
+    // };
   }
 }
 
