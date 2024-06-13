@@ -2,7 +2,7 @@ name: Deploy worker and bot
 on:
   push:
     branches:
-      - main    # change to main if needed
+      - main # change to main if needed
       - tin/setup-fly
 
 concurrency:
@@ -10,18 +10,27 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}-${{ github.actor }}
   cancel-in-progress: true
 
-
 jobs:
   deploy-worker:
     name: Deploy worker
     runs-on: ubuntu-latest
-    concurrency: deploy-worker    # optional: ensure only one action runs at a time
+    concurrency: deploy-worker # optional: ensure only one action runs at a time
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      # Detect changes my-node-app
+      - uses: pnpm/action-setup@v4
+      - name: Install Turbo Ignore
+        run: |
+          pnpm install -g turbo-ignore
+      - name: Detect Changes?
+        id: worker-diff
+        continue-on-error: true
+        run: turbo-ignore worker
+      # -----------------------------
       - name: Prepare
         id: prep
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         run: |
           TAG=$(echo $GITHUB_SHA | head -c7)
           IMAGE="my_app"
@@ -32,13 +41,15 @@ jobs:
         id: buildx
         # Use the action from the master, as we've seen some inconsistencies with @v1
         # Issue: https://github.com/docker/build-push-action/issues/286
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         uses: docker/setup-buildx-action@master
         # Only worked for us with this option on 🤷‍♂️
         with:
           install: true
-      
+
       - name: Cache Docker layers
         uses: actions/cache@v2
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         with:
           path: /tmp/.buildx-cache
           # Key is named differently to avoid collision
@@ -48,6 +59,7 @@ jobs:
 
       - name: Build production image
         uses: docker/build-push-action@v2
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
@@ -63,16 +75,19 @@ jobs:
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Setup flyctl
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
         uses: superfly/flyctl-actions/setup-flyctl@master
-      
+
       - name: Deploy app (worker)
-        run: flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.worker.toml --image ${{ steps.prep.outputs.tagged_image }} 
-      
+        if: ${{ steps.worker-diff.outcome == 'failure' }} # Only run when change
+        run: flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.worker.toml --image ${{ steps.prep.outputs.tagged_image }}
+
       # - name: Deploy app (bot)
       #   run: flyctl deploy --local-only --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.bot.toml
 
@@ -83,9 +98,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      # Detect changes my-node-app
+      - uses: pnpm/action-setup@v4
+      - name: Install Turbo Ignore
+        run: |
+          pnpm install -g turbo-ignore
+      - name: Detect Changes?
+        id: bot-diff
+        continue-on-error: true
+        run: turbo-ignore worker
+      # --------------------------------
       - name: Prepare
         id: prep
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         run: |
           TAG=$(echo $GITHUB_SHA | head -c7)
           IMAGE="bot"
@@ -97,12 +122,14 @@ jobs:
         # Use the action from the master, as we've seen some inconsistencies with @v1
         # Issue: https://github.com/docker/build-push-action/issues/286
         uses: docker/setup-buildx-action@master
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         # Only worked for us with this option on 🤷‍♂️
         with:
           install: true
-      
+
       - name: Cache Docker layers
         uses: actions/cache@v2
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         with:
           path: /tmp/.buildx-cache
           # Key is named differently to avoid collision
@@ -112,6 +139,7 @@ jobs:
 
       - name: Build production image
         uses: docker/build-push-action@v2
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
@@ -127,15 +155,18 @@ jobs:
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Setup flyctl
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
         uses: superfly/flyctl-actions/setup-flyctl@master
-      
+
       - name: Deploy app (bot)
-        run: flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.bot.toml --image ${{ steps.prep.outputs.tagged_image }} 
-      
+        if: ${{ steps.bot-diff.outcome == 'failure' }} # Only run when change
+        run: flyctl deploy --build-arg TURBO_TEAM="${{ secrets.TURBO_TEAM }}" --build-arg TURBO_TOKEN="${{ secrets.TURBO_TOKEN }}" -c ./fly.bot.toml --image ${{ steps.prep.outputs.tagged_image }}
+
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
