@@ -24,12 +24,14 @@ export enum QuestId {
   POINT_RECEIVED_FROM_FRIEND = "POINT_RECEIVED_FROM_FRIEND",
   SHARING_FRIEND_STICKER = "SHARING_FRIEND_STICKER",
   SHARING_MY_STICKER = "SHARING_MY_STICKER",
+  MINT_OCC_BY_EPIC_POINT = "MINT_OCC_BY_EPIC_POINT",
 }
 
 export const mapQuestIdToTitle: Record<QuestId, string> = {
   [QuestId.JOIN_COMMUNITY]: "Join Community",
   [QuestId.BIND_WALLET_ADDRESS]: "Bind Wallet Address",
   [QuestId.MINT_GM_EPIC_QUEST]: "Mint GM Epic Quest",
+  [QuestId.MINT_OCC_BY_EPIC_POINT]: "Mint OCC By Epic Point",
 
   // Quest is added from server-side
   [QuestId.POINT_RECEIVED_FROM_FRIEND]: "Point Received From Friend",

@@ -77,7 +77,7 @@ const Page = () => {
                     </div>
 
                     <div className="text-right text-xl font-bold leading-7 text-[#BACF00]">
-                      +{formatNumber(log.point)}
+                      {log.point > 0 ? `+${formatNumber(log.point)}` : `${formatNumber(log.point)}`} 
                     </div>
                   </div>
 

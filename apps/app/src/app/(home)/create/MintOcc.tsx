@@ -284,12 +284,86 @@ export const MintGMOCC = memo(() => {
   const { sendMintNftFromFaucet } = useNftContract();
   const { mutateAsync } = api.occ.createOCC.useMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutateAsync: mintByEpicMutateAsync } = api.occ.mintOCCbyEpic.useMutation();
+  const [mintByEpicPoint, setMintByEpicPoint] = useState(true);
   const [showDrawer, setShowDrawer] = useQueryState(
     "showDrawer",
     parseAsBoolean.withDefault(false),
   );
   const utils = api.useUtils();
   const { data: topOccs } = api.occ.getTopOccs.useQuery({ limit: 5 });
+
+  const mintByEpic = async () => {
+    setIsLoading(true);
+    try {
+      await toast.promise(
+        mintByEpicMutateAsync({
+          type: OccType.GMSymbolOCC,
+        }),
+        {
+          loading: "Creating OCC...",
+          success: () => {
+            void utils.occ.getOcc.invalidate();
+            void setShowDrawer(null);
+
+            return "OCC created";
+          },
+          error: (e) => {
+            console.log(`Failed to create OCC:`, e);
+
+            return "Failed to create OCC";
+          },
+        },
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const mintByTon = async () => {
+    setIsLoading(true);
+    try {
+      const txHash =
+        env.NEXT_PUBLIC_G3_ENV === "development"
+          ? MOCK_TX_HASH
+          : await sendMintNftFromFaucet({
+              name: "Name Of NFT #6",
+              description: "NFT Description",
+              image:
+                "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
+            });
+
+      await toast.promise(
+        mutateAsync({
+          type: OccType.GMSymbolOCC,
+          txHash,
+        }),
+        {
+          loading: "Creating OCC...",
+          success: () => {
+            void utils.occ.getOcc.invalidate();
+            void setShowDrawer(null);
+
+            return "OCC created";
+          },
+          error: (e) => {
+            console.log(`Failed to create OCC:`, e);
+
+            return "Failed to create OCC";
+          },
+        },
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const mintOCC = async () => {
+    if (mintByEpicPoint) {
+      await mintByEpic();
+    } else {
+      await mintByTon();
+    }
+  };
 
   return (
     <div>
@@ -372,12 +446,24 @@ export const MintGMOCC = memo(() => {
               className="flex flex-row items-center justify-center gap-8"
               size="3"
             >
-              {/* <RadioGroup.Item value="1" className="flex items-center">
+              <RadioGroup.Item
+                value="1"
+                className="flex items-center"
+                onClick={() => {
+                  setMintByEpicPoint(true);
+                }}
+              >
                 <div className="text-xl font-bold leading-7 text-slate-900">
                   100 EPIC
                 </div>
-              </RadioGroup.Item> */}
-              <RadioGroup.Item value="2" className="flex items-center">
+              </RadioGroup.Item>
+              <RadioGroup.Item
+                value="2"
+                className="flex items-center"
+                onClick={() => {
+                  setMintByEpicPoint(false);
+                }}
+              >
                 <div className="text-xl font-bold leading-7 text-slate-900">
                   0.3 TON
                 </div>
@@ -388,49 +474,12 @@ export const MintGMOCC = memo(() => {
           <div className="mb-3 mt-8 space-y-3 px-5">
             <Button
               size="4"
-              onClick={async () => {
-                setIsLoading(true);
-                try {
-                  const txHash =
-                    env.NEXT_PUBLIC_G3_ENV === "development"
-                      ? MOCK_TX_HASH
-                      : await sendMintNftFromFaucet({
-                          name: "Name Of NFT #6",
-                          description: "NFT Description",
-                          image:
-                            "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
-                        });
-
-                  await toast.promise(
-                    mutateAsync({
-                      type: OccType.GMSymbolOCC,
-                      txHash,
-                    }),
-                    {
-                      loading: "Creating OCC...",
-                      success: () => {
-                        void utils.occ.getOcc.invalidate();
-                        void setShowDrawer(null);
-
-                        return "OCC created";
-                      },
-                      error: (e) => {
-                        console.log(`Failed to create OCC:`, e);
-
-                        return "Failed to create OCC";
-                      },
-                    },
-                  );
-                } finally {
-                  setIsLoading(false);
-                }
-              }}
+              onClick={mintOCC}
               className="w-full"
               loading={isLoading}
             >
               Confirm to mint
             </Button>
-
             <Button
               size="4"
               className="w-full"

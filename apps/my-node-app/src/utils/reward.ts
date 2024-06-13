@@ -19,6 +19,7 @@ export class RewardService {
     POINT_RECEIVED_FROM_FRIEND: 25,
     SHARING_FRIEND_STICKER: 25,
     SHARING_MY_STICKER: 50,
+    MINT_OCC_BY_EPIC_POINT: -100,
   };
 
   public async rewardUser({
