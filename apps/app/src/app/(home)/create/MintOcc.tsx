@@ -1,9 +1,9 @@
 "use client";
-import { Button, RadioGroup, Spinner } from "@radix-ui/themes";
+import { Button, RadioGroup, Skeleton, Spinner } from "@radix-ui/themes";
 import { useInitData } from "@tma.js/sdk-react";
 import Image from "next/image";
 import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { env } from "../../../env";
@@ -57,115 +57,126 @@ export const MintOCC = () => {
   const { data: occ, isPending } = api.occ.getOcc.useQuery(undefined, {
     enabled: isAuthenticated,
   });
-  const { data: stickers, isPending: isStickersPending } =
-    api.sticker.getStickers.useQuery(undefined, {
-      enabled: isAuthenticated,
-    });
+  const {
+    data: stickersData,
+    isPending: isStickersPending,
+    isSuccess,
+  } = api.sticker.getStickers.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
   const initData = useInitData(true);
   const [stickerId, setStickerId] = useQueryState("stickerId", parseAsInteger);
   const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
+  const stickers = stickersData?.items;
   const selectedSticker = stickers?.find((s) => s.id === stickerId);
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
+  const [showRevealSoonDrawer, setShowRevealSoonDrawer] = useState(false);
 
   if (isPending) return <Spinner mx="auto" />;
 
   return occ ? (
     <div className="px-4">
-      <div className="aspect-[335/461] w-full rounded-lg bg-[#E9FFF1] p-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="aspect-square w-full rounded-lg"
-          src={IMAGES.create.gm}
-          alt=""
-        />
+      <div className="flex h-16 rounded-xl bg-slate-900 px-[14px] py-3 opacity-80">
+        <div className="flex items-center gap-2.5">
+          <Image
+            src={IMAGES.create.icon_level_1}
+            alt=""
+            height={40}
+            width={40}
+            className="rounded-full"
+          />
 
-        <div className="mt-4">
-          <div className="text-center text-4xl font-bold leading-[44px] text-slate-900">
-            #GM{occ.id}
-          </div>
-        </div>
-
-        <div className="mt-2 flex *:flex-1">
-          <div className="mt-1.5 flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
-              <div className="text-center text-base font-medium leading-normal tracking-tight text-[#005320]">
-                Level
-              </div>
+          <div>
+            <div className="text-base font-medium leading-normal tracking-tight text-white">
+              Level
             </div>
 
-            <div className="mt-2 inline-flex h-6 items-center justify-center gap-2.5 rounded-[32px] bg-white px-2 pb-[3px] pt-px">
-              <div className="text-center text-sm font-medium leading-tight tracking-tight text-blue-500">
+            <button
+              className="inline-flex h-[21px] items-center justify-center gap-2.5 rounded-[32px] bg-blue-50 px-2 pb-0.5 pt-px"
+              onClick={() => {
+                setShowRevealSoonDrawer(true);
+              }}
+            >
+              <div className="text-center text-xs font-medium leading-[18px] tracking-tight text-blue-500">
                 Reveal soon
               </div>
-            </div>
-          </div>
-
-          <div className="mt-1.5 flex flex-col items-center">
-            <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-[#14DB60]" />
-              <div className="text-center text-base font-medium leading-normal tracking-tight text-[#005320]">
-                Shares
-              </div>
-            </div>
-
-            <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-              {occ.totalShare}
-            </div>
+            </button>
           </div>
         </div>
 
-        <div className="mt-3">
-          <SelectedAssets />
+        <div className="mx-5 h-full w-px bg-white opacity-20"></div>
+
+        <div className="flex items-center gap-2.5">
+          <Image
+            src={IMAGES.create.icon_chart_2}
+            alt=""
+            height={40}
+            width={40}
+            className="rounded-full"
+          />
+
+          <div>
+            <div className="text-base font-medium leading-normal tracking-tight text-white">
+              Share
+            </div>
+
+            <div className="text-center text-2xl font-bold leading-none text-white">
+              {Intl.NumberFormat().format(occ.totalShare)}
+            </div>
+          </div>
         </div>
       </div>
+
+      <Skeleton width="30" height="10" loading={isStickersPending}>
+        <div className="mt-5">
+          {isSuccess && (
+            <div className="text-xl font-bold leading-7 text-slate-900">
+              Effect inventory ({stickersData.total})
+            </div>
+          )}
+        </div>
+        <div className="mt-3 grid grid-cols-4 gap-2">
+          <EffectItem imageUrl={IMAGES.MOCK_OCC[1]} isSelected />
+
+          <EffectItem
+            imageUrl={IMAGES.MOCK_OCC[2]}
+            isDisabled
+            disabledContent={{
+              title: "Level 2",
+              buttonText: "Unlock",
+              onClick: () => {
+                toast.error("Feature not available yet");
+              },
+            }}
+          />
+
+          <EffectItem
+            imageUrl={IMAGES.MOCK_OCC[3]}
+            isDisabled
+            disabledContent={{
+              title: "Level 3",
+              buttonText: "Unlock",
+              onClick: () => {
+                toast.error("Feature not available yet");
+              },
+            }}
+          />
+          <EffectItem
+            imageUrl={IMAGES.MOCK_OCC[4]}
+            isDisabled
+            disabledContent={{
+              title: "Level 4",
+              buttonText: "Unlock",
+              onClick: () => {
+                toast.error("Feature not available yet");
+              },
+            }}
+          />
+        </div>
+      </Skeleton>
 
       <div className="mt-5">
-        <div className="text-xl font-bold leading-7 text-slate-900">
-          Effect inventory (1)
-        </div>
-      </div>
-
-      <div className="mt-3 grid grid-cols-4 gap-2">
-        <EffectItem
-          imageUrl="https://api.dicebear.com/8.x/micah/svg"
-          isSelected
-        />
-
-        <EffectItem
-          imageUrl="https://api.dicebear.com/8.x/micah/svg"
-          isDisabled
-          disabledContent={{
-            title: "Level 2",
-            buttonText: "Unlock",
-            onClick: () => {
-              toast.error("Feature not available yet");
-            },
-          }}
-        />
-
-        <EffectItem
-          imageUrl="https://api.dicebear.com/8.x/micah/svg"
-          isDisabled
-          disabledContent={{
-            title: "Level 3",
-            buttonText: "Unlock",
-            onClick: () => {
-              toast.error("Feature not available yet");
-            },
-          }}
-        />
-        <EffectItem
-          imageUrl="https://api.dicebear.com/8.x/micah/svg"
-          isDisabled
-          disabledContent={{
-            title: "Level 4",
-            buttonText: "Unlock",
-            onClick: () => {
-              toast.error("Feature not available yet");
-            },
-          }}
-        />
+        <SelectedAssets />
       </div>
 
       <Spinner mx="auto" loading={isStickersPending}>
@@ -237,6 +248,11 @@ export const MintOCC = () => {
       </Spinner>
 
       <SelectAssetDrawer />
+
+      <RevealSoonDrawer
+        open={showRevealSoonDrawer}
+        onOpenChange={setShowRevealSoonDrawer}
+      />
 
       <Drawer
         open={stickerId !== null}
@@ -330,7 +346,7 @@ export const MintOCC = () => {
   );
 };
 
-export const MintGMOCC = () => {
+export const MintGMOCC = memo(() => {
   const { sendMintNftFromFaucet } = useNftContract();
   const { mutateAsync } = api.occ.createOCC.useMutation();
   const [isLoading, setIsLoading] = useState(false);
@@ -511,9 +527,11 @@ export const MintGMOCC = () => {
       </div>
     </div>
   );
-};
+});
 
-export const SelectAssetDrawer = () => {
+MintGMOCC.displayName = "MintGMOCC";
+
+export const SelectAssetDrawer = memo(() => {
   const [selectAssetsDrawer, setSelectAssetsDrawer] =
     useSelectAssetsForGMDrawer();
   const [selectedAssets, setSelectedAssets] = useState<
@@ -656,4 +674,56 @@ export const SelectAssetDrawer = () => {
       </DrawerContent>
     </Drawer>
   );
-};
+});
+
+SelectAssetDrawer.displayName = "SelectAssetDrawer";
+
+export const RevealSoonDrawer = memo(
+  ({
+    open,
+    onOpenChange,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }) => {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent>
+          <div className="text-center text-2xl font-bold leading-9 text-slate-900">
+            Share more GM to your
+            <br />
+            Telegram friends
+          </div>
+
+          <div className="mt-2">
+            <div className="text-center text-base font-light leading-normal tracking-tight text-slate-500">
+              Share more GMs and level up your avatar to unlock more GM effects.
+            </div>
+          </div>
+
+          <div className="mt-5 flex justify-center">
+            <div className="inline-flex h-9 items-center justify-center gap-2.5 rounded-[32px] bg-blue-50 px-3 pb-[5px] pt-[3px]">
+              <div className="text-center text-xl font-medium leading-7 text-blue-500">
+                Reveal soon
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-3 mt-8 space-y-3 px-5">
+            <Button
+              size="4"
+              className="w-full"
+              onClick={() => {
+                onOpenChange(false);
+              }}
+            >
+              Close
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  },
+);
+
+RevealSoonDrawer.displayName = "RevealSoonDrawer";

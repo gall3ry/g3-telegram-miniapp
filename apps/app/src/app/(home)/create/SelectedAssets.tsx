@@ -1,6 +1,8 @@
 "use client";
 import { Spinner } from "@radix-ui/themes";
+import Image from "next/image";
 import { api } from "../../../trpc/react";
+import { IMAGES } from "../../_constants/image";
 import { useSelectAssetsForGMDrawer } from "./MintOcc";
 
 export const SelectedAssets = () => {
@@ -12,17 +14,40 @@ export const SelectedAssets = () => {
     },
   );
 
-  const [first, second, third] = gmNFTs ?? [null, null, null];
-  const moreThanThree = gmNFTs && gmNFTs?.length > 3;
+  const NUMBER_ELEMENTS = 5;
+  const firstFive = gmNFTs?.slice(0, NUMBER_ELEMENTS);
+  const moreThanFive = gmNFTs && gmNFTs?.length > NUMBER_ELEMENTS;
+  const last = gmNFTs?.[NUMBER_ELEMENTS - 1];
+
+  const renderNFT = (nft: NonNullable<typeof gmNFTs>[number]) => {
+    return (
+      <div className="relative">
+        <div
+          className="aspect-square w-full rounded-xl bg-cover"
+          style={{
+            backgroundImage: `url(${nft.imageUrl})`,
+          }}
+        ></div>
+        <div className="absolute right-1 top-1">
+          <Image
+            src={IMAGES.create.ton_logo}
+            alt="ton-logo"
+            width="20"
+            height="20"
+          />
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="relative flex h-[70px] items-center justify-between gap-4 rounded-lg bg-white px-4 py-3">
-      <div>
-        <div className="text-base font-bold leading-normal text-slate-900">
-          Selected assets
+    <>
+      <div className="mt-5 flex items-center justify-between">
+        <div className="text-xl font-bold leading-7 text-slate-900">
+          GM Stickers
         </div>
         <button
-          className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-blue-400"
+          className="cursor-pointer text-right text-base font-medium leading-normal tracking-tight text-blue-400"
           onClick={() => {
             void setSelectAssetsDrawer(true);
           }}
@@ -31,38 +56,27 @@ export const SelectedAssets = () => {
         </button>
       </div>
 
-      <Spinner loading={!isSuccess}>
-        <div className="flex gap-1">
-          {first?.imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="h-11 w-11 rounded-lg" src={first.imageUrl} alt="" />
-          )}
+      <div className="mt-3">
+        <Spinner loading={!isSuccess}>
+          <div className="grid grid-cols-5 gap-2">
+            {firstFive?.slice(0, NUMBER_ELEMENTS - 1)?.map(renderNFT)}
 
-          {second?.imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              className="h-11 w-11 rounded-lg"
-              src={second.imageUrl}
-              alt=""
-            />
-          )}
+            {last && (
+              <div className="relative overflow-hidden rounded-lg">
+                {moreThanFive && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-slate-900 text-white opacity-50">
+                    <div className="text-center text-base font-bold leading-normal text-white">
+                      +{gmNFTs?.length - (firstFive?.length ?? 0)}
+                    </div>
+                  </div>
+                )}
 
-          <div className="relative overflow-hidden rounded-lg">
-            {moreThanThree && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-900 text-white opacity-50">
-                <div className="text-center text-base font-bold leading-normal text-white">
-                  +{gmNFTs?.length - 3}
-                </div>
+                {renderNFT(last)}
               </div>
             )}
-
-            {third?.imageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className="h-11 w-11" src={third.imageUrl} alt="" />
-            )}
           </div>
-        </div>
-      </Spinner>
-    </div>
+        </Spinner>
+      </div>
+    </>
   );
 };

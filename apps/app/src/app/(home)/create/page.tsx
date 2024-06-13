@@ -7,7 +7,6 @@ import { LoggedUserOnly } from "../_components/LoggedUserOnly";
 import { MintOCC } from "./MintOcc";
 
 const Page = () => {
-  // const items = ["GM", "PNL", "IDCard"] as const;
   const items = [
     {
       name: "GM",

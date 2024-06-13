@@ -13,17 +13,29 @@ export const stickerRouter = createTRPCRouter({
         session: { userId },
       },
     }) => {
-      return db.sticker.findMany({
-        where: {
-          GMSymbolOCC: {
-            Occ: {
-              Provider: {
-                userId,
-              },
+      const where = {
+        GMSymbolOCC: {
+          Occ: {
+            Provider: {
+              userId,
             },
           },
         },
-      });
+      } satisfies Prisma.StickerWhereInput;
+
+      const [items, total] = await Promise.all([
+        db.sticker.findMany({
+          where: where,
+        }),
+        db.sticker.count({
+          where: where,
+        }),
+      ]);
+
+      return {
+        items,
+        total,
+      };
     },
   ),
 
