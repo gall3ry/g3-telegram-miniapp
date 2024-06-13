@@ -6,8 +6,7 @@ import {
   type ImageAsset,
 } from "@rive-app/canvas";
 import { useRive } from "@rive-app/react-canvas";
-import { memo, useEffect, useRef, useState } from "react";
-import { useLogger } from "react-use";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { getGifFromImages } from "../../rive/getGifFromImages";
 
 const loadAndDecodeImg = async (
@@ -57,9 +56,9 @@ export const Sample1 = memo(
   }) => {
     const [images, setImages] = useState<string[]>([]);
     const interval = useRef<ReturnType<typeof setInterval>>();
-    const [recording, setRecording] = useState<"idle" | "recording" | "done">(
-      "idle",
-    );
+    const [recording, setRecording] = useState<
+      "idle" | "recording" | "done" | "done_capturing_static_template"
+    >("idle");
     const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
 
     const { RiveComponent, canvas, rive } = useRive({
@@ -136,15 +135,35 @@ export const Sample1 = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInitialPlaying]);
 
+    const dispatchEvent = useCallback((image: string) => {
+      const event = new CustomEvent("gif", { detail: image });
+      window.dispatchEvent(event);
+    }, []);
+
     useEffect(() => {
-      if (recording === "done") {
+      if (recording === "recording") {
+        //  if not animation
+        console.log(rive?.playingStateMachineNames);
+
+        if (rive?.playingStateMachineNames.length === 0) {
+          // capture
+          setImages((prev) => [...prev, canvas!.toDataURL()]);
+          setRecording("done_capturing_static_template");
+        }
+      } else if (recording === "done") {
         void getGifFromImages(images).then((image) => {
           // throw event
-          const event = new CustomEvent("gif", { detail: image });
-          window.dispatchEvent(event);
-
+          dispatchEvent(image);
           return Promise.resolve();
         });
+      } else if (recording === "done_capturing_static_template") {
+        setTimeout(() => {
+          void getGifFromImages([canvas!.toDataURL()]).then((image) => {
+            // throw event
+            dispatchEvent(image);
+            return Promise.resolve();
+          });
+        }, 1000);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [recording]);
@@ -165,8 +184,6 @@ export const Sample1 = memo(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [imageUrl, nftAsset?.name, rive]);
-
-    useLogger("isPlaying", rive?.isPlaying);
 
     return (
       <div className="relative overflow-hidden rounded-xl border-2">

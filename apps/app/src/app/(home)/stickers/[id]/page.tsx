@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { unstable_noStore } from "next/cache";
+import { Suspense } from "react";
 import { db } from "../../../../server/db";
 import { BottomActions } from "./BottomActions";
 import { TemplateInfo } from "./TemplateInfo";
@@ -39,8 +40,10 @@ export async function generateMetadata({
 const TemplateId = () => {
   return (
     <div>
-      <TemplateInfo />
-      <BottomActions />
+      <Suspense fallback={<></>}>
+        <TemplateInfo />
+        <BottomActions />
+      </Suspense>
     </div>
   );
 };

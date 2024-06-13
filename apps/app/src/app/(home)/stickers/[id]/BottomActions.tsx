@@ -27,9 +27,14 @@ export const BottomActions = () => {
 const Footer = () => {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { data: occ } = api.occ.getOcc.useQuery(undefined, {
-    enabled: !!id,
-  });
+  const { data: sticker } = api.sticker.getSticker.useQuery(
+    {
+      id: +id,
+    },
+    {
+      enabled: isFinite(+id),
+    },
+  );
 
   return (
     <div className="sticky inset-x-0 bottom-0 z-50 flex h-20 items-center gap-3 bg-white px-5 shadow-2xl">
@@ -49,7 +54,7 @@ const Footer = () => {
         size="4"
         className="flex-1"
         onClick={() => {
-          if (!occ) return;
+          if (!sticker) return;
           postEvent("web_app_switch_inline_query", {
             query: `${id}`,
             chat_types: ["channels", "groups", "users"],

@@ -12,7 +12,7 @@ export const getGifFromImages = (images: string[]) => {
     throw new Error("gifshot is not supported");
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     gifshot.createGIF(
       {
         images,
@@ -26,7 +26,7 @@ export const getGifFromImages = (images: string[]) => {
         if (!obj.error) {
           const image = obj.image;
 
-          resolve(image);
+          resolve(image as string);
         }
 
         reject(obj.error as Error);

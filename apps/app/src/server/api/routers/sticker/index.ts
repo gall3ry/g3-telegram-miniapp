@@ -27,6 +27,20 @@ export const stickerRouter = createTRPCRouter({
     },
   ),
 
+  getSticker: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .query(async ({ input: { id } }) => {
+      return db.sticker.findFirst({
+        where: {
+          id,
+        },
+      });
+    }),
+
   getGMNFTs: protectedProcedure.query(
     async ({
       ctx: {
