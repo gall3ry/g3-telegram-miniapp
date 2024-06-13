@@ -16,6 +16,11 @@ model User {
     point      Int          @default(0)
     RewardLogs RewardLogs[]
     Provider   Provider[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    countryCode String?
 }
 
 model RewardLogs {
@@ -164,4 +169,15 @@ model Sticker {
     nftAddress String
 
     @@unique([stickerType, nftAddress])
+}
+
+model BotMessage {
+    id       Int     @id @default(autoincrement())
+    msg_type String
+    user_id  Int
+    hour     Int?
+    message  String?
+    payload  Json?
+
+    @@index([user_id])
 }
