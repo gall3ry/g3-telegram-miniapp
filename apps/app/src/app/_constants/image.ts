@@ -10,6 +10,9 @@ export const IMAGES = {
     4: "/images/mock-occ/4.png",
     5: "/images/mock-occ/5.png",
   },
+  create: {
+    gm: "/images/create/gm.png",
+  },
 
   balance_bg: "/images/balance_bg.png",
 } as const;

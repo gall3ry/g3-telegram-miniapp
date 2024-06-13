@@ -9,6 +9,7 @@ import { z } from "zod";
 import { env } from "../../../env";
 import { OccType } from "../../../server/api/routers/occ/OccType";
 import { api } from "../../../trpc/react";
+import { IMAGES } from "../../_constants/image";
 import { useNftContract } from "../../_hooks/useNftContract";
 import { useIsAuthenticated } from "../../_providers/useAuth";
 import { mapStickerTypeToTemplateComponent } from "../_components/_templates";
@@ -17,6 +18,7 @@ import { IconAsset } from "../_icons/IconAsset";
 import { IconCheck } from "../_icons/IconCheck";
 import { IconEffect } from "../_icons/IconEffect";
 import { LeaderboardAvatar } from "../LeaderboardAvatar";
+import { IconLock } from "../templates/[id]/_components/IconLock";
 import { EffectItem } from "./EffectItem";
 import { mockAssets } from "./MOCK_ASSET";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
@@ -73,7 +75,7 @@ export const MintOCC = () => {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="aspect-square w-full rounded-lg"
-          src="https://via.placeholder.com/303x303"
+          src={IMAGES.create.gm}
           alt=""
         />
 
@@ -341,31 +343,27 @@ export const MintGMOCC = () => {
 
   return (
     <div>
-      <div className="p-4">
-        <div className="mt-6 flex justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="h-[161px] w-[161px] rounded-full"
-            src="https://via.placeholder.com/161x161"
-            alt=""
-          />
+      <div className="mt-4 px-4">
+        <div className="text-center text-2xl font-bold leading-9 text-black">
+          Unlock Your Creativity
+          <br />
+          with GM EPIC
         </div>
 
-        <div className="mt-5">
-          <div className="text-center text-sm font-light leading-tight tracking-tight text-slate-700">
-            Want your own epic GM like the famous below? Let&apos;s unlock the
-            #GM now to awesomely show off your daily Web3 routine to community.
-            Mint, customize, share, collect points, and level up for your chance
-            to win the $EPIC AIRDROP (TBA){" "}
-          </div>
+        <div className="mt-2 text-center text-sm font-light leading-tight tracking-tight text-slate-700">
+          Want to show off your sticker ownership with daily messages? Mint GM,
+          customize your content, and share more to level up and collect points
+          for the $EPIC Airdrops (TBA).
         </div>
 
         <div className="mt-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             className="aspect-square w-full rounded-xl"
-            src="https://via.placeholder.com/335x335"
+            src={IMAGES.create.gm}
             alt=""
+            width="335"
+            height="335"
           />
         </div>
 
@@ -499,11 +497,15 @@ export const MintGMOCC = () => {
       <div className="container sticky -left-4 -right-4 bottom-20 mt-7 bg-white px-5 py-3 shadow-xl">
         <Button
           className="w-full"
+          radius="large"
           size="4"
           onClick={() => {
             void setShowDrawer(true);
           }}
         >
+          <div className="size-6">
+            <IconLock />
+          </div>
           Mint GM
         </Button>
       </div>

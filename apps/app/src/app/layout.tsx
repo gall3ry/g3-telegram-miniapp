@@ -1,5 +1,5 @@
 import { Theme } from "@radix-ui/themes";
-import "~/styles/globals.css";
+import "~/styles/globals.scss";
 
 // Import Swiper styles
 import "swiper/css";
@@ -37,7 +37,7 @@ export default function RootLayout({
       <body className="font-sans">
         <Providers>
           <Toaster />
-          <Theme radius="full" accentColor="lime">
+          <Theme radius="large" accentColor="lime">
             {children}
           </Theme>
         </Providers>

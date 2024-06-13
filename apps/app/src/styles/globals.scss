@@ -10,4 +10,9 @@
 
   --lime-9: #14db60;
   --lime-10: #c0e000;
+
+  /* .rt-BaseButton */
+  .rt-BaseButton {
+    @apply text-xl font-bold leading-7 text-slate-900;
+  }
 }
