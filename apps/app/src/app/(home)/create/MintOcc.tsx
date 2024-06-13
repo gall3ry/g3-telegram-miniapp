@@ -670,6 +670,7 @@ export const AllStickers = memo(() => {
     });
   const stickers = stickersData?.items;
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
+  const [, setStickerId] = useQueryState("stickerId", parseAsInteger);
 
   return (
     <Spinner mx="auto" loading={isStickersPending}>
