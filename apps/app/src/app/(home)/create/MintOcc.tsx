@@ -247,7 +247,7 @@ export const MintOCC = () => {
         <DrawerContent>
           <div className="px-5">
             <div className="aspect-square w-full rounded-xl">
-              {selectedSticker?.stickerType &&
+              {selectedSticker?.imageUrl &&
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
                   imageUrl: selectedSticker.imageUrl,
                 })}
