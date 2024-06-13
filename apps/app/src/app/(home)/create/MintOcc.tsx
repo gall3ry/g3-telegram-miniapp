@@ -522,6 +522,7 @@ export const SelectAssetDrawer = () => {
     api.sticker.generateSticker.useMutation({
       onSuccess: () => {
         void utils.sticker.getStickers.invalidate();
+        void utils.sticker.getGMNFTs.invalidate();
       },
     });
   const { data: occ } = api.occ.getOcc.useQuery(undefined, {
