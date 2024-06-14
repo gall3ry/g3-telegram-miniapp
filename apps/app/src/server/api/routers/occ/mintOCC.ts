@@ -38,26 +38,27 @@ export const mintOCCbyEpic = protectedProcedure
     }
 
     // deduct user point
-    await db.user.update({
-      where: {
-        id: session.userId,
-      },
-      data: {
-        point: {
-          decrement: EPIC_POINT_TO_MINT,
+    await db.$transaction([
+      db.user.update({
+        where: {
+          id: session.userId,
         },
-      },
-    });
-
-    // save log to RewardLogs
-    await db.rewardLogs.create({
-      data: {
-        userId: session.userId,
-        point: -EPIC_POINT_TO_MINT,
-        taskId: QuestId.MINT_OCC_BY_EPIC_POINT,
-        // taskId: "MINT_OCC_BY_EPIC_POINT",
-      },
-    });
+        data: {
+          point: {
+            decrement: EPIC_POINT_TO_MINT,
+          },
+        },
+      }),
+      // save log to RewardLogs
+      db.rewardLogs.create({
+        data: {
+          userId: session.userId,
+          point: -EPIC_POINT_TO_MINT,
+          taskId: QuestId.MINT_OCC_BY_EPIC_POINT,
+          // taskId: "MINT_OCC_BY_EPIC_POINT",
+        },
+      })
+    ]);
 
     // TODO: Use real txHash and nftAddress later - now just for testing
     const txHash = uuidv4();
