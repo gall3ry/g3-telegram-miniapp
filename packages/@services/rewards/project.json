@@ -1,0 +1,20 @@
+{
+  "name": "rewards",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/@services/rewards/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/@services/rewards",
+        "tsConfig": "packages/@services/rewards/tsconfig.lib.json",
+        "packageJson": "packages/@services/rewards/package.json",
+        "main": "packages/@services/rewards/src/index.ts",
+        "assets": ["packages/@services/rewards/*.md"]
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "g3-telegram-bot",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/g3-telegram-bot/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "g3-telegram-bot:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "g3-telegram-bot:build:development"
+        },
+        "staging": {
+          "buildTarget": "g3-telegram-bot:build:staging"
+        }
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/g3-telegram-bot/Dockerfile . -t g3-telegram-bot"
+    }
+  }
+}

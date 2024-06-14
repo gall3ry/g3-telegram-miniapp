@@ -1,0 +1,24 @@
+{
+  "name": "g3-miniapp-v2",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/g3-miniapp-v2/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "g3-miniapp-v2:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "g3-miniapp-v2:build:development"
+        },
+        "production": {
+          "buildTarget": "g3-miniapp-v2:build:production"
+        }
+      }
+    }
+  }
+}

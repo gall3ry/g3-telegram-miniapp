@@ -1,0 +1,29 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@g3-miniapp-v2/database-client": [
+        "packages/database-client/src/index.ts"
+      ],
+      "@g3-miniapp-v2/database-schema": [
+        "packages/database-schema/src/index.ts"
+      ],
+      "@g3-miniapp-v2/rewards": ["packages/@services/rewards/src/index.ts"],
+      "@g3-miniapp-v2/types": ["packages/types/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
