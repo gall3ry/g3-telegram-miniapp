@@ -1,4 +1,4 @@
-import { PrismaClient } from '@g3-miniapp-v2/database-client';
+import { PrismaClient } from '@database/database-client';
 
 export const db = new PrismaClient({
   log: [],

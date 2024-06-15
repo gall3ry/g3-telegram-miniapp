@@ -1,0 +1,20 @@
+{
+  "name": "database-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/@database/database-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/@database/database-client",
+        "tsConfig": "packages/@database/database-client/tsconfig.lib.json",
+        "packageJson": "packages/@database/database-client/package.json",
+        "main": "packages/@database/database-client/src/index.ts",
+        "assets": ["packages/@database/database-client/*.md"]
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { RewardService } from '@g3-miniapp-v2/rewards';
+import { RewardService } from '@services/rewards';
 import { db } from './db';
 
 export const rewardService = new RewardService(db);

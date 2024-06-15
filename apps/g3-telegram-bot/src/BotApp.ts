@@ -1,5 +1,5 @@
-import { Prisma } from '@g3-miniapp-v2/database-client';
-import { mapStickerTypeToStickerTemplate, QuestId } from '@g3-miniapp-v2/types';
+import { Prisma } from '@database/database-client';
+import { mapStickerTypeToStickerTemplate, QuestId } from '@shared/types';
 import { Telegraf } from 'telegraf';
 import { InputTextMessageContent } from 'telegraf/types';
 import { z } from 'zod';

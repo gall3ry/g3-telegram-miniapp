@@ -15,14 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@g3-miniapp-v2/database-client": [
-        "packages/database-client/src/index.ts"
+      "@database/database-client": [
+        "packages/@database/database-client/src/index.ts"
       ],
-      "@g3-miniapp-v2/database-schema": [
-        "packages/database-schema/src/index.ts"
+      "@database/database-schema": [
+        "packages/@database/database-schema/src/index.ts"
       ],
-      "@g3-miniapp-v2/rewards": ["packages/@services/rewards/src/index.ts"],
-      "@g3-miniapp-v2/types": ["packages/types/src/index.ts"]
+      "@services/rewards": ["packages/@services/rewards/src/index.ts"],
+      "@shared/types": ["packages/@shared/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

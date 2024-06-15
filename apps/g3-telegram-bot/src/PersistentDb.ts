@@ -1,15 +1,16 @@
-import { Chat } from "telegraf/types";
+import { Chat } from 'telegraf/types';
 
 type UserId = number;
 
 type Data = {
   stickerId?: number;
-  chatType?: "sender" | Chat["type"];
+  chatType?: 'sender' | Chat['type'];
 };
 
 export class PersistentDb {
   private static instance: PersistentDb;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   public static getInstance(): PersistentDb {
