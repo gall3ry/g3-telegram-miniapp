@@ -1,27 +1,32 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import input from 'input';
 import { groupBy, mapValues } from 'lodash-es';
 import { Api, TelegramClient } from 'telegram';
-import { StringSession } from 'telegram/sessions/StringSession';
-import { env } from './env';
-
-export const apiId = env.TELEGRAM_API_ID;
-export const apiHash = env.TELEGRAM_API_HASH;
-export const stringSession = new StringSession(env.TELEGRAM_STRING_SESSION);
 
 export interface Dictionary<T> {
   [index: string]: T;
 }
 
-export class TelegramService {
-  // singleton
-  private static instance: TelegramService;
+@Injectable()
+export class TelegramService implements OnModuleInit {
+  private telegramClient: TelegramClient;
 
-  private telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
-    connectionRetries: 5,
-  });
+  constructor(private configService: ConfigService) {
+    const apiId = this.configService.get<number>('TELEGRAM_API_ID');
+    const apiHash = this.configService.get<string>('TELEGRAM_API_HASH');
+    const stringSession = this.configService.get<string>(
+      'TELEGRAM_STRING_SESSION'
+    );
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+    this.telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
+      connectionRetries: 5,
+    });
+  }
+
+  async onModuleInit() {
+    await this._initialize();
+  }
 
   private async _initialize() {
     if (this.telegramClient.connected) {
@@ -38,14 +43,6 @@ export class TelegramService {
     });
 
     console.log(`🚀 Telegram client is ready!`);
-  }
-
-  public static async getInstance() {
-    if (!TelegramService.instance) {
-      TelegramService.instance = new TelegramService();
-      await TelegramService.instance._initialize();
-    }
-    return TelegramService.instance;
   }
 
   async getReactionsByIds({

@@ -40,7 +40,15 @@
       "@g3-telegram-bot/inline-query-tracker": [
         "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
       ],
-      "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"]
+      "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"],
+      "@g3-worker/emoji": ["packages/g3-worker/emoji/src/index.ts"],
+      "@g3-worker/prisma-client": [
+        "packages/g3-worker/prisma-client/src/index.ts"
+      ],
+      "@g3-worker/telegram": ["packages/g3-worker/telegram/src/index.ts"],
+      "@g3-worker/telegram-reaction-crawling": [
+        "packages/g3-worker/telegram-reaction-crawling/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

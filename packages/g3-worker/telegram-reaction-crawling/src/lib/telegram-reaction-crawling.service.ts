@@ -1,23 +1,32 @@
+import { EmojiService } from '@g3-worker/emoji';
+import { PrismaService } from '@g3-worker/prisma-client';
+import { TelegramService } from '@g3-worker/telegram';
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { groupBy } from 'lodash-es';
 import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
-import { TelegramService } from './TelegramService';
-import { db } from './db';
-import { env } from './env';
-import { EmojiService } from './services/emoji';
 
 @Injectable()
-export class AppService {
-  private readonly logger = new Logger(AppService.name);
+export class TelegramReactionCrawlingService {
+  private readonly logger = new Logger(TelegramReactionCrawlingService.name);
+
+  constructor(
+    private db: PrismaService,
+    private telegramService: TelegramService,
+    private configService: ConfigService,
+    private emojiService: EmojiService
+  ) {}
 
   // 2 minutes for testing
   @Cron('0 */2 * * * *')
   async updateEmotion() {
+    const db = this.db;
+    const instance = this.telegramService;
+
     this.logger.debug(`[updateEmotion] Start`);
-    const instance = await TelegramService.getInstance();
 
     const shareList = await db.share.findMany({
       where: {
@@ -83,7 +92,8 @@ export class AppService {
                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           const emoticon: string = (reaction as any)?.emoticon;
                           const getEmojiDataFromNative =
-                            EmojiService.getInstance().getEmojiDataFromNative;
+                            this.emojiService.getEmojiDataFromNative;
+
                           const unifiedCode =
                             (await getEmojiDataFromNative(emoticon))?.unified ??
                             (await getEmojiDataFromNative(`❌`))?.unified;
@@ -111,13 +121,15 @@ export class AppService {
 
   @Cron('0 0 * * *') // At 00:00
   async resetMapping() {
-    const { count } = await db.mapTonProofToPayload.deleteMany({});
+    const { count } = await this.db.mapTonProofToPayload.deleteMany({});
     this.logger.debug('[resetMapping] Deleted %d mappings', count);
   }
 
   async getGif(payload: {
     stickerIds: number[];
   }): Promise<{ stickerId: number; cdnUrl: string }[]> {
+    const db = this.db;
+
     console.log(`[getGif] Start, payload: ${JSON.stringify(payload)}`);
     const fn = z
       .function()
@@ -155,7 +167,9 @@ export class AppService {
           const result = await pqueue.addAll(
             stickers.map(({ id }) => async () => {
               const page = await browser.newPage();
-              const url = `${env.FRONTEND_URL}/stickers/${id}?record=true`;
+              const url = `${this.configService.get(
+                'FRONTEND_URL'
+              )}/stickers/${id}?record=true`;
 
               await page.goto(url);
               // add event listener (gif)

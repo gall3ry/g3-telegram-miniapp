@@ -1,11 +1,13 @@
+import { TelegramReactionCrawlingService } from '@g3-worker/telegram-reaction-crawling';
 import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { z, ZodError } from 'zod';
-import { AppService } from './app.service';
 import { db } from './db';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly telegramReactionCrawlingService: TelegramReactionCrawlingService
+  ) {}
 
   @Get()
   getHello() {
@@ -19,12 +21,12 @@ export class AppController {
   });
 
   @Post('/webhook/sticker/capture-gif')
-  async getGif(@Body() body: any) {
+  async getGif(@Body() body: unknown) {
     try {
       // TODO: validate upstash signature
       const { stickerIds } = this._captureGifSchema.parse(body);
 
-      const result = await this.appService.getGif({
+      const result = await this.telegramReactionCrawlingService.getGif({
         stickerIds,
       });
 

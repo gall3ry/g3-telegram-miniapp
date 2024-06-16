@@ -1,0 +1,20 @@
+{
+  "name": "emoji",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-worker/emoji/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/g3-worker/emoji",
+        "tsConfig": "packages/g3-worker/emoji/tsconfig.lib.json",
+        "packageJson": "packages/g3-worker/emoji/package.json",
+        "main": "packages/g3-worker/emoji/src/index.ts",
+        "assets": ["packages/g3-worker/emoji/*.md"]
+      }
+    }
+  }
+}
