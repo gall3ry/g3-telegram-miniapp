@@ -1,1 +1,1 @@
-export { Prisma, PrismaClient, StickerType } from '@prisma/client';
+export * from '@prisma/client';

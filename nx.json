@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -37,16 +40,31 @@
       "exclude": [
         "apps/g3-miniapp-v2-e2e/**/*",
         "g3-telegram-bot-e2e/**/*",
-        "apps/g3-telegram-bot-e2e/**/*"
+        "apps/g3-telegram-bot-e2e/**/*",
+        "apps/g3-worker-e2e/**/*"
       ]
+    },
+    {
+      "plugin": "@nx/next/plugin",
+      "options": {
+        "startTargetName": "start",
+        "buildTargetName": "build",
+        "devTargetName": "dev",
+        "serveStaticTargetName": "serve-static"
+      }
     }
   ],
   "nxCloudAccessToken": "OGVlNzQwNTUtODU1Mi00MTliLWIyYmQtODJlODAwYTI2ZjI3fHJlYWQtd3JpdGU=",
   "targetDefaults": {
     "@nx/js:tsc": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "release": {

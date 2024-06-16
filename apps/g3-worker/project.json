@@ -1,0 +1,28 @@
+{
+  "name": "g3-worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/g3-worker/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "g3-worker:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "g3-worker:build:development"
+        },
+        "production": {
+          "buildTarget": "g3-worker:build:production"
+        }
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/g3-worker/Dockerfile . -t g3-worker"
+    }
+  }
+}
