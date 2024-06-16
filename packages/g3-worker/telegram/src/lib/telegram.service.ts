@@ -1,31 +1,37 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { EnvService } from '@g3-worker/env';
+import { Injectable, Logger } from '@nestjs/common';
 import input from 'input';
-import { groupBy, mapValues } from 'lodash-es';
 import { Api, TelegramClient } from 'telegram';
+import { StringSession } from 'telegram/sessions';
+import groupBy = require('lodash.groupby');
+import mapValues = require('lodash.mapvalues');
 
 export interface Dictionary<T> {
   [index: string]: T;
 }
 
 @Injectable()
-export class TelegramService implements OnModuleInit {
+export class TelegramService {
   private telegramClient: TelegramClient;
 
-  constructor(private configService: ConfigService) {
-    const apiId = this.configService.get<number>('TELEGRAM_API_ID');
-    const apiHash = this.configService.get<string>('TELEGRAM_API_HASH');
-    const stringSession = this.configService.get<string>(
-      'TELEGRAM_STRING_SESSION'
+  constructor(private envService: EnvService) {
+    const apiId = this.envService.get('TELEGRAM_API_ID');
+    const apiHash = this.envService.get('TELEGRAM_API_HASH');
+    const stringSession = new StringSession(
+      this.envService.get('TELEGRAM_STRING_SESSION')
     );
 
     this.telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
       connectionRetries: 5,
     });
-  }
 
-  async onModuleInit() {
-    await this._initialize();
+    this._initialize()
+      .then(() => {
+        Logger.log('Telegram client started successfully');
+      })
+      .catch((error) => {
+        Logger.error('Failed to start Telegram client', error);
+      });
   }
 
   private async _initialize() {
@@ -33,14 +39,19 @@ export class TelegramService implements OnModuleInit {
       return;
     }
 
-    console.log(`🚀 Initializing Telegram client...`);
+    console.log(`🚀 Starting telegram client`);
+
     await this.telegramClient.start({
       phoneNumber: async () => await input.text('Please enter your number: '),
       password: async () => await input.text('Please enter your password: '),
       phoneCode: async () =>
         await input.text('Please enter the code you received: '),
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        console.log(`Error: ${err}`);
+      },
     });
+
+    console.log(this.telegramClient.session.save());
 
     console.log(`🚀 Telegram client is ready!`);
   }
@@ -61,6 +72,10 @@ export class TelegramService implements OnModuleInit {
       }[]
     >
   > {
+    if (!this.telegramClient.connected) {
+      await this._initialize();
+    }
+
     const reactions = (await this.telegramClient.invoke(
       new Api.messages.GetMessagesReactions({
         id: ids,

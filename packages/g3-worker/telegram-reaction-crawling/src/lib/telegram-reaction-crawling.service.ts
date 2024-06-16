@@ -1,13 +1,13 @@
 import { EmojiService } from '@g3-worker/emoji';
+import { EnvService } from '@g3-worker/env';
 import { PrismaService } from '@g3-worker/prisma-client';
 import { TelegramService } from '@g3-worker/telegram';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
-import { groupBy } from 'lodash-es';
 import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
+import groupBy = require('lodash.groupby');
 
 @Injectable()
 export class TelegramReactionCrawlingService {
@@ -16,7 +16,7 @@ export class TelegramReactionCrawlingService {
   constructor(
     private db: PrismaService,
     private telegramService: TelegramService,
-    private configService: ConfigService,
+    private envService: EnvService,
     private emojiService: EmojiService
   ) {}
 
@@ -167,7 +167,7 @@ export class TelegramReactionCrawlingService {
           const result = await pqueue.addAll(
             stickers.map(({ id }) => async () => {
               const page = await browser.newPage();
-              const url = `${this.configService.get(
+              const url = `${this.envService.get(
                 'FRONTEND_URL'
               )}/stickers/${id}?record=true`;
 

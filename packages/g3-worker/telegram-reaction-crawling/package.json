@@ -1,4 +1,4 @@
 {
-  "name": "@g3-miniapp-v2/telegram-reaction-crawling",
+  "name": "@g3-worker/telegram-reaction-crawling",
   "version": "0.0.1"
 }

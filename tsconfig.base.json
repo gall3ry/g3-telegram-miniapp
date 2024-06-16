@@ -42,6 +42,7 @@
       ],
       "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"],
       "@g3-worker/emoji": ["packages/g3-worker/emoji/src/index.ts"],
+      "@g3-worker/env": ["packages/g3-worker/env/src/index.ts"],
       "@g3-worker/prisma-client": [
         "packages/g3-worker/prisma-client/src/index.ts"
       ],
