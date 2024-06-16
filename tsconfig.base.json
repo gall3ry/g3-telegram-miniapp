@@ -20,6 +20,10 @@
       "@g3-telegram-bot/inline-query-tracker": [
         "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
       ],
+      "@g3-miniapp/telegram-bot-service": [
+        "packages/g3-miniapp/telegram-bot-service/src/index.ts"
+      ],
+      "@g3-miniapp/utils": ["packages/g3-miniapp/utils/src/index.ts"],
       "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"],
       "@g3-worker/emoji": ["packages/g3-worker/emoji/src/index.ts"],
       "@g3-worker/env": ["packages/g3-worker/env/src/index.ts"],
