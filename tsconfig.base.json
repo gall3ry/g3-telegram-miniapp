@@ -21,6 +21,18 @@
       "@database/database-schema": [
         "packages/@database/database-schema/src/index.ts"
       ],
+      "@g3-miniapp/data-access-home": [
+        "packages/g3-miniapp/data-access-home/src/index.ts"
+      ],
+      "@g3-miniapp/data-access-home/server": [
+        "packages/g3-miniapp/data-access-home/src/server.ts"
+      ],
+      "@g3-miniapp/feature-home": [
+        "packages/g3-miniapp/feature-home/src/index.ts"
+      ],
+      "@g3-miniapp/feature-home/server": [
+        "packages/g3-miniapp/feature-home/src/server.ts"
+      ],
       "@services/rewards": ["packages/@services/rewards/src/index.ts"],
       "@shared/types": ["packages/@shared/types/src/index.ts"]
     }
