@@ -1,12 +1,10 @@
-import { EmojiService } from '@g3-worker/emoji';
-import { EnvModule, envSchema } from '@g3-worker/env';
-import { PrismaService } from '@g3-worker/prisma-client';
-import { TelegramService } from '@g3-worker/telegram';
-import { TelegramReactionCrawlingService } from '@g3-worker/telegram-reaction-crawling';
+import { envSchema } from '@g3-worker/env';
+import { TelegramReactionCrawlingModule } from '@g3-worker/telegram-reaction-crawling';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
-import { AppController } from './app.controller';
+import { AllExceptionsFilter } from './http-exception.filter';
 
 @Module({
   imports: [
@@ -15,14 +13,13 @@ import { AppController } from './app.controller';
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
-    EnvModule,
+    TelegramReactionCrawlingModule,
   ],
-  controllers: [AppController],
   providers: [
-    TelegramReactionCrawlingService,
-    PrismaService,
-    TelegramService,
-    EmojiService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule {}

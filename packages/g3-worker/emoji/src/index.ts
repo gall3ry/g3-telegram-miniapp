@@ -1,1 +1,2 @@
-export * from './lib/emoji';
+export * from './lib/emoji.module';
+export * from './lib/emoji.service';

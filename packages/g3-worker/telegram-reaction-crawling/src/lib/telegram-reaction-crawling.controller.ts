@@ -1,12 +1,13 @@
-import { TelegramReactionCrawlingService } from '@g3-worker/telegram-reaction-crawling';
+import { PrismaService } from '@g3-worker/prisma-client';
 import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { z, ZodError } from 'zod';
-import { db } from './db';
+import { TelegramReactionCrawlingService } from './telegram-reaction-crawling.service';
 
 @Controller()
-export class AppController {
+export class TelegramReactionCrawlingController {
   constructor(
-    private readonly telegramReactionCrawlingService: TelegramReactionCrawlingService
+    private readonly telegramReactionCrawlingService: TelegramReactionCrawlingService,
+    private readonly db: PrismaService
   ) {}
 
   @Get()
@@ -32,7 +33,7 @@ export class AppController {
 
       return Promise.all(
         result.map(async (sticker) => {
-          return db.sticker.update({
+          return this.db.sticker.update({
             where: {
               id: sticker.stickerId,
             },
