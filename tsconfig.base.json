@@ -15,12 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@database/database-client": [
-        "packages/@database/database-client/src/index.ts"
+      "@g3-miniapp-v2/data-access-rewards": [
+        "packages/shared/data-access-rewards/src/index.ts"
       ],
-      "@database/database-schema": [
-        "packages/@database/database-schema/src/index.ts"
+      "@g3-miniapp-v2/shared/database-chema": [
+        "packages/shared/database-chema/src/index.ts"
       ],
+      "@g3-miniapp-v2/shared/database-client": [
+        "packages/shared/database-client/src/index.ts"
+      ],
+      "@g3-miniapp-v2/types": ["packages/shared/types/src/index.ts"],
       "@g3-miniapp/data-access-home": [
         "packages/g3-miniapp/data-access-home/src/index.ts"
       ],
@@ -33,8 +37,10 @@
       "@g3-miniapp/feature-home/server": [
         "packages/g3-miniapp/feature-home/src/server.ts"
       ],
-      "@services/rewards": ["packages/@services/rewards/src/index.ts"],
-      "@shared/types": ["packages/@shared/types/src/index.ts"]
+      "@g3-telegram-bot/inline-query-tracker": [
+        "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
+      ],
+      "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

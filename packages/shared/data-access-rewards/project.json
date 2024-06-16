@@ -1,0 +1,20 @@
+{
+  "name": "data-access-rewards",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/data-access-rewards/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/data-access-rewards",
+        "tsConfig": "packages/shared/data-access-rewards/tsconfig.lib.json",
+        "packageJson": "packages/shared/data-access-rewards/package.json",
+        "main": "packages/shared/data-access-rewards/src/index.ts",
+        "assets": ["packages/shared/data-access-rewards/*.md"]
+      }
+    }
+  }
+}

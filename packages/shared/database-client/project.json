@@ -1,0 +1,20 @@
+{
+  "name": "shared-database-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/database-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/database-client",
+        "tsConfig": "packages/shared/database-client/tsconfig.lib.json",
+        "packageJson": "packages/shared/database-client/package.json",
+        "main": "packages/shared/database-client/src/index.ts",
+        "assets": ["packages/shared/database-client/*.md"]
+      }
+    }
+  }
+}

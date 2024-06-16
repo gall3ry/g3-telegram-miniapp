@@ -1,0 +1,9 @@
+{
+  "name": "@g3-telegram-bot/types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-telegram-bot/types/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project @g3-telegram-bot/types --web",
+  "targets": {}
+}
