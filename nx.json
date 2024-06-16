@@ -38,7 +38,8 @@
         "apps/g3-miniapp-v2-e2e/**/*",
         "g3-telegram-bot-e2e/**/*",
         "apps/g3-telegram-bot-e2e/**/*",
-        "apps/g3-worker-e2e/**/*"
+        "apps/g3-worker-e2e/**/*",
+        "apps/g3-backend-e2e/**/*"
       ]
     },
     {
@@ -59,6 +60,11 @@
       "inputs": ["production", "^production"]
     },
     "@nx/js:swc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@nx/esbuild:esbuild": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]

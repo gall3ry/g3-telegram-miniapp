@@ -1,0 +1,33 @@
+{
+  "name": "@g3-backend/trpc-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-backend/trpc-server/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/g3-backend/trpc-server",
+        "tsConfig": "packages/g3-backend/trpc-server/tsconfig.lib.json",
+        "packageJson": "packages/g3-backend/trpc-server/package.json",
+        "main": "packages/g3-backend/trpc-server/src/index.ts",
+        "assets": ["packages/g3-backend/trpc-server/*.md"]
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    }
+  }
+}
