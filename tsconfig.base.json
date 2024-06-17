@@ -36,9 +36,7 @@
       "@gall3ry/database-client": [
         "packages/shared/database-client/src/index.ts"
       ],
-      "@gall3ry/g3-backend/trpc-server": [
-        "packages/g3-backend/trpc-server/src/index.ts"
-      ],
+      "@gall3ry/trpc-server": ["packages/g3-backend/trpc-server/src/index.ts"],
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
