@@ -1,4 +1,4 @@
-import { StickerType } from '@gall3ry/shared/database-client';
+import { StickerType } from '@gall3ry/database-client';
 
 export type StickerTemplate = {
   title: string;

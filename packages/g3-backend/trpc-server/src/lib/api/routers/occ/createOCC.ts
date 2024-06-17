@@ -1,5 +1,5 @@
-import { Prisma } from '@gall3ry/shared/database-client';
-import { tryNTimes } from '@gall3ry/shared/utils';
+import { Prisma } from '@gall3ry/database-client';
+import { tryNTimes } from '@gall3ry/shared-utils';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';

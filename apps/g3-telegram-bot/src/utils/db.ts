@@ -1,4 +1,4 @@
-import { PrismaClient } from '@gall3ry/shared/database-client';
+import { PrismaClient } from '@gall3ry/database-client';
 
 export const db = new PrismaClient({
   log: [],

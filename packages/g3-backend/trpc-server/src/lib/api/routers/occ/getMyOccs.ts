@@ -1,4 +1,4 @@
-import { Prisma } from '@gall3ry/shared/database-client';
+import { Prisma } from '@gall3ry/database-client';
 import groupBy from 'lodash.groupby';
 import { z } from 'zod';
 import { db } from '../../../db';

@@ -1,4 +1,4 @@
-import { type Prisma, StickerType } from '@gall3ry/shared/database-client';
+import { type Prisma, StickerType } from '@gall3ry/database-client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';

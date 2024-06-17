@@ -1,4 +1,4 @@
-import { Prisma } from '@gall3ry/shared/database-client';
+import { Prisma } from '@gall3ry/database-client';
 import { TRPCError } from '@trpc/server';
 import { db } from '../../../db';
 import { protectedProcedure } from '../../trpc';
