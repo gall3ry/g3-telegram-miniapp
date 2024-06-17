@@ -1,4 +1,5 @@
 "use client";
+import { Spinner } from "@radix-ui/themes";
 import {
   decodeFont,
   decodeImage,
@@ -201,6 +202,12 @@ export const Sample1 = memo(
     return (
       <div className="relative overflow-hidden rounded-xl border-2">
         <RiveComponent width="100%" className="aspect-square" />
+
+        {!nftAsset && (
+          <div className="bg-black/20[ absolute inset-0 flex items-center justify-center">
+            <Spinner />
+          </div>
+        )}
       </div>
     );
   },
