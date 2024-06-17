@@ -1,5 +1,5 @@
 {
-  "name": "@g3-backend/trpc-client",
+  "name": "trpc-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/g3-backend/trpc-client/src",
   "projectType": "library",

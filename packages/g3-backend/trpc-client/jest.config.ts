@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: '@g3-backend/trpc-client',
+  displayName: 'trpc-client',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

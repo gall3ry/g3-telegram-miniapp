@@ -25,19 +25,10 @@
       "@g3-miniapp-v2/shared/database-client": [
         "packages/shared/database-client/src/index.ts"
       ],
+      "@g3-miniapp-v2/trpc-client": [
+        "packages/g3-backend/trpc-client/src/index.ts"
+      ],
       "@g3-miniapp-v2/types": ["packages/shared/types/src/index.ts"],
-      "@g3-miniapp/data-access-home": [
-        "packages/g3-miniapp/data-access-home/src/index.ts"
-      ],
-      "@g3-miniapp/data-access-home/server": [
-        "packages/g3-miniapp/data-access-home/src/server.ts"
-      ],
-      "@g3-miniapp/feature-home": [
-        "packages/g3-miniapp/feature-home/src/index.ts"
-      ],
-      "@g3-miniapp/feature-home/server": [
-        "packages/g3-miniapp/feature-home/src/server.ts"
-      ],
       "@g3-telegram-bot/inline-query-tracker": [
         "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
       ],
@@ -50,9 +41,6 @@
       "@g3-worker/telegram": ["packages/g3-worker/telegram/src/index.ts"],
       "@g3-worker/telegram-reaction-crawling": [
         "packages/g3-worker/telegram-reaction-crawling/src/index.ts"
-      ],
-      "@gall3ry/g3-backend/trpc-client": [
-        "packages/g3-backend/trpc-client/src/index.ts"
       ],
       "@gall3ry/g3-backend/trpc-server": [
         "packages/g3-backend/trpc-server/src/index.ts"

@@ -1,9 +1,0 @@
-{
-  "name": "g3-miniapp",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/g3-miniapp",
-  "projectType": "application",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project g3-miniapp --web",
-  "targets": {}
-}
