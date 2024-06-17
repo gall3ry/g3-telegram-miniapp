@@ -1,5 +1,5 @@
 "use client";
-import { Button, Skeleton, Spinner } from "@radix-ui/themes";
+import { Button, Spinner } from "@radix-ui/themes";
 import { useInitData } from "@tma.js/sdk-react";
 import Image from "next/image";
 import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
@@ -21,7 +21,6 @@ import { IconPoints } from "../_icons/IconPoints";
 import { LeaderboardAvatar } from "../LeaderboardAvatar";
 import { IconLock } from "../templates/[id]/_components/IconLock";
 import { useUser } from "../useUser";
-import { EffectItem } from "./EffectItem";
 import { mockAssets } from "./MOCK_ASSET";
 import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
 import { Option } from "./Option";
@@ -129,7 +128,7 @@ export const MintOCC = () => {
         </div>
       </div>
 
-      <Skeleton width="30" height="10" loading={isStickersPending}>
+      {/* <Skeleton width="30" height="10" loading={isStickersPending}>
         <div className="mt-5">
           {isSuccess && (
             <div className="text-xl font-bold leading-7 text-slate-900">
@@ -175,7 +174,7 @@ export const MintOCC = () => {
             }}
           />
         </div>
-      </Skeleton>
+      </Skeleton> */}
 
       <div className="mt-5">
         <SelectedAssets />
@@ -557,7 +556,7 @@ export const SelectAssetDrawer = memo(() => {
     >
       <DrawerContent>
         <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-          Select assets for GM effect
+          GM Creation
         </div>
         <div className="mt-2 flex justify-center gap-6">
           <button
@@ -652,7 +651,7 @@ export const SelectAssetDrawer = memo(() => {
               );
             }}
           >
-            Confirm
+            Create
           </Button>
         </div>
       </DrawerContent>
@@ -759,7 +758,7 @@ export const AllStickers = memo(() => {
       {stickers && stickers.length > 0 && (
         <div className="mt-5">
           <div className="text-xl font-bold leading-7 text-slate-900">
-            All variants
+            Created UGC list
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
