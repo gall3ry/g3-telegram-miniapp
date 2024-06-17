@@ -3,8 +3,17 @@
 # Build the docker image with `npx nx docker-build g3-worker`.
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
-# Run the container with `docker run -p 3000:3000 -t g3-worker`.
+# Run the container with `docker run --env-file ./apps/g3-worker/.env.local -p 3000:3000 -t g3-worker`.
 FROM docker.io/node:lts-alpine
+
+# Install Python, pip, and build tools
+RUN apk add --update --no-cache python3 py3-pip build-base && \
+    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
+    if [ ! -e /usr/bin/pip ]; then ln -sf pip3 /usr/bin/pip ; fi
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
@@ -12,13 +21,16 @@ ENV PORT=3000
 WORKDIR /app
 
 RUN addgroup --system g3-worker && \
-          adduser --system -G g3-worker g3-worker
+    adduser --system -G g3-worker g3-worker
 
-COPY  g3-worker/
+COPY dist/apps/g3-worker g3-worker/
+COPY packages/shared/database-schema/prisma g3-worker/prisma/
 RUN chown -R g3-worker:g3-worker .
 
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-RUN npm --prefix g3-worker --omit=dev -f install
+WORKDIR /app/g3-worker
+RUN pnpx prisma generate --schema prisma/schema.prisma
+RUN pnpm install
 
-CMD [ "node", "g3-worker" ]
+EXPOSE 3000
+
+CMD [ "node", "./main.js" ]

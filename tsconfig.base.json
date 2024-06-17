@@ -16,17 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@gall3ry/data-access-rewards": [
-        "packages/shared/data-access-rewards/src/index.ts"
-      ],
-      "@gall3ry/shared/database-chema": [
-        "packages/shared/database-chema/src/index.ts"
-      ],
-      "@gall3ry/database-client": [
-        "packages/shared/database-client/src/index.ts"
-      ],
-      "@gall3ry/trpc-client": ["packages/g3-backend/trpc-client/src/index.ts"],
-      "@gall3ry/types": ["packages/shared/types/src/index.ts"],
       "@g3-telegram-bot/inline-query-tracker": [
         "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
       ],
@@ -40,11 +29,22 @@
       "@g3-worker/telegram-reaction-crawling": [
         "packages/g3-worker/telegram-reaction-crawling/src/index.ts"
       ],
+      "@gall3ry/data-access-rewards": [
+        "packages/shared/data-access-rewards/src/index.ts"
+      ],
+      "@gall3ry/database-client": [
+        "packages/shared/database-client/src/index.ts"
+      ],
       "@gall3ry/g3-backend/trpc-server": [
         "packages/g3-backend/trpc-server/src/index.ts"
       ],
+      "@gall3ry/shared-utils": ["packages/shared/utils/src/index.ts"],
       "@gall3ry/shared/constants": ["packages/shared/constants/src/index.ts"],
-      "@gall3ry/shared-utils": ["packages/shared/utils/src/index.ts"]
+      "@gall3ry/shared-database-schema": [
+        "packages/shared/shared-database-schema/src/index.ts"
+      ],
+      "@gall3ry/trpc-client": ["packages/g3-backend/trpc-client/src/index.ts"],
+      "@gall3ry/types": ["packages/shared/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

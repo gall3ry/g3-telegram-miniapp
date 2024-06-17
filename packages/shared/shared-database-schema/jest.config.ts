@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-database-chema',
+  displayName: 'shared-database-schema',
   preset: '../../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

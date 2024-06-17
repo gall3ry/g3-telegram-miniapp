@@ -24,7 +24,7 @@ RUN addgroup --system g3-telegram-bot && \
     adduser --system -G g3-telegram-bot g3-telegram-bot
 
 COPY dist/apps/g3-telegram-bot g3-telegram-bot/
-COPY packages/database-schema/prisma g3-telegram-bot/prisma/
+COPY packages/shared/database-schema/prisma g3-telegram-bot/prisma/
 RUN chown -R g3-telegram-bot:g3-telegram-bot .
 
 WORKDIR /app/g3-telegram-bot
