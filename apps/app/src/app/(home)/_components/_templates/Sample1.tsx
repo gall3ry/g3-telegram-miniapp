@@ -204,7 +204,7 @@ export const Sample1 = memo(
         <RiveComponent width="100%" className="aspect-square" />
 
         {!nftAsset && (
-          <div className="bg-black/20[ absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl border bg-white">
             <Spinner />
           </div>
         )}
