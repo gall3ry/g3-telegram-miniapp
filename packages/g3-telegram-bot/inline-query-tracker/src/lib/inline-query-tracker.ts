@@ -79,7 +79,7 @@ export class InlineQueryTrackerModule extends BaseModule {
               id: `${stickerId} ${from.id}`,
               title: mapStickerTypeToStickerTemplate[stickerType].title,
               thumbnail_url:
-                'https://staging.miniapp.gall3ry.io/images/create/gm.png',
+                'https://api.akord.com/files/1ee325b1-7cf1-42ea-bc25-ac28c0ea32e3',
               description:
                 mapStickerTypeToStickerTemplate[stickerType].description,
               input_message_content: {
