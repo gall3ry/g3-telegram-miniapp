@@ -6,7 +6,7 @@
 Running local registry
 
 ```bash
-pnpm exec nx run @g3-miniapp-v2/source:local-registry
+pnpm exec nx run @gall3ry/source:local-registry
 ```
 
 Generate types

@@ -1,4 +1,4 @@
-import { type Prisma } from '@g3-miniapp-v2/shared/database-client';
+import { type Prisma } from '@gall3ry/shared/database-client';
 import { z } from 'zod';
 import { db } from '../../../db';
 import { uploadToAkord, VaultName } from '../../services/akord';

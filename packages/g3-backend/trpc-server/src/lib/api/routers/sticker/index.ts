@@ -1,7 +1,4 @@
-import {
-  type Prisma,
-  StickerType,
-} from '@g3-miniapp-v2/shared/database-client';
+import { type Prisma, StickerType } from '@gall3ry/shared/database-client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';

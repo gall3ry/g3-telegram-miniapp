@@ -1,4 +1,4 @@
-import { type QuestId, mapQuestIdToTitle } from '@g3-miniapp-v2/types';
+import { type QuestId, mapQuestIdToTitle } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
 import PostHogClient, { Flag } from '../../../services/posthog';
 import { type IQuest } from './BaseQuest';

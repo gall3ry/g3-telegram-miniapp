@@ -1,4 +1,4 @@
-import { StickerType } from '@g3-miniapp-v2/shared/database-client';
+import { StickerType } from '@gall3ry/shared/database-client';
 
 export type StickerTemplate = {
   title: string;

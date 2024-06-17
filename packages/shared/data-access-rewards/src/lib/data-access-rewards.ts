@@ -1,5 +1,5 @@
-import { PrismaClient } from '@g3-miniapp-v2/shared/database-client';
-import type { QuestId } from '@g3-miniapp-v2/types';
+import { PrismaClient } from '@gall3ry/shared/database-client';
+import type { QuestId } from '@gall3ry/types';
 
 export class RewardService {
   private db: PrismaClient;

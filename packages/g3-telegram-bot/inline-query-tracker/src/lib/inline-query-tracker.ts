@@ -1,6 +1,6 @@
-import { RewardService } from '@g3-miniapp-v2/data-access-rewards';
-import { mapStickerTypeToStickerTemplate, QuestId } from '@g3-miniapp-v2/types';
 import { BaseModule } from '@g3-telegram-bot/types';
+import { RewardService } from '@gall3ry/data-access-rewards';
+import { mapStickerTypeToStickerTemplate, QuestId } from '@gall3ry/types';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Logger } from 'pino';
 import { Telegraf } from 'telegraf';

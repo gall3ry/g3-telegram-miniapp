@@ -1,5 +1,5 @@
 // globalThis
-import { RewardService } from '@g3-miniapp-v2/data-access-rewards';
+import { RewardService } from '@gall3ry/data-access-rewards';
 import { db } from './db';
 import { env } from './env';
 

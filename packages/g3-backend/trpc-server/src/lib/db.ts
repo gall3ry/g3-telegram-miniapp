@@ -1,4 +1,4 @@
-import { PrismaClient } from '@g3-miniapp-v2/shared/database-client';
+import { PrismaClient } from '@gall3ry/shared/database-client';
 
 import { env } from './env';
 

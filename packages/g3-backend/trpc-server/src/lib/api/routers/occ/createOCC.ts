@@ -1,4 +1,4 @@
-import { Prisma } from '@g3-miniapp-v2/shared/database-client';
+import { Prisma } from '@gall3ry/shared/database-client';
 import { tryNTimes } from '@gall3ry/shared/utils';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';

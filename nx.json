@@ -35,7 +35,7 @@
         "targetName": "test"
       },
       "exclude": [
-        "apps/g3-miniapp-v2-e2e/**/*",
+        "apps/gall3ry-e2e/**/*",
         "g3-telegram-bot-e2e/**/*",
         "apps/g3-telegram-bot-e2e/**/*",
         "apps/g3-worker-e2e/**/*",
