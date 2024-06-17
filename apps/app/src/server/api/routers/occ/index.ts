@@ -5,6 +5,7 @@ import { getMyCurrentLeaderboardPosition } from "./getMyCurrentLeaderboardPositi
 import { getMyOccs, getTopOccs } from "./getMyOccs";
 import { getOcc } from "./getOcc";
 import { mintOCCbyEpic } from "./mintOCC";
+import { mintOCCbyTON } from "./mintOCCbyTON";
 
 export const occRouter = createTRPCRouter({
   // TODO: move it to worker
@@ -12,6 +13,7 @@ export const occRouter = createTRPCRouter({
   getMyOccs,
   getTopOccs,
   mintOCCbyEpic,
+  mintOCCbyTON,
   getOcc: getOcc,
   getLeaderboard,
   getMyCurrentLeaderboardPosition,

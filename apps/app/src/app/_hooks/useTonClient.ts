@@ -9,6 +9,7 @@ export function useTonClient() {
 
   return {
     client: useAsyncInitialize(async () => {
+      // console.log("network", network);
       if (!network) return;
       return new TonClient({
         endpoint: await getHttpEndpoint({
