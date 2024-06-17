@@ -50,6 +50,12 @@
         "devTargetName": "dev",
         "serveStaticTargetName": "serve-static"
       }
+    },
+    {
+      "plugin": "@nx/rollup/plugin",
+      "options": {
+        "buildTargetName": "build"
+      }
     }
   ],
   "nxCloudAccessToken": "OGVlNzQwNTUtODU1Mi00MTliLWIyYmQtODJlODAwYTI2ZjI3fHJlYWQtd3JpdGU=",

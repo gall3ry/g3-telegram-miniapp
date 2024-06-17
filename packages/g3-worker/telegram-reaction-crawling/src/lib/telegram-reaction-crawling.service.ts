@@ -1,10 +1,10 @@
+import PQueue from '@esm2cjs/p-queue';
 import { EmojiService } from '@g3-worker/emoji';
 import { EnvService } from '@g3-worker/env';
 import { PrismaService } from '@g3-worker/prisma-client';
 import { TelegramService } from '@g3-worker/telegram';
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
 import groupBy = require('lodash.groupby');

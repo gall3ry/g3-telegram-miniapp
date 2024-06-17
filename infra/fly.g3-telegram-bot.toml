@@ -1,0 +1,17 @@
+# fly.toml app configuration file generated for telegram-miniapp on 2024-05-27T16:39:14+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'g3-v2-stg-telegram-bot'
+primary_region = 'sin'
+
+[build]
+dockerfile = "../apps/g3-telegram-bot/Dockerfile"
+
+[env]
+
+[[vm]]
+memory = '2gb'
+cpu_kind = 'shared'
+cpus = 2

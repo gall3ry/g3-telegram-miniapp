@@ -3,34 +3,36 @@
 # Build the docker image with `npx nx docker-build g3-worker`.
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
-# Run the container with `docker run --env-file ./apps/g3-worker/.env.local -p 3000:3000 -t g3-worker`.
-FROM docker.io/node:lts-alpine
+# Run the container with `docker run --env-file ./apps/g3-worker/.env.local -p 3100:3100 -t g3-worker`.
+FROM mcr.microsoft.com/playwright:v1.44.1-jammy
 
-# Install Python, pip, and build tools
-RUN apk add --update --no-cache python3 py3-pip build-base && \
-    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
-    if [ ! -e /usr/bin/pip ]; then ln -sf pip3 /usr/bin/pip ; fi
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.5 \
+    python3-pip \
+    build-essential \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
 ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV PORT=3100
 
 WORKDIR /app
 
-RUN addgroup --system g3-worker && \
-    adduser --system -G g3-worker g3-worker
+RUN groupadd -r g3-worker && useradd -r -g g3-worker g3-worker
 
 COPY dist/apps/g3-worker g3-worker/
-COPY packages/shared/database-schema/prisma g3-worker/prisma/
+COPY packages/shared/shared-database-schema/prisma g3-worker/prisma/
 RUN chown -R g3-worker:g3-worker .
 
 WORKDIR /app/g3-worker
 RUN pnpx prisma generate --schema prisma/schema.prisma
 RUN pnpm install
 
-EXPOSE 3000
+EXPOSE 3100
 
 CMD [ "node", "./main.js" ]

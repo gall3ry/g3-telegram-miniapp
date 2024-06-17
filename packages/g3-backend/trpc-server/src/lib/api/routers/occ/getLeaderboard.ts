@@ -1,4 +1,4 @@
-import { IMAGES } from '@gall3ry/shared/constants';
+import { IMAGES } from '@gall3ry/shared-constants';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 

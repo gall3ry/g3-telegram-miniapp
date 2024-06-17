@@ -1,0 +1,36 @@
+# fly.toml app configuration file generated for telegram-miniapp on 2024-05-27T16:39:14+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'g3-v2-stg-worker'
+primary_region = 'hkg'
+
+
+[build]
+dockerfile = "../apps/g3-worker/Dockerfile"
+
+[processes]
+worker = "node main.js"
+
+[env]
+
+[[vm]]
+memory = '2gb'
+cpu_kind = 'shared'
+cpus = 4
+
+# worker webservice
+[http_service]
+processes = ["worker"]
+internal_port = 3100
+force_https = true
+auto_stop_machines = false
+auto_start_machines = false
+min_machines_running = 0
+[[http_service.checks]]
+grace_period = "60s"
+interval = "15s"
+method = "GET"
+timeout = "10s"
+path = "/"

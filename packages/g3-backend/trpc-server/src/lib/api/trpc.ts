@@ -10,8 +10,8 @@ import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
-import { decodeAuthToken, type AuthToken } from '../ton/_utils/jwt';
 import { db } from '../db';
+import { decodeAuthToken, type AuthToken } from '../ton/_utils/jwt';
 
 /**
  * 1. CONTEXT

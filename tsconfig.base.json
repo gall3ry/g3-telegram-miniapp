@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "module": "esnext",
     "lib": ["es2020", "dom"],
@@ -38,11 +39,11 @@
       "@gall3ry/g3-backend/trpc-server": [
         "packages/g3-backend/trpc-server/src/index.ts"
       ],
-      "@gall3ry/shared-utils": ["packages/shared/utils/src/index.ts"],
-      "@gall3ry/shared/constants": ["packages/shared/constants/src/index.ts"],
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
+      "@gall3ry/shared-utils": ["packages/shared/utils/src/index.ts"],
+      "@gall3ry/shared-constants": ["packages/shared/constants/src/index.ts"],
       "@gall3ry/trpc-client": ["packages/g3-backend/trpc-client/src/index.ts"],
       "@gall3ry/types": ["packages/shared/types/src/index.ts"]
     }

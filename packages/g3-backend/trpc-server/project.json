@@ -14,14 +14,15 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "format": ["esm", "cjs"],
         "outputPath": "dist/packages/g3-backend/trpc-server",
         "tsConfig": "packages/g3-backend/trpc-server/tsconfig.lib.json",
-        "packageJson": "packages/g3-backend/trpc-server/package.json",
         "main": "packages/g3-backend/trpc-server/src/index.ts",
-        "assets": ["packages/g3-backend/trpc-server/*.md"]
+        "assets": [],
+        "generateExportsField": true
       }
     },
     "nx-release-publish": {

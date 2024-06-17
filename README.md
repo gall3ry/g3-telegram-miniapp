@@ -1,7 +1,10 @@
 # G3MiniappV2
  
-## Development server
+## Ports
+Worker: 3100
+Backend: 3200
 
+## Development server
 
 Running local registry
 
