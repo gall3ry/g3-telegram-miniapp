@@ -202,6 +202,7 @@ export const MintOCC = () => {
             <div className="aspect-square w-full rounded-xl">
               {selectedSticker?.GMNFT.imageUrl &&
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
+                  stickerTitle: `STICKER #${selectedSticker.id}`,
                   imageUrl: selectedSticker.GMNFT.imageUrl,
                 })}
             </div>
@@ -775,6 +776,7 @@ export const AllStickers = memo(() => {
                     {sticker.GMNFT.imageUrl &&
                       mapStickerTypeToTemplateComponent(sticker.stickerType, {
                         imageUrl: sticker.GMNFT.imageUrl,
+                        stickerTitle: `STICKER #${sticker.id}`,
                       })}
                   </div>
                 }

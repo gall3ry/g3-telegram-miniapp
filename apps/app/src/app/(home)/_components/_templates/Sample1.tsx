@@ -50,9 +50,11 @@ export const Sample1 = memo(
   ({
     shouldRecord = false,
     imageUrl,
+    stickerTitle,
   }: {
     shouldRecord?: boolean;
     imageUrl: string;
+    stickerTitle: string;
   }) => {
     const [images, setImages] = useState<string[]>([]);
     const interval = useRef<ReturnType<typeof setInterval>>();
@@ -107,6 +109,7 @@ export const Sample1 = memo(
 
         return false;
       },
+
       onLoop: () => {
         if (interval.current) {
           clearInterval(interval.current);
@@ -178,6 +181,8 @@ export const Sample1 = memo(
 
     useEffect(() => {
       if (imageUrl && nftAsset && rive) {
+        rive.setTextRunValue("STICKER_TITLE", stickerTitle);
+
         loadAndDecodeImg(imageUrl, {
           width: 1000,
           height: 1000,
