@@ -8,6 +8,8 @@ import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
 
+import { v4 as uuidv4 } from 'uuid';
+
 const randomSeed = Math.floor(Math.random() * 10000);
 
 export type mintArgs = {
@@ -36,6 +38,7 @@ export function useNftContract() {
   return {
     address: nftContract?.address.toString(),
     sendMintNft: (args: mintArgs) => {
+      // console.log(nftContract);
       if (!nftContract) throw new Error("Contract not initialized");
       if (!wallet) throw new Error("Wallet not initialized");
 
@@ -53,6 +56,7 @@ export function useNftContract() {
       });
     },
     sendMintNftFromFaucet: async (args: mintArgs) => {
+      // console.log(nftContract);
       if (!nftContract) throw new Error("Nft contract not initialized");
       if (!wallet) throw new Error("Wallet not initialized");
       const nftMessage = beginCell();
@@ -81,7 +85,10 @@ export function useNftContract() {
         ],
         validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
       });
-      const txhash = await getTxByBOC(boc.boc, wallet);
+
+      // TODO: Use real txHash and nftAddress later - now just for recording
+      // const txhash = await getTxByBOC(boc.boc, wallet);
+      const txhash = uuidv4();
       console.log("txhash", txhash);
 
       return txhash;
