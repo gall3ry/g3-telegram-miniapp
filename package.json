@@ -136,6 +136,7 @@
     "@typescript-eslint/parser": "^7.3.0",
     "autoprefixer": "10.4.13",
     "babel-jest": "^29.4.1",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.19.2",
     "eslint": "~8.57.0",
     "eslint-config-next": "14.2.3",
@@ -163,6 +164,7 @@
     "swc-loader": "0.1.15",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
+    "tsx": "^4.15.6",
     "typescript": "~5.4.2",
     "verdaccio": "^5.0.4",
     "webpack-cli": "^5.1.4"

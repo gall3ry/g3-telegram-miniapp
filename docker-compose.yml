@@ -1,0 +1,33 @@
+# Same docker file with the centre backend
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: johndoe
+      POSTGRES_PASSWORD: randompassword
+      POSTGRES_DB: mydb
+    volumes:
+      - ./g3chain_db_data:/var/lib/postgresql
+    ports:
+      - 5433:5432
+    networks:
+      - g3_network
+
+  worker:
+    image: g3-worker
+    build: apps/worker
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - apps/g3-worker/.env.local
+    expose:
+      - 3100
+    networks:
+      - g3_network
+
+networks:
+  g3_network:
+    driver: bridge

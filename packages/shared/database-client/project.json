@@ -6,6 +6,7 @@
   "tags": [],
   "targets": {
     "build": {
+      "dependsOn": ["^generate-types"],
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -16,5 +17,6 @@
         "assets": ["packages/shared/database-client/*.md"]
       }
     }
-  }
+  },
+  "implicitDependencies": ["shared-database-schema"]
 }

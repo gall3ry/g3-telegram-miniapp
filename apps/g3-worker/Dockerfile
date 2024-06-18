@@ -32,7 +32,8 @@ RUN chown -R g3-worker:g3-worker .
 WORKDIR /app/g3-worker
 RUN pnpx prisma generate --schema prisma/schema.prisma
 RUN pnpm install
+RUN pnpm i -D tsx
 
 EXPOSE 3100
 
-CMD [ "node", "./main.js" ]
+CMD [ "pnpm", "exec", "tsx", "./main.js" ]

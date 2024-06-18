@@ -5,19 +5,18 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {},
     "serve": {
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "g3-worker:build"
+        "watch": true,
+        "command": "concurrently -n \"runner,builder-watcher\" \"pnpm exec tsx --watch dist/apps/g3-worker/main.js\" \"pnpm exec nx watch --projects=g3-worker -d -- pnpm exec nx build g3-worker\""
       },
       "configurations": {
-        "development": {
-          "buildTarget": "g3-worker:build:development"
-        },
-        "production": {
-          "buildTarget": "g3-worker:build:production"
-        }
+        "development": {},
+        "production": {}
       }
     },
     "docker-build": {
