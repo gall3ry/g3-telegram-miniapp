@@ -1,5 +1,5 @@
+import { PrismaClient } from '@gall3ry/database-client';
 import { env } from '@gall3ry/g3-miniapp-env';
-import { PrismaClient } from '@prisma/client';
 
 const createPrismaClient = () =>
   new PrismaClient({

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@gall3ry/database-client';
 import { Logger } from 'pino';
 import { Telegraf } from 'telegraf';
 

@@ -1,8 +1,8 @@
 import { tryNTimes } from '@g3-miniapp/utils';
+import { Prisma } from '@gall3ry/database-client';
 import { env } from '@gall3ry/g3-miniapp-env';
 import { getNFTIdAndOwnerFromTx } from '@gall3ry/shared-ton-utils';
 import { OccType } from '@gall3ry/types';
-import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';
