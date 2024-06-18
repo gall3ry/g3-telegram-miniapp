@@ -9,9 +9,9 @@ import {
   WalletContractV4 as WalletContractV4R2,
   type Slice,
   type StateInit,
-} from "@ton/ton";
-import { Buffer } from "buffer";
-import { WalletContractV4R1 } from "./wallet-contract-v4-r1";
+} from '@ton/ton';
+import { Buffer } from 'buffer';
+import { WalletContractV4R1 } from './wallet-contract-v4-r1';
 
 const knownWallets = [
   { contract: WalletContractV1R1, loadData: loadWalletV1Data },
@@ -66,7 +66,9 @@ export function tryParsePublicKey(stateInit: StateInit): Buffer | null {
       if (wallet.init.code.equals(stateInit.code)) {
         return loadData(stateInit.data.beginParse()).publicKey;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return null;

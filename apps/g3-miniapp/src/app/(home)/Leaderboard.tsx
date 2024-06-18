@@ -1,11 +1,11 @@
-"use client";
-import { Spinner } from "@radix-ui/themes";
-import { usePostHog } from "posthog-js/react";
-import React, { useMemo } from "react";
-import { useInView } from "react-intersection-observer";
-import { api } from "../../trpc/react";
-import { IMAGES } from "../_constants/image";
-import { LeaderboardItem } from "./LeaderboardItem";
+'use client';
+import { Spinner } from '@radix-ui/themes';
+import { usePostHog } from 'posthog-js/react';
+import React, { useMemo } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { api } from '../../trpc/react';
+import { IMAGES } from '../_constants/image';
+import { LeaderboardItem } from './LeaderboardItem';
 
 export const Leaderboard = () => {
   const LIMIT = 10;
@@ -26,7 +26,7 @@ export const Leaderboard = () => {
 
           return lastPage.nextCursor;
         },
-      },
+      }
     );
   const { featureFlags } = usePostHog();
 
@@ -38,10 +38,10 @@ export const Leaderboard = () => {
 
   const leaderboardEnabled = useMemo(
     () =>
-      featureFlags.isFeatureEnabled("leaderboard", {
+      featureFlags.isFeatureEnabled('leaderboard', {
         send_event: false,
       }),
-    [featureFlags],
+    [featureFlags]
   );
 
   if (leaderboardEnabled === false) {
@@ -57,13 +57,14 @@ export const Leaderboard = () => {
               occId={item.id}
               key={index}
               rank={pageIndex * LIMIT + index + 1}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               occImageUrl={(IMAGES.MOCK_STICKER as any)[(index % 5) + 1]}
               avatarUrl={item.avatarUrl}
-              username={item.displayName ?? "?"}
+              username={item.displayName ?? '?'}
               shareCount={item.shareCount}
               address={item.address}
             />
-          )),
+          ))
         )
         .flat()}
 

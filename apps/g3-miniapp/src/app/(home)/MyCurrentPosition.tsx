@@ -1,7 +1,7 @@
-import { Spinner } from "@radix-ui/themes";
-import { api } from "../../trpc/react";
-import { IMAGES } from "../_constants/image";
-import { LeaderboardItem } from "./LeaderboardItem";
+import { Spinner } from '@radix-ui/themes';
+import { api } from '../../trpc/react';
+import { IMAGES } from '../_constants/image';
+import { LeaderboardItem } from './LeaderboardItem';
 
 export const MyCurrentPosition = () => {
   const { data, isPending, isSuccess } =
@@ -19,6 +19,7 @@ export const MyCurrentPosition = () => {
             <LeaderboardItem
               occId={data.occId}
               avatarUrl={data.avatarUrl}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               occImageUrl={(IMAGES.MOCK_STICKER as any)[data.rank % 5]}
               rank={1}
               shareCount={data.shareCount}

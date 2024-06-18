@@ -8,7 +8,7 @@ import {
   type ContractProvider,
   type Sender,
   type TupleItemInt,
-} from "ton-core";
+} from 'ton-core';
 
 export type RoyaltyParams = {
   royaltyFactor: number;
@@ -34,7 +34,7 @@ export function nftCollectionConfigToCell(config: NftCollectionConfig): Cell {
       beginCell()
         .storeUint(config.royaltyParams.royaltyFactor, 16)
         .storeUint(config.royaltyParams.royaltyBase, 16)
-        .storeAddress(config.royaltyParams.royaltyAddress),
+        .storeAddress(config.royaltyParams.royaltyAddress)
     )
     .endCell();
 }
@@ -42,7 +42,7 @@ export function nftCollectionConfigToCell(config: NftCollectionConfig): Cell {
 export default class NftCollection implements Contract {
   constructor(
     readonly address: Address,
-    readonly init?: { code: Cell; data: Cell },
+    readonly init?: { code: Cell; data: Cell }
   ) {}
 
   static createFromAddress(address: Address) {
@@ -52,7 +52,7 @@ export default class NftCollection implements Contract {
   static createFromConfig(
     config: NftCollectionConfig,
     code: Cell,
-    workchain = 0,
+    workchain = 0
   ) {
     const data = nftCollectionConfigToCell(config);
     const init = { code, data };
@@ -77,7 +77,7 @@ export default class NftCollection implements Contract {
       itemIndex: number;
       itemOwnerAddress: Address;
       itemContent: Cell;
-    },
+    }
   ) {
     const nftMessage = beginCell();
     nftMessage.storeAddress(opts.itemOwnerAddress);
@@ -102,7 +102,7 @@ export default class NftCollection implements Contract {
       value: bigint;
       queryId: bigint;
       newOwnerAddress: Address;
-    },
+    }
   ) {
     await provider.internal(via, {
       value: opts.value,
@@ -120,11 +120,11 @@ export default class NftCollection implements Contract {
     ownerAddress: Address;
     collectionContent: Cell;
   }> {
-    const collection_data = await provider.get("get_collection_data", []);
+    const collection_data = await provider.get('get_collection_data', []);
     const stack = await collection_data.stack;
-    let nextItem: bigint = stack.readBigNumber();
-    let collectionContent = await stack.readCell();
-    let ownerAddress = await stack.readAddress();
+    const nextItem: bigint = stack.readBigNumber();
+    const collectionContent = await stack.readCell();
+    const ownerAddress = await stack.readAddress();
     return {
       nextItemId: nextItem,
       collectionContent: collectionContent,
@@ -133,7 +133,7 @@ export default class NftCollection implements Contract {
   }
 
   async getItemAddressByIndex(provider: ContractProvider, index: TupleItemInt) {
-    const res = await provider.get("get_nft_address_by_index", [index]);
+    const res = await provider.get('get_nft_address_by_index', [index]);
     const itemAddress = await res.stack.readAddress();
     return itemAddress;
   }
