@@ -40,7 +40,7 @@ export const updateDisplayName = protectedProcedure
           .getUserProfilePhoto({
             telegramUserId: telegramId,
           })
-          .catch((e) => {
+          .catch((e: any) => {
             console.log(e);
             return null;
           });

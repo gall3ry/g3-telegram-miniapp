@@ -1,15 +1,19 @@
-import { sha256 } from "@ton/crypto";
-import { Address, Cell, contractAddress, loadStateInit } from "@ton/ton";
-import { Buffer } from "buffer";
-import { randomBytes, sign } from "tweetnacl";
-import { env } from "../../../env";
-import { type CheckProofRequestDto } from "../_dto/check-proof-request-dto";
-import { tryParsePublicKey } from "../_wrappers/wallets-data";
+import { sha256 } from '@ton/crypto';
+import { Address, Cell, contractAddress, loadStateInit } from '@ton/ton';
+import { Buffer } from 'buffer';
+import { randomBytes, sign } from 'tweetnacl';
+import { env } from '../../../env';
+import { type CheckProofRequestDto } from '../_dto/check-proof-request-dto';
+import { tryParsePublicKey } from '../_wrappers/wallets-data';
 
-const tonProofPrefix = "ton-proof-item-v2/";
-const tonConnectPrefix = "ton-connect";
+const tonProofPrefix = 'ton-proof-item-v2/';
+const tonConnectPrefix = 'ton-connect';
 // TODO: to add more domains
-const allowedDomains = ["g3-miniapp.vercel.app", "staging.miniapp.gall3ry.io"];
+const allowedDomains = [
+  'g3-miniapp.vercel.app',
+  'staging.miniapp.gall3ry.io',
+  'https://g3-telegram-miniapp-v2.vercel.app',
+];
 const validAuthTime = 60; // 1 minute
 
 export class TonProofService {
@@ -17,7 +21,7 @@ export class TonProofService {
    * Generate a random payload.
    */
   static generatePayload(): string {
-    return Buffer.from(randomBytes(32)).toString("hex");
+    return Buffer.from(randomBytes(32)).toString('hex');
   }
 
   /**
@@ -26,11 +30,11 @@ export class TonProofService {
    */
   static async checkProof(
     payload: CheckProofRequestDto,
-    getWalletPublicKey: (address: string) => Promise<Buffer | null>,
+    getWalletPublicKey: (address: string) => Promise<Buffer | null>
   ): Promise<boolean> {
     try {
       const stateInit = loadStateInit(
-        Cell.fromBase64(payload.proof.state_init).beginParse(),
+        Cell.fromBase64(payload.proof.state_init).beginParse()
       );
 
       // 1. First, try to obtain public key via get_public_key get-method on smart contract deployed at Address.
@@ -45,7 +49,7 @@ export class TonProofService {
       }
 
       // 2.2. Check that TonAddressItemReply.publicKey equals to obtained public key
-      const wantedPublicKey = Buffer.from(payload.public_key, "hex");
+      const wantedPublicKey = Buffer.from(payload.public_key, 'hex');
       if (!publicKey.equals(wantedPublicKey)) {
         return false;
       }
@@ -59,7 +63,7 @@ export class TonProofService {
 
       if (
         !allowedDomains.includes(payload.proof.domain.value) &&
-        env.NEXT_PUBLIC_G3_ENV === "production"
+        env.NEXT_PUBLIC_G3_ENV === 'production'
       ) {
         return false;
       }
@@ -76,7 +80,7 @@ export class TonProofService {
           lengthBytes: payload.proof.domain.lengthBytes,
           value: payload.proof.domain.value,
         },
-        signature: Buffer.from(payload.proof.signature, "base64"),
+        signature: Buffer.from(payload.proof.signature, 'base64'),
         payload: payload.proof.payload,
         stateInit: payload.proof.state_init,
         timestamp: payload.proof.timestamp,

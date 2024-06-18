@@ -1,7 +1,7 @@
-import { sign, verify, type JwtPayload } from 'jsonwebtoken';
-import { env } from '../../../env';
+import { sign, verify, type JwtPayload } from "jsonwebtoken";
+import { env } from "../../../env";
 
-declare module 'jsonwebtoken' {
+declare module "jsonwebtoken" {
   export interface JwtPayload {
     userId: string;
   }
@@ -28,8 +28,8 @@ class JwtService {
       },
       env.JWT_SECRET,
       {
-        expiresIn: '30d',
-      }
+        expiresIn: "30d",
+      },
     );
   }
 

@@ -1,12 +1,12 @@
-import { TRPCError } from "@trpc/server";
-import { type z } from "zod";
-import { db } from "../../../db";
-import { CheckProofRequest } from "../../../ton/_dto/check-proof-request-dto";
-import { TonApiService } from "../../../ton/_services/ton-api-service";
-import { TonProofService } from "../../../ton/_services/ton-proof-service";
-import { createAuthToken, verifyToken } from "../../../ton/_utils/jwt";
-import PostHogClient from "../../services/posthog";
-import { publicProcedure } from "../../trpc";
+import { TRPCError } from '@trpc/server';
+import { type z } from 'zod';
+import { db } from '../../../db';
+import { CheckProofRequest } from '../../../ton/_dto/check-proof-request-dto';
+import { TonApiService } from '../../../ton/_services/ton-api-service';
+import { TonProofService } from '../../../ton/_services/ton-proof-service';
+import { createAuthToken, verifyToken } from '../../../ton/_utils/jwt';
+import PostHogClient from '../../services/posthog';
+import { publicProcedure } from '../../trpc';
 
 class CheckProofService {
   static async checkProofOrThrow({
@@ -23,12 +23,12 @@ class CheckProofService {
         proof,
         network,
       },
-      (address) => client.getWalletPublicKey(address),
+      (address) => client.getWalletPublicKey(address)
     );
     if (!isValid) {
       throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Invalid proof",
+        code: 'BAD_REQUEST',
+        message: 'Invalid proof',
       });
     }
 
@@ -41,8 +41,8 @@ class CheckProofService {
 
     if (!(await verifyToken(payloadToken))) {
       throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Invalid token",
+        code: 'BAD_REQUEST',
+        message: 'Invalid token',
       });
     }
   }
@@ -52,10 +52,10 @@ class CheckProofService {
     network,
   }: {
     address: string;
-    network: z.infer<typeof CheckProofRequest>["network"];
+    network: z.infer<typeof CheckProofRequest>['network'];
   }) {
     const exist = await db.provider.findFirst({
-      where: { value: address, type: "TON_WALLET" },
+      where: { value: address, type: 'TON_WALLET' },
     });
 
     const client = PostHogClient();
@@ -63,12 +63,12 @@ class CheckProofService {
     const provider = await db.provider.upsert({
       where: {
         type_value: {
-          type: "TON_WALLET",
+          type: 'TON_WALLET',
           value: address,
         },
       },
       create: {
-        type: "TON_WALLET",
+        type: 'TON_WALLET',
         value: address,
         User: {
           create: {},
@@ -83,29 +83,29 @@ class CheckProofService {
     const user = provider.User;
     if (!user) {
       throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "No user associated with this address",
+        code: 'BAD_REQUEST',
+        message: 'No user associated with this address',
       });
     }
 
     if (!exist) {
       client.capture({
         distinctId: user.id.toString(),
-        event: "new_user",
+        event: 'new_user',
         properties: {
           address: address,
           network: network,
-          type: "TON_WALLET",
+          type: 'TON_WALLET',
         },
       });
     } else {
       client.capture({
         distinctId: user.id.toString(),
-        event: "returning_user",
+        event: 'returning_user',
         properties: {
           address: address,
           network: network,
-          type: "TON_WALLET",
+          type: 'TON_WALLET',
         },
       });
     }

@@ -28,6 +28,7 @@ export const TemplateInfo = () => {
         mapStickerTypeToTemplateComponent(sticker.stickerType, {
           imageUrl: sticker.GMNFT.imageUrl,
           shouldRecord: shouldRecord,
+          stickerTitle: `STICKER #${sticker.id}`,
         })}
 
       <div className="mt-4 text-center text-4xl font-bold leading-[44px] text-slate-900">

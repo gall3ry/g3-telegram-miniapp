@@ -1,47 +1,46 @@
-"use client";
-import { Button, Skeleton, Spinner } from "@radix-ui/themes";
-import { useInitData } from "@tma.js/sdk-react";
-import Image from "next/image";
-import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
-import { memo, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { z } from "zod";
-import { env } from "../../../env";
-import { OccType } from "../../../server/api/routers/occ/OccType";
-import { api } from "../../../trpc/react";
-import { IMAGES } from "../../_constants/image";
-import { useNftContract } from "../../_hooks/useNftContract";
-import { useIsAuthenticated } from "../../_providers/useAuth";
-import { mapStickerTypeToTemplateComponent } from "../_components/_templates";
-import { Drawer, DrawerContent } from "../_components/Drawer";
-import { IconAsset } from "../_icons/IconAsset";
-import { IconCheck } from "../_icons/IconCheck";
-import { IconEffect } from "../_icons/IconEffect";
-import { IconPoints } from "../_icons/IconPoints";
-import { LeaderboardAvatar } from "../LeaderboardAvatar";
-import { IconLock } from "../templates/[id]/_components/IconLock";
-import { useUser } from "../useUser";
-import { EffectItem } from "./EffectItem";
-import { mockAssets } from "./MOCK_ASSET";
-import { MOCK_TX_HASH } from "./MOCK_TX_HASH";
-import { Option } from "./Option";
-import { SelectedAssets } from "./SelectedAssets";
-import { useWebAppSwitchInlineQuery } from "./useWebAppSwitchInlineQuery";
+'use client';
+import { Button, Spinner } from '@radix-ui/themes';
+import { useInitData } from '@tma.js/sdk-react';
+import Image from 'next/image';
+import { parseAsBoolean, parseAsInteger, useQueryState } from 'nuqs';
+import { memo, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { z } from 'zod';
+import { env } from '../../../env';
+import { OccType } from '../../../server/api/routers/occ/OccType';
+import { api } from '../../../trpc/react';
+import { IMAGES } from '../../_constants/image';
+import { useNftContract } from '../../_hooks/useNftContract';
+import { useIsAuthenticated } from '../../_providers/useAuth';
+import { mapStickerTypeToTemplateComponent } from '../_components/_templates';
+import { Drawer, DrawerContent } from '../_components/Drawer';
+import { IconAsset } from '../_icons/IconAsset';
+import { IconCheck } from '../_icons/IconCheck';
+import { IconEffect } from '../_icons/IconEffect';
+import { IconPoints } from '../_icons/IconPoints';
+import { LeaderboardAvatar } from '../LeaderboardAvatar';
+import { IconLock } from '../templates/[id]/_components/IconLock';
+import { useUser } from '../useUser';
+import { mockAssets } from './MOCK_ASSET';
+import { MOCK_TX_HASH } from './MOCK_TX_HASH';
+import { Option } from './Option';
+import { SelectedAssets } from './SelectedAssets';
+import { useWebAppSwitchInlineQuery } from './useWebAppSwitchInlineQuery';
 
 export const withProxy = (
   url: string,
   size?: {
     width?: number;
     height?: number;
-  },
+  }
 ) => {
   const { width, height } = size ?? {};
 
-  const BASE_API = "/api/proxy?url=";
-  const withSize = width && height ? `&width=${width}&height=${height}` : "";
+  const BASE_API = '/api/proxy?url=';
+  const withSize = width && height ? `&width=${width}&height=${height}` : '';
 
   // if current website
-  if (url.startsWith("/")) {
+  if (url.startsWith('/')) {
     return `${BASE_API}${window.location.origin}${url}${withSize}`;
   }
 
@@ -51,7 +50,7 @@ export const withProxy = (
 export const useSelectAssetsForGMDrawer = () => {
   return useQueryState(
     `selectAssetGMDrawer`,
-    parseAsBoolean.withDefault(false),
+    parseAsBoolean.withDefault(false)
   );
 };
 
@@ -60,15 +59,11 @@ export const MintOCC = () => {
   const { data: occ, isPending } = api.occ.getOcc.useQuery(undefined, {
     enabled: isAuthenticated,
   });
-  const {
-    data: stickersData,
-    isPending: isStickersPending,
-    isSuccess,
-  } = api.sticker.getStickers.useQuery(undefined, {
+  const { data: stickersData } = api.sticker.getStickers.useQuery(undefined, {
     enabled: isAuthenticated,
   });
   const initData = useInitData(true);
-  const [stickerId, setStickerId] = useQueryState("stickerId", parseAsInteger);
+  const [stickerId, setStickerId] = useQueryState('stickerId', parseAsInteger);
   const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
   const stickers = stickersData?.items;
   const selectedSticker = stickers?.find((s) => s.id === stickerId);
@@ -129,7 +124,7 @@ export const MintOCC = () => {
         </div>
       </div>
 
-      <Skeleton width="30" height="10" loading={isStickersPending}>
+      {/* <Skeleton width="30" height="10" loading={isStickersPending}>
         <div className="mt-5">
           {isSuccess && (
             <div className="text-xl font-bold leading-7 text-slate-900">
@@ -175,7 +170,7 @@ export const MintOCC = () => {
             }}
           />
         </div>
-      </Skeleton>
+      </Skeleton> */}
 
       <div className="mt-5">
         <SelectedAssets />
@@ -203,6 +198,7 @@ export const MintOCC = () => {
             <div className="aspect-square w-full rounded-xl">
               {selectedSticker?.GMNFT.imageUrl &&
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
+                  stickerTitle: `STICKER #${selectedSticker.id}`,
                   imageUrl: selectedSticker.GMNFT.imageUrl,
                 })}
             </div>
@@ -266,12 +262,12 @@ export const MintOCC = () => {
 
                   postSwitchInlineQuery({
                     query: `${stickerId} ${telegramUserId}`,
-                    chatTypes: ["channels", "groups", "users"],
+                    chatTypes: ['channels', 'groups', 'users'],
                   });
                 }}
                 disabled={!selectedSticker?.imageUrl}
               >
-                {selectedSticker?.imageUrl ? "Send Sticker" : "Loading..."}
+                {selectedSticker?.imageUrl ? 'Send Sticker' : 'Loading...'}
               </Button>
             </div>
           </div>
@@ -291,8 +287,8 @@ export const MintGMOCC = memo(() => {
     api.occ.mintOCCbyEpic.useMutation();
   const [mintByEpicPoint, setMintByEpicPoint] = useState(true);
   const [showDrawer, setShowDrawer] = useQueryState(
-    "showDrawer",
-    parseAsBoolean.withDefault(false),
+    'showDrawer',
+    parseAsBoolean.withDefault(false)
   );
   const utils = api.useUtils();
   const { data: topOccs } = api.occ.getTopOccs.useQuery({ limit: 5 });
@@ -305,19 +301,19 @@ export const MintGMOCC = memo(() => {
           type: OccType.GMSymbolOCC,
         }),
         {
-          loading: "Creating OCC...",
+          loading: 'Creating OCC...',
           success: () => {
             void utils.occ.getOcc.invalidate();
             void setShowDrawer(null);
 
-            return "OCC created";
+            return 'OCC created';
           },
           error: (e) => {
             console.log(`Failed to create OCC:`, e);
 
-            return "Failed to create OCC";
+            return 'Failed to create OCC';
           },
-        },
+        }
       );
     } finally {
       setIsLoading(false);
@@ -328,13 +324,13 @@ export const MintGMOCC = memo(() => {
     setIsLoading(true);
     try {
       const txHash =
-        env.NEXT_PUBLIC_G3_ENV === "development"
+        env.NEXT_PUBLIC_G3_ENV === 'development'
           ? MOCK_TX_HASH
           : await sendMintNftFromFaucet({
-              name: "Name Of NFT #6",
-              description: "NFT Description",
+              name: 'Name Of NFT #6',
+              description: 'NFT Description',
               image:
-                "ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg",
+                'ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg',
             });
 
       await toast.promise(
@@ -343,19 +339,19 @@ export const MintGMOCC = memo(() => {
           txHash,
         }),
         {
-          loading: "Creating OCC...",
+          loading: 'Creating OCC...',
           success: () => {
             void utils.occ.getOcc.invalidate();
             void setShowDrawer(null);
 
-            return "OCC created";
+            return 'OCC created';
           },
           error: (e) => {
             console.log(`Failed to create OCC:`, e);
 
-            return "Failed to create OCC";
+            return 'Failed to create OCC';
           },
-        },
+        }
       );
     } finally {
       setIsLoading(false);
@@ -417,11 +413,11 @@ export const MintGMOCC = memo(() => {
                       {item.shareCount}
                     </div>
                     <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
-                      share{item.shareCount === 1 ? "" : "s"}
+                      share{item.shareCount === 1 ? '' : 's'}
                     </div>
                   </div>
                 </div>
-              ),
+              )
           )}
         </div>
       </div>
@@ -509,7 +505,7 @@ export const MintGMOCC = memo(() => {
   );
 });
 
-MintGMOCC.displayName = "MintGMOCC";
+MintGMOCC.displayName = 'MintGMOCC';
 
 export const SelectAssetDrawer = memo(() => {
   const [selectAssetsDrawer, setSelectAssetsDrawer] =
@@ -534,7 +530,7 @@ export const SelectAssetDrawer = memo(() => {
     undefined,
     {
       enabled: true,
-    },
+    }
   );
 
   useEffect(() => {
@@ -557,14 +553,14 @@ export const SelectAssetDrawer = memo(() => {
     >
       <DrawerContent>
         <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-          Select assets for GM effect
+          GM Creation
         </div>
         <div className="mt-2 flex justify-center gap-6">
           <button
             className="text-center text-base font-medium leading-normal tracking-tight text-blue-400"
             onClick={() => {
               setSelectedAssets(
-                mockAssets.filter((asset) => !selectedAssets.includes(asset)),
+                mockAssets.filter((asset) => !selectedAssets.includes(asset))
               );
             }}
           >
@@ -595,7 +591,7 @@ export const SelectAssetDrawer = memo(() => {
                 setSelectedAssets((prev) =>
                   prev.includes(asset)
                     ? prev.filter((a) => a !== asset)
-                    : [...prev, asset],
+                    : [...prev, asset]
                 );
               }}
             >
@@ -626,7 +622,7 @@ export const SelectAssetDrawer = memo(() => {
             size="4"
             onClick={async () => {
               if (!occ?.id || !userId) {
-                throw new Error("No occ id");
+                throw new Error('No occ id');
               }
 
               await toast.promise(
@@ -637,22 +633,22 @@ export const SelectAssetDrawer = memo(() => {
                   })),
                 }),
                 {
-                  loading: "Generating sticker...",
+                  loading: 'Generating sticker...',
                   success: () => {
                     void setSelectAssetsDrawer(false);
 
-                    return "Sticker generated";
+                    return 'Sticker generated';
                   },
                   error: (e) => {
                     console.log(`Failed to generate sticker:`, e);
 
-                    return "Failed to generate sticker";
+                    return 'Failed to generate sticker';
                   },
-                },
+                }
               );
             }}
           >
-            Confirm
+            Create
           </Button>
         </div>
       </DrawerContent>
@@ -660,7 +656,7 @@ export const SelectAssetDrawer = memo(() => {
   );
 });
 
-SelectAssetDrawer.displayName = "SelectAssetDrawer";
+SelectAssetDrawer.displayName = 'SelectAssetDrawer';
 
 export const RevealSoonDrawer = memo(
   ({
@@ -707,10 +703,10 @@ export const RevealSoonDrawer = memo(
         </DrawerContent>
       </Drawer>
     );
-  },
+  }
 );
 
-RevealSoonDrawer.displayName = "RevealSoonDrawer";
+RevealSoonDrawer.displayName = 'RevealSoonDrawer';
 
 export const AllStickers = memo(() => {
   const { isAuthenticated } = useIsAuthenticated();
@@ -720,7 +716,7 @@ export const AllStickers = memo(() => {
     });
   const stickers = stickersData?.items;
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
-  const [, setStickerId] = useQueryState("stickerId", parseAsInteger);
+  const [, setStickerId] = useQueryState('stickerId', parseAsInteger);
 
   return (
     <Spinner mx="auto" loading={isStickersPending}>
@@ -759,7 +755,7 @@ export const AllStickers = memo(() => {
       {stickers && stickers.length > 0 && (
         <div className="mt-5">
           <div className="text-xl font-bold leading-7 text-slate-900">
-            All variants
+            Created UGC list
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
@@ -776,6 +772,7 @@ export const AllStickers = memo(() => {
                     {sticker.GMNFT.imageUrl &&
                       mapStickerTypeToTemplateComponent(sticker.stickerType, {
                         imageUrl: sticker.GMNFT.imageUrl,
+                        stickerTitle: `STICKER #${sticker.id}`,
                       })}
                   </div>
                 }
@@ -783,7 +780,7 @@ export const AllStickers = memo(() => {
                 <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
                   <div className="text-center text-sm font-bold leading-tight text-slate-900">
                     {sticker.shareCount} share
-                    {sticker.shareCount === 1 ? "" : "s"}
+                    {sticker.shareCount === 1 ? '' : 's'}
                   </div>
                 </div>
               </div>
@@ -795,4 +792,4 @@ export const AllStickers = memo(() => {
   );
 });
 
-AllStickers.displayName = "AllStickers";
+AllStickers.displayName = 'AllStickers';

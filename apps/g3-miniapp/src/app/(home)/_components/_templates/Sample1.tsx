@@ -1,4 +1,5 @@
 "use client";
+import { Spinner } from "@radix-ui/themes";
 import {
   decodeFont,
   decodeImage,
@@ -50,9 +51,11 @@ export const Sample1 = memo(
   ({
     shouldRecord = false,
     imageUrl,
+    stickerTitle,
   }: {
     shouldRecord?: boolean;
     imageUrl: string;
+    stickerTitle: string;
   }) => {
     const [images, setImages] = useState<string[]>([]);
     const interval = useRef<ReturnType<typeof setInterval>>();
@@ -107,6 +110,7 @@ export const Sample1 = memo(
 
         return false;
       },
+
       onLoop: () => {
         if (interval.current) {
           clearInterval(interval.current);
@@ -178,6 +182,8 @@ export const Sample1 = memo(
 
     useEffect(() => {
       if (imageUrl && nftAsset && rive) {
+        rive.setTextRunValue("STICKER_TITLE", stickerTitle);
+
         loadAndDecodeImg(imageUrl, {
           width: 1000,
           height: 1000,
@@ -196,6 +202,12 @@ export const Sample1 = memo(
     return (
       <div className="relative overflow-hidden rounded-xl border-2">
         <RiveComponent width="100%" className="aspect-square" />
+
+        {!nftAsset && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl border bg-white">
+            <Spinner />
+          </div>
+        )}
       </div>
     );
   },

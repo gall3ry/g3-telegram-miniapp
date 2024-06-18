@@ -27,9 +27,6 @@ export const getGifFromImages = (images: string[]) => {
         if (!obj.error) {
           const image = obj.image;
 
-          // new tab
-          window.open(image as string);
-
           resolve(image as string);
         }
 

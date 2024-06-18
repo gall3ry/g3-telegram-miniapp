@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "src/app/api/**/*": {
+      "maxDuration": 300,
+      "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
+    },
+    "src/app/**/*": {
+      "maxDuration": 300,
+      "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
+    }
+  }
+}
