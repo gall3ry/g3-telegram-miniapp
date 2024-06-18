@@ -6,6 +6,7 @@
   "tags": [],
   "// targets": "to see all targets run: nx show project g3-miniapp --web",
   "targets": {
+    "build": {},
     "dev": {
       "configurations": {
         "development": {},
