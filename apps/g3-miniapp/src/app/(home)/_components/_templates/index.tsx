@@ -1,4 +1,4 @@
-import { StickerType } from '@prisma/client';
+import { StickerType } from '@gall3ry/database-client';
 import { type ComponentProps } from 'react';
 import { Sample1 } from './Sample1';
 

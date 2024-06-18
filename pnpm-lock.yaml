@@ -21,7 +21,7 @@ dependencies:
     specifier: ^3.6.0
     version: 3.6.0(react-hook-form@7.52.0)
   '@nestjs/common':
-    specifier: ^10.0.2
+    specifier: ^10.3.9
     version: 10.3.9(reflect-metadata@0.1.14)(rxjs@7.8.1)
   '@nestjs/config':
     specifier: ^3.2.2
@@ -231,7 +231,7 @@ dependencies:
     specifier: ^0.0.66
     version: 0.0.66(expo@51.0.14)(react-native@0.74.2)
   tslib:
-    specifier: ^2.3.0
+    specifier: ^2.6.3
     version: 2.6.3
   tweetnacl:
     specifier: ^1.0.3

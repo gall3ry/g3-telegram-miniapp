@@ -1,7 +1,7 @@
 import { BaseModule } from '@g3-telegram-bot/types';
 import { RewardService } from '@gall3ry/data-access-rewards';
+import { Prisma, PrismaClient } from '@gall3ry/database-client';
 import { mapStickerTypeToStickerTemplate, QuestId } from '@gall3ry/types';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { Logger } from 'pino';
 import { Telegraf } from 'telegraf';
 import { InputTextMessageContent } from 'telegraf/types';

@@ -1,5 +1,5 @@
+import { type Prisma, StickerType } from '@gall3ry/database-client';
 import { env } from '@gall3ry/g3-miniapp-env';
-import { type Prisma, StickerType } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';

@@ -12,6 +12,13 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'via.placeholder.com',
+      },
+    ],
+  },
 };
 
 const plugins = [
