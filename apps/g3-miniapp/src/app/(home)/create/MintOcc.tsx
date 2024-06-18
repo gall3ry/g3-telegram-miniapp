@@ -281,7 +281,8 @@ export const MintOCC = () => {
 
 export const MintGMOCC = memo(() => {
   const { sendMintNftFromFaucet } = useNftContract();
-  const { mutateAsync } = api.occ.createOCC.useMutation();
+  // const { mutateAsync } = api.occ.createOCC.useMutation();
+  const { mutateAsync } = api.occ.mintOCCbyTON.useMutation();
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: mintByEpicMutateAsync } =
     api.occ.mintOCCbyEpic.useMutation();
