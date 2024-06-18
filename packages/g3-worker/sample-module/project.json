@@ -1,0 +1,19 @@
+{
+  "name": "sample-module",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-worker/sample-module/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/g3-worker/sample-module",
+        "main": "packages/g3-worker/sample-module/src/index.ts",
+        "tsConfig": "packages/g3-worker/sample-module/tsconfig.lib.json",
+        "assets": ["packages/g3-worker/sample-module/*.md"]
+      }
+    }
+  }
+}

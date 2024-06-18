@@ -48,6 +48,9 @@
         "packages/g3-miniapp/feature-home/src/server.ts"
       ],
       "@gall3ry/g3-miniapp-server": ["packages/g3-miniapp/server/src/index.ts"],
+      "@gall3ry/sample-module": [
+        "packages/g3-worker/sample-module/src/index.ts"
+      ],
       "@gall3ry/shared-constants": ["packages/shared/constants/src/index.ts"],
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
