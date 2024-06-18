@@ -1,6 +1,6 @@
 'use client';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { QuestId } from '@g3-miniapp-v2/types';
+import { QuestId } from '@gall3ry/types';
 import { Spinner } from '@radix-ui/themes';
 import { TRPCClientError } from '@trpc/client';
 import { useCallback } from 'react';

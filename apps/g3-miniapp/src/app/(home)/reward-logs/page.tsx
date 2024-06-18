@@ -1,7 +1,7 @@
 'use client';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { mapQuestIdToTitle } from '@g3-miniapp-v2/types';
 import { formatNumber } from '@g3-miniapp/utils';
+import { mapQuestIdToTitle } from '@gall3ry/types';
 import { Spinner } from '@radix-ui/themes';
 import { format } from 'date-fns';
 import groupBy from 'lodash.groupby';

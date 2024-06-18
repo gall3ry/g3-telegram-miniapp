@@ -17,13 +17,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@g3-telegram-bot/inline-query-tracker": [
-        "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
-      ],
       "@g3-miniapp/telegram-bot-service": [
         "packages/g3-miniapp/telegram-bot-service/src/index.ts"
       ],
       "@g3-miniapp/utils": ["packages/g3-miniapp/utils/src/index.ts"],
+      "@g3-telegram-bot/inline-query-tracker": [
+        "packages/g3-telegram-bot/inline-query-tracker/src/index.ts"
+      ],
       "@g3-telegram-bot/types": ["packages/g3-telegram-bot/types/src/index.ts"],
       "@g3-worker/emoji": ["packages/g3-worker/emoji/src/index.ts"],
       "@g3-worker/env": ["packages/g3-worker/env/src/index.ts"],
@@ -44,9 +44,6 @@
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
-      "@gall3ry/shared-utils": ["packages/shared/utils/src/index.ts"],
-      "@gall3ry/trpc-client": ["packages/g3-backend/trpc-client/src/index.ts"],
-      "@gall3ry/trpc-server": ["packages/g3-backend/trpc-server/src/index.ts"],
       "@gall3ry/types": ["packages/shared/types/src/index.ts"]
     }
   },

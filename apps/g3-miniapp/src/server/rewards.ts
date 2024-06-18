@@ -1,4 +1,4 @@
-import { RewardService } from '@g3-miniapp-v2/data-access-rewards';
+import { RewardService } from '@gall3ry/data-access-rewards';
 import { env } from '../env';
 import { db } from './db';
 

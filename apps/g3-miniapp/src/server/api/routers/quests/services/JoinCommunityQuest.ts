@@ -1,4 +1,4 @@
-import { QuestId } from '@g3-miniapp-v2/types';
+import { QuestId } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
 import { env } from '../../../../../env';
 import { db } from '../../../../db';

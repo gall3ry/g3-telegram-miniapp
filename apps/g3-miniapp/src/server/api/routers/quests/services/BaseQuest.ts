@@ -1,4 +1,4 @@
-import { type QuestId } from '@g3-miniapp-v2/types';
+import { type QuestId } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
 import { rewardService } from '../../../../rewards';
 
