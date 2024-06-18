@@ -32,8 +32,7 @@
     {
       "plugin": "@nx/jest/plugin",
       "options": {
-        "targetName": "test",
-        "passWithNoTests": true
+        "targetName": "test"
       },
       "exclude": [
         "apps/gall3ry-e2e/**/*",
