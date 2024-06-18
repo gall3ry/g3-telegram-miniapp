@@ -1,10 +1,7 @@
+import { env } from '@gall3ry/g3-miniapp-env';
+import { appRouter, createTRPCContext } from '@gall3ry/g3-miniapp-server';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { type NextRequest } from 'next/server';
-
-// import { appRouter } from "~/server/api/root";
-import { env } from '../../../../env';
-import { appRouter } from '../../../../server/api/root';
-import { createTRPCContext } from '../../../../server/api/trpc';
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when

@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { SDKProvider } from "@tma.js/sdk-react";
-import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
-import dynamic from "next/dynamic";
-import { posthog } from "posthog-js";
-import { PostHogProvider } from "posthog-js/react";
-import { useEffect } from "react";
-import { env } from "../../env";
-import { TRPCReactProvider } from "../../trpc/react";
-import { BackendAuthProvider } from "./BackendAuthProvider";
+import { env } from '@gall3ry/g3-miniapp-env';
+import { SDKProvider } from '@tma.js/sdk-react';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import dynamic from 'next/dynamic';
+import { posthog } from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
+import { useEffect } from 'react';
+import { TRPCReactProvider } from '../../trpc/react';
+import { BackendAuthProvider } from './BackendAuthProvider';
 const TonConnectUIProvider = dynamic(
-  () => import("@tonconnect/ui-react").then((mod) => mod.TonConnectUIProvider),
-  { ssr: false },
+  () => import('@tonconnect/ui-react').then((mod) => mod.TonConnectUIProvider),
+  { ssr: false }
 );
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
     api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
     loaded: function (ph) {
-      if (env.NEXT_PUBLIC_G3_ENV === "development") {
+      if (env.NEXT_PUBLIC_G3_ENV === 'development') {
         console.log(`Removing PostHog session recording`);
         ph.opt_out_capturing(); // opts a user out of event capture
         ph.set_config({ disable_session_recording: true });
@@ -30,10 +30,10 @@ if (typeof window !== "undefined") {
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (
-      typeof window !== "undefined" &&
-      env.NEXT_PUBLIC_G3_ENV !== "production"
+      typeof window !== 'undefined' &&
+      env.NEXT_PUBLIC_G3_ENV !== 'production'
     ) {
-      void import("eruda").then(({ default: eruda }) => eruda.init());
+      void import('eruda').then(({ default: eruda }) => eruda.init());
     }
   }, []);
 

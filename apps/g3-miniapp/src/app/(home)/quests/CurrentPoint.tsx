@@ -1,12 +1,12 @@
-"use client";
-import { IconButton, Spinner } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
-import { memo } from "react";
-import { IMAGES } from "../../_constants/image";
-import { useIsAuthenticated } from "../../_providers/useAuth";
-import { IconPoints } from "../_icons/IconPoints";
-import { useUser } from "../useUser";
-import { IconTime } from "./IconTime";
+'use client';
+import { IMAGES } from '@gall3ry/shared-constants';
+import { IconButton, Spinner } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
+import { memo } from 'react';
+import { useIsAuthenticated } from '../../_providers/useAuth';
+import { IconPoints } from '../_icons/IconPoints';
+import { useUser } from '../useUser';
+import { IconTime } from './IconTime';
 
 export const CurrentPoint = memo(() => {
   const router = useRouter();
@@ -19,7 +19,7 @@ export const CurrentPoint = memo(() => {
         className="relative rounded-xl px-4 pb-[22px] pt-4"
         style={{
           backgroundImage: `url(${IMAGES.balance_bg})`,
-          backgroundSize: "cover",
+          backgroundSize: 'cover',
         }}
       >
         <div className="flex items-center justify-between">
@@ -30,7 +30,7 @@ export const CurrentPoint = memo(() => {
             variant="soft"
             radius="large"
             onClick={() => {
-              router.push("/reward-logs");
+              router.push('/reward-logs');
             }}
           >
             <div className="size-5">
@@ -59,4 +59,4 @@ export const CurrentPoint = memo(() => {
   );
 });
 
-CurrentPoint.displayName = "CurrentPoint";
+CurrentPoint.displayName = 'CurrentPoint';

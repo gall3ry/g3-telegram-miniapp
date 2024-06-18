@@ -1,10 +1,10 @@
 'use client';
 import { formatTonAddress } from '@g3-miniapp/utils';
+import { IMAGES } from '@gall3ry/shared-constants';
 import { Avatar, Button, IconButton, Skeleton } from '@radix-ui/themes';
 import { toUserFriendlyAddress } from '@tonconnect/sdk';
 import { memo, useMemo, useState } from 'react';
 import { api } from '../../../trpc/react';
-import { IMAGES } from '../../_constants/image';
 import { Drawer, DrawerContent, DrawerFooter } from '../_components/Drawer';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
 import { useUser } from '../useUser';

@@ -1,8 +1,8 @@
 import { cn } from '@g3-miniapp/utils';
+import { IMAGES } from '@gall3ry/shared-constants';
 import { Spinner } from '@radix-ui/themes';
 import Image from 'next/image';
 import { Suspense } from 'react';
-import { IMAGES } from '../../_constants/image';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
 import { MintOCC } from './MintOcc';
 

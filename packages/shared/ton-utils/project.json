@@ -1,0 +1,19 @@
+{
+  "name": "shared-ton-utils",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/ton-utils/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/ton-utils",
+        "main": "packages/shared/ton-utils/src/index.ts",
+        "tsConfig": "packages/shared/ton-utils/tsconfig.lib.json",
+        "assets": ["packages/shared/ton-utils/*.md"]
+      }
+    }
+  }
+}

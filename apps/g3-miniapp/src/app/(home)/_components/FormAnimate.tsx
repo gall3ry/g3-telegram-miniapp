@@ -1,8 +1,8 @@
-"use client";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { Button, Text } from "@radix-ui/themes";
-import { useState } from "react";
+'use client';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { CheckIcon } from '@radix-ui/react-icons';
+import { Button, Text } from '@radix-ui/themes';
+import { useState } from 'react';
 
 export const FormAnimate = () => {
   const [parent] = useAutoAnimate(/* optional config */);

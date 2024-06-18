@@ -1,4 +1,7 @@
 'use client';
+import { env } from '@gall3ry/g3-miniapp-env';
+import { IMAGES } from '@gall3ry/shared-constants';
+import { OccType } from '@gall3ry/types';
 import { Button, Spinner } from '@radix-ui/themes';
 import { useInitData } from '@tma.js/sdk-react';
 import Image from 'next/image';
@@ -6,10 +9,7 @@ import { parseAsBoolean, parseAsInteger, useQueryState } from 'nuqs';
 import { memo, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { env } from '../../../env';
-import { OccType } from '../../../server/api/routers/occ/OccType';
 import { api } from '../../../trpc/react';
-import { IMAGES } from '../../_constants/image';
 import { useNftContract } from '../../_hooks/useNftContract';
 import { useIsAuthenticated } from '../../_providers/useAuth';
 import { mapStickerTypeToTemplateComponent } from '../_components/_templates';

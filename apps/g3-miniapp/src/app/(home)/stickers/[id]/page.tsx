@@ -1,9 +1,9 @@
-import { type Metadata } from "next";
-import { unstable_noStore } from "next/cache";
-import { Suspense } from "react";
-import { db } from "../../../../server/db";
-import { BottomActions } from "./BottomActions";
-import { TemplateInfo } from "./TemplateInfo";
+import { db } from '@gall3ry/g3-miniapp-server';
+import { type Metadata } from 'next';
+import { unstable_noStore } from 'next/cache';
+import { Suspense } from 'react';
+import { BottomActions } from './BottomActions';
+import { TemplateInfo } from './TemplateInfo';
 
 export async function generateMetadata({
   params,

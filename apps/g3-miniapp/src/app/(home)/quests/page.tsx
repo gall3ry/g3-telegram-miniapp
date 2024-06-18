@@ -1,12 +1,11 @@
 'use client';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { QuestId } from '@gall3ry/types';
+import { QuestId, QuestStatus } from '@gall3ry/types';
 import { Spinner } from '@radix-ui/themes';
 import { TRPCClientError } from '@trpc/client';
 import { useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { QuestStatus } from '../../../server/api/routers/quests/services/QuestStatus';
 import { api } from '../../../trpc/react';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
 import { AllQuestsCompleted } from './AllQuestsCompleted';

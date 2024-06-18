@@ -1,5 +1,5 @@
-import { IMAGES } from "../_constants/image";
-import { Sample1 } from "./_components/_templates/Sample1";
+import { IMAGES } from '@gall3ry/shared-constants';
+import { Sample1 } from './_components/_templates/Sample1';
 
 export const LeaderboardAvatar = ({
   rank,

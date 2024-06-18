@@ -1,5 +1,7 @@
 'use client';
 
+import { type AppRouter } from '@gall3ry/g3-miniapp-server';
+import { ErrorMessage } from '@gall3ry/types';
 import {
   QueryCache,
   QueryClient,
@@ -14,10 +16,7 @@ import { createTRPCReact } from '@trpc/react-query';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 import { useState } from 'react';
 import SuperJSON from 'superjson';
-
 import { useAuth } from '../app/_providers/useAuth';
-import { AppRouter } from '../server/api/root';
-import { ErrorMessage } from '../server/api/routers/auth/ErrorMessage';
 
 const createQueryClient = () =>
   new QueryClient({

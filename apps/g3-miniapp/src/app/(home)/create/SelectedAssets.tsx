@@ -1,9 +1,9 @@
-"use client";
-import { Spinner } from "@radix-ui/themes";
-import Image from "next/image";
-import { api } from "../../../trpc/react";
-import { IMAGES } from "../../_constants/image";
-import { useSelectAssetsForGMDrawer } from "./MintOcc";
+'use client';
+import { IMAGES } from '@gall3ry/shared-constants';
+import { Spinner } from '@radix-ui/themes';
+import Image from 'next/image';
+import { api } from '../../../trpc/react';
+import { useSelectAssetsForGMDrawer } from './MintOcc';
 
 export const SelectedAssets = () => {
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
@@ -11,7 +11,7 @@ export const SelectedAssets = () => {
     undefined,
     {
       enabled: true,
-    },
+    }
   );
 
   const NUMBER_ELEMENTS = 5;

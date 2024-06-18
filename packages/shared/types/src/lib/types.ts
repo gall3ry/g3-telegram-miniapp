@@ -38,3 +38,7 @@ export const mapQuestIdToTitle: Record<QuestId, string> = {
   [QuestId.SHARING_FRIEND_STICKER]: 'Sharing Friend Sticker',
   [QuestId.SHARING_MY_STICKER]: 'Sharing My Sticker',
 };
+
+export enum OccType {
+  GMSymbolOCC = 'GMSymbolOCC',
+}

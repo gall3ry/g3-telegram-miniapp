@@ -1,10 +1,10 @@
 'use client';
+import { IMAGES } from '@gall3ry/shared-constants';
 import { Spinner } from '@radix-ui/themes';
 import { usePostHog } from 'posthog-js/react';
 import React, { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { api } from '../../trpc/react';
-import { IMAGES } from '../_constants/image';
 import { LeaderboardItem } from './LeaderboardItem';
 
 export const Leaderboard = () => {

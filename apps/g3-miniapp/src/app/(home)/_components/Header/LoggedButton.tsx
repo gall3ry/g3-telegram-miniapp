@@ -1,12 +1,12 @@
-"use client";
-import { Avatar, DropdownMenu } from "@radix-ui/themes";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
-import { api } from "../../../../trpc/react";
-import { IMAGES } from "../../../_constants/image";
-import { useIsAuthenticated } from "../../../_providers/useAuth";
-import { IconPoints } from "../../_icons/IconPoints";
+'use client';
+import { IMAGES } from '@gall3ry/shared-constants';
+import { Avatar, DropdownMenu } from '@radix-ui/themes';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
+import { api } from '../../../../trpc/react';
+import { useIsAuthenticated } from '../../../_providers/useAuth';
+import { IconPoints } from '../../_icons/IconPoints';
 
 function UserMenu() {
   const { isAuthenticated } = useIsAuthenticated();
@@ -21,12 +21,12 @@ function UserMenu() {
       <DropdownMenu.Root>
         <Link
           onMouseEnter={() => {
-            router.prefetch("/profile");
+            router.prefetch('/profile');
           }}
           href="/profile"
           className="flex cursor-pointer items-center gap-3"
           onClick={() => {
-            posthog.capture("profile_click", {
+            posthog.capture('profile_click', {
               user: user.displayName,
             });
           }}
@@ -45,7 +45,7 @@ function UserMenu() {
               className="h-10 w-10 rounded-[40px] border-2 border-[#14DB60]"
               // src={user.avatarUrl ?? undefined}
               src={IMAGES.avatar}
-              fallback={user.displayName?.[0] ?? "?"}
+              fallback={user.displayName?.[0] ?? '?'}
               alt="avatar"
             />
           </div>

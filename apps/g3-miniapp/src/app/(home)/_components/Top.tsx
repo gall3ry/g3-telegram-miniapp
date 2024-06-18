@@ -1,10 +1,10 @@
-"use client";
-import { Flex, Spinner } from "@radix-ui/themes";
-import Image from "next/image";
-import { memo } from "react";
-import { IMAGES } from "../../_constants/image";
-import { useIsAuthenticated } from "../../_providers/useAuth";
-import { CurrentPoint } from "../quests/CurrentPoint";
+'use client';
+import { IMAGES } from '@gall3ry/shared-constants';
+import { Flex, Spinner } from '@radix-ui/themes';
+import Image from 'next/image';
+import { memo } from 'react';
+import { useIsAuthenticated } from '../../_providers/useAuth';
+import { CurrentPoint } from '../quests/CurrentPoint';
 
 export const Top = memo(() => {
   const { isAuthenticated, isLoading } = useIsAuthenticated();
@@ -70,4 +70,4 @@ export const Top = memo(() => {
   );
 });
 
-Top.displayName = "Top";
+Top.displayName = 'Top';

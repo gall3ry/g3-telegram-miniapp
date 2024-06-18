@@ -40,10 +40,20 @@
       "@gall3ry/database-client": [
         "packages/shared/database-client/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-env": ["packages/g3-miniapp/env/src/index.ts"],
+      "@gall3ry/g3-miniapp-feature-home": [
+        "packages/g3-miniapp/feature-home/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-feature-home/server": [
+        "packages/g3-miniapp/feature-home/src/server.ts"
+      ],
+      "@gall3ry/g3-miniapp-server": ["packages/g3-miniapp/server/src/index.ts"],
       "@gall3ry/shared-constants": ["packages/shared/constants/src/index.ts"],
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
+      "@gall3ry/shared-schema": ["packages/shared/schema/src/index.ts"],
+      "@gall3ry/shared-ton-utils": ["packages/shared/ton-utils/src/index.ts"],
       "@gall3ry/telegram-bot-recommendation": [
         "packages/g3-worker/telegram-bot-recommendation/src/index.ts"
       ],

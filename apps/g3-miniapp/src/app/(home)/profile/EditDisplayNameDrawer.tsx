@@ -1,5 +1,6 @@
 'use client';
 import { cn } from '@g3-miniapp/utils';
+import { updateInputNameSchema } from '@gall3ry/shared-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Spinner, Text, TextField } from '@radix-ui/themes';
 import { useEffect } from 'react';
@@ -7,7 +8,6 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Drawer as VauleDrawer } from 'vaul';
 import { type z } from 'zod';
-import { updateInputNameSchema } from '../../../server/api/routers/auth/_shared/updateInputNameSchema';
 import { api } from '../../../trpc/react';
 import {
   DrawerContent,

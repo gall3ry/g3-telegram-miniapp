@@ -1,6 +1,6 @@
+import { IMAGES } from '@gall3ry/shared-constants';
 import { Spinner } from '@radix-ui/themes';
 import { api } from '../../trpc/react';
-import { IMAGES } from '../_constants/image';
 import { LeaderboardItem } from './LeaderboardItem';
 
 export const MyCurrentPosition = () => {
