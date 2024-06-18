@@ -6,12 +6,15 @@
   "tags": [],
   "// targets": "to see all targets run: nx show project g3-miniapp --web",
   "targets": {
-    "build": {},
+    "build": {
+      "dependsOn": ["^generate-types"]
+    },
     "dev": {
       "configurations": {
         "development": {},
         "staging": {}
       }
     }
-  }
+  },
+  "implicitDependencies": ["shared-database-schema"]
 }
