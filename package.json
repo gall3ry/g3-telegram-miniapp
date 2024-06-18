@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "serve": "nx serve",
+    "postinstall": "pnpm exec nx run-many --target=generate-types",
     "commit": "git-cz"
   },
   "private": true,
