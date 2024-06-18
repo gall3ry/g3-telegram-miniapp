@@ -1,10 +1,10 @@
 import { EnvService } from '@g3-worker/env';
 import { Injectable, Logger } from '@nestjs/common';
 import input from 'input';
+import groupBy from 'lodash.groupby';
+import mapValues from 'lodash.mapvalues';
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions';
-import groupBy = require('lodash.groupby');
-import mapValues = require('lodash.mapvalues');
 
 export interface Dictionary<T> {
   [index: string]: T;

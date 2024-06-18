@@ -67,7 +67,7 @@ jobs:
         run: pnpm nx build g3-worker
 
       - name: Deploy worker
-        run: flyctl deploy -c ./infra/fly.worker.toml
+        run: flyctl deploy -c ./infra/fly.worker.toml --local-only
 
   deploy-bot:
     name: Deploy bot
@@ -97,7 +97,7 @@ jobs:
         run: pnpm nx build g3-telegram-bot
 
       - name: Deploy app (bot)
-        run: flyctl deploy -c ./infra/fly.g3-telegram-bot.toml
+        run: flyctl deploy -c ./infra/fly.g3-telegram-bot.toml --local-only
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
