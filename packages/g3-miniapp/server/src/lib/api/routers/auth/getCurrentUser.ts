@@ -1,6 +1,6 @@
 import { Prisma } from '@gall3ry/database-client';
+import { ErrorMessage } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
-import { ErrorMessage } from '../../../../../../../shared/types/src/lib/ErrorMessage';
 import { db } from '../../../db';
 import { protectedProcedure } from '../../trpc';
 

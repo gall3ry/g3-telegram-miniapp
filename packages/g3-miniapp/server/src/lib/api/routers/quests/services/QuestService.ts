@@ -1,6 +1,5 @@
-import { type QuestId, mapQuestIdToTitle } from '@gall3ry/types';
+import { type QuestId, QuestStatus, mapQuestIdToTitle } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
-import { QuestStatus } from '../../../../../../../../shared/types/src/lib/QuestStatus';
 import PostHogClient, { Flag } from '../../../services/posthog';
 import { type IQuest } from './BaseQuest';
 import { BindWalletAddressTask } from './BindWalletAddressTask';
