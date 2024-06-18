@@ -1,0 +1,20 @@
+{
+  "name": "telegram-bot-recommendation",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-worker/telegram-bot-recommendation/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/g3-worker/telegram-bot-recommendation",
+        "tsConfig": "packages/g3-worker/telegram-bot-recommendation/tsconfig.lib.json",
+        "packageJson": "packages/g3-worker/telegram-bot-recommendation/package.json",
+        "main": "packages/g3-worker/telegram-bot-recommendation/src/index.ts",
+        "assets": ["packages/g3-worker/telegram-bot-recommendation/*.md"]
+      }
+    }
+  }
+}

@@ -44,6 +44,9 @@
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
+      "@gall3ry/telegram-bot-recommendation": [
+        "packages/g3-worker/telegram-bot-recommendation/src/index.ts"
+      ],
       "@gall3ry/types": ["packages/shared/types/src/index.ts"]
     }
   },
