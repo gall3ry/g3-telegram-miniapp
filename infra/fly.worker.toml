@@ -11,7 +11,7 @@ primary_region = 'hkg'
 dockerfile = "../apps/g3-worker/Dockerfile"
 
 [processes]
-worker = "node main.js"
+worker = "pnpm exec tsx main.js"
 
 [env]
 
