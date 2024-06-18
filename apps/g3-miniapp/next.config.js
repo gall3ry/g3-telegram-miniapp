@@ -12,10 +12,6 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  typescript: {
-    // TODO: vercel bugs that it tells error even if there is no error
-    ignoreBuildErrors: process.env.VERCEL ? true : false,
-  },
 };
 
 const plugins = [
