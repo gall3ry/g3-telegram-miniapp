@@ -56,6 +56,12 @@
       "options": {
         "buildTargetName": "build"
       }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
     }
   ],
   "nxCloudAccessToken": "OGVlNzQwNTUtODU1Mi00MTliLWIyYmQtODJlODAwYTI2ZjI3fHJlYWQtd3JpdGU=",

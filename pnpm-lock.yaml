@@ -94,7 +94,7 @@ dependencies:
     version: 4.6.0
   next:
     specifier: 14.2.3
-    version: 14.2.3(@babel/core@7.24.7)(react-dom@18.3.1)(react@18.3.1)
+    version: 14.2.3(@babel/core@7.24.7)(@playwright/test@1.44.1)(react-dom@18.3.1)(react@18.3.1)
   pino:
     specifier: ^9.2.0
     version: 9.2.0
@@ -151,6 +151,9 @@ devDependencies:
   '@nestjs/testing':
     specifier: ^10.3.9
     version: 10.3.9(@nestjs/common@10.3.9)(@nestjs/core@10.3.9)(@nestjs/platform-express@10.3.9)
+  '@nx/devkit':
+    specifier: 19.3.0
+    version: 19.3.0(nx@19.3.0)
   '@nx/esbuild':
     specifier: 19.3.0
     version: 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(esbuild@0.19.12)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1)
@@ -175,6 +178,9 @@ devDependencies:
   '@nx/node':
     specifier: 19.3.0
     version: 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(ts-node@10.9.1)(typescript@5.4.5)(verdaccio@5.31.1)
+  '@nx/playwright':
+    specifier: 19.3.0
+    version: 19.3.0(@playwright/test@1.44.1)(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1)
   '@nx/react':
     specifier: 19.3.0
     version: 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1)(webpack@5.92.0)
@@ -190,6 +196,9 @@ devDependencies:
   '@nx/workspace':
     specifier: 19.3.0
     version: 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)
+  '@playwright/test':
+    specifier: ^1.36.0
+    version: 1.44.1
   '@pmmmwh/react-refresh-webpack-plugin':
     specifier: ^0.5.7
     version: 0.5.15(react-refresh@0.10.0)(webpack@5.92.0)
@@ -265,6 +274,9 @@ devDependencies:
   eslint-plugin-jsx-a11y:
     specifier: 6.7.1
     version: 6.7.1(eslint@8.57.0)
+  eslint-plugin-playwright:
+    specifier: ^0.15.3
+    version: 0.15.3(eslint@8.57.0)
   eslint-plugin-react:
     specifier: 7.32.2
     version: 7.32.2(eslint@8.57.0)
@@ -4180,7 +4192,7 @@ packages:
       file-loader: 6.2.0(webpack@5.92.0)
       fs-extra: 11.2.0
       ignore: 5.3.1
-      next: 14.2.3(@babel/core@7.24.7)(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.3(@babel/core@7.24.7)(@playwright/test@1.44.1)(react-dom@18.3.1)(react@18.3.1)
       semver: 7.6.2
       tslib: 2.6.3
       webpack-merge: 5.10.0
@@ -4333,6 +4345,36 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@nx/playwright@19.3.0(@playwright/test@1.44.1)(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1):
+    resolution: {integrity: sha512-Q9/H848tSk8mudKhYiJOsOIDtdmak8/pSAI1sKw+UZguLCz+yFswohMv8pr0+cuQBywBe5fZY+lfzl0wxyvZdQ==}
+    peerDependencies:
+      '@playwright/test': ^1.36.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+    dependencies:
+      '@nx/devkit': 19.3.0(nx@19.3.0)
+      '@nx/eslint': 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(verdaccio@5.31.1)
+      '@nx/js': 19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1)
+      '@phenomnomnominal/tsquery': 5.0.1(typescript@5.4.5)
+      '@playwright/test': 1.44.1
+      minimatch: 9.0.3
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - '@zkochan/js-yaml'
+      - debug
+      - eslint
+      - nx
+      - supports-color
+      - typescript
+      - verdaccio
+    dev: true
 
   /@nx/react@19.3.0(@swc-node/register@1.9.2)(@swc/core@1.5.29)(@types/node@18.16.20)(eslint@8.57.0)(nx@19.3.0)(typescript@5.4.5)(verdaccio@5.31.1)(webpack@5.92.0):
     resolution: {integrity: sha512-kT0kOp5JjTqPxiBHjIi2LhI4gxPRghC9iitMsG3orD847KG2cP+ONRJWcq9e5lJFgeppiTr7EP3fg/Q5b2ZS1g==}
@@ -4548,6 +4590,13 @@ packages:
     engines: {node: '>=14'}
     requiresBuild: true
     optional: true
+
+  /@playwright/test@1.44.1:
+    resolution: {integrity: sha512-1hZ4TNvD5z9VuhNJ/walIjvMVvYkZKf71axoF/uiAqpntQJXpG64dlXhoDXE3OczPuTuvjf/M5KWFg5VAVUS3Q==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      playwright: 1.44.1
 
   /@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.10.0)(webpack@5.92.0):
     resolution: {integrity: sha512-LFWllMA55pzB9D34w/wXUCf8+c+IYKuJDgxiZ3qMhl64KRMBHYM1I3VdGaD2BV5FNPV2/S2596bppxHbv2ZydQ==}
@@ -9974,6 +10023,18 @@ packages:
       semver: 6.3.1
     dev: true
 
+  /eslint-plugin-playwright@0.15.3(eslint@8.57.0):
+    resolution: {integrity: sha512-LQMW5y0DLK5Fnpya7JR1oAYL2/7Y9wDiYw6VZqlKqcRGSgjbVKNqxraphk7ra1U3Bb5EK444xMgUlQPbMg2M1g==}
+    peerDependencies:
+      eslint: '>=7'
+      eslint-plugin-jest: '>=25'
+    peerDependenciesMeta:
+      eslint-plugin-jest:
+        optional: true
+    dependencies:
+      eslint: 8.57.0
+    dev: true
+
   /eslint-plugin-react-hooks@4.6.0(eslint@8.57.0):
     resolution: {integrity: sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==}
     engines: {node: '>=10'}
@@ -11027,7 +11088,6 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /fsevents@2.3.3:
@@ -14160,7 +14220,7 @@ packages:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: false
 
-  /next@14.2.3(@babel/core@7.24.7)(react-dom@18.3.1)(react@18.3.1):
+  /next@14.2.3(@babel/core@7.24.7)(@playwright/test@1.44.1)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-dowFkFTR8v79NPJO4QsBUtxv0g9BrS/phluVpMAt2ku7H+cbcBJlopXjkWlwxrk/xGqMemr7JkGPGemPrLLX7A==}
     engines: {node: '>=18.17.0'}
     hasBin: true
@@ -14179,6 +14239,7 @@ packages:
         optional: true
     dependencies:
       '@next/env': 14.2.3
+      '@playwright/test': 1.44.1
       '@swc/helpers': 0.5.5
       busboy: 1.6.0
       caniuse-lite: 1.0.30001634
@@ -15084,7 +15145,6 @@ packages:
     resolution: {integrity: sha512-wh0JWtYTrhv1+OSsLPgFzGzt67Y7BE/ZS3jEqgGBlp2ppp1ZDj8c+9IARNW4dwf1poq5MgHreEM2KV/GuR4cFA==}
     engines: {node: '>=16'}
     hasBin: true
-    dev: false
 
   /playwright@1.44.1:
     resolution: {integrity: sha512-qr/0UJ5CFAtloI3avF95Y0L1xQo6r3LQArLIg/z/PoGJ6xa+EwzrwO5lpNr/09STxdHuUoP2mvuELJS+hLdtgg==}
@@ -15094,7 +15154,6 @@ packages:
       playwright-core: 1.44.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
 
   /plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}

@@ -1,0 +1,9 @@
+{
+  "name": "g3-miniapp-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/g3-miniapp-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["g3-miniapp"],
+  "// targets": "to see all targets run: nx show project g3-miniapp-e2e --web",
+  "targets": {}
+}
