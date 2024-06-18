@@ -37,6 +37,9 @@ export const IMAGES = {
     icon_level_1: '/images/create/icon-level-1.png',
     ton_logo: '/images/create/ton-logo.png',
   },
+  home: {
+    home_bg: '/images/home/home-bg.png',
+  },
 
   balance_bg: '/images/balance_bg.png',
   avatar: '/images/avatar.png',
