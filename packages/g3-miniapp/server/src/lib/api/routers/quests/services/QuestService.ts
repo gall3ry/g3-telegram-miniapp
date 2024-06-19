@@ -1,5 +1,6 @@
 import { type QuestId, QuestStatus, mapQuestIdToTitle } from '@gall3ry/types';
 import { TRPCError } from '@trpc/server';
+import { db } from '../../../../db';
 import PostHogClient, { Flag } from '../../../services/posthog';
 import { type IQuest } from './BaseQuest';
 import { BindWalletAddressTask } from './BindWalletAddressTask';
@@ -122,6 +123,21 @@ export class QuestService {
       });
     }
 
+    if (task.isRequireWalletConnection && !this._hasWalletConnection(userId)) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Wallet connection required',
+      });
+    }
+
     await task.completeQuestOrThrow({ userId });
+  }
+
+  private async _hasWalletConnection(userId: number) {
+    const provider = await db.provider.findFirst({
+      where: { id: userId, type: 'TON_WALLET' },
+    });
+
+    return !!provider;
   }
 }
