@@ -1,26 +1,10 @@
-"use client";
-import { useIsConnectionRestored } from "@tonconnect/ui-react";
-import { useEffect, useState } from "react";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { api } from "../../trpc/react";
+'use client';
+import { useAuth } from '@gall3ry/g3-miniapp-global-store';
+import { useIsConnectionRestored } from '@tonconnect/ui-react';
+import { useEffect, useState } from 'react';
+import { api } from '../../trpc/react';
 
-export const useAuth = create<{
-  accessToken: string | null;
-  setAccessToken: (accessToken: string | null) => void;
-  reset: () => void;
-}>()(
-  persist(
-    (set) => ({
-      accessToken: null,
-      setAccessToken: (accessToken) => set({ accessToken }),
-      reset: () => set({ accessToken: null }),
-    }),
-    {
-      name: "miniapp-auth",
-    },
-  ),
-);
+export { useAuth } from '@gall3ry/g3-miniapp-global-store';
 
 export const useAuthHydrated = () => {
   const [isHydrated, setHydrated] = useState(false);
@@ -31,7 +15,7 @@ export const useAuthHydrated = () => {
     const unsubHydrate = useAuth.persist.onHydrate(() => setHydrated(false));
 
     const unsubFinishHydration = useAuth.persist.onFinishHydration(() =>
-      setHydrated(true),
+      setHydrated(true)
     );
 
     setHydrated(useAuth.persist.hasHydrated());

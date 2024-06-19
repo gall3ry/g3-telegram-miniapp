@@ -28,6 +28,14 @@ services:
     networks:
       - g3_network
 
+  redis:
+    image: redis
+    ports:
+      - 6380:6379
+    restart: always
+    networks:
+      - g3_network
+
 networks:
   g3_network:
     driver: bridge

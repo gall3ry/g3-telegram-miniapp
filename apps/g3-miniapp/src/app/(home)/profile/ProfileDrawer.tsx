@@ -1,9 +1,13 @@
-"use client";
-import { Button } from "@radix-ui/themes";
-import { Drawer, DrawerContent, DrawerFooter } from "../_components/Drawer";
-import { EditDisplayNameDrawer } from "./EditDisplayNameDrawer";
-import { IconEdit } from "./_icon/IconEdit";
-import { useEditQueryState } from "./useEditQueryState";
+'use client';
+import { Button } from '@radix-ui/themes';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+} from '../../../../../../packages/g3-miniapp/ui/src/lib/Drawer';
+import { EditDisplayNameDrawer } from './EditDisplayNameDrawer';
+import { IconEdit } from './_icon/IconEdit';
+import { useEditQueryState } from './useEditQueryState';
 
 export const ProfileDrawer = () => {
   const {
@@ -16,7 +20,7 @@ export const ProfileDrawer = () => {
   const items = [
     {
       icon: <IconEdit className="size-8" />,
-      title: "Edit user name",
+      title: 'Edit user name',
       onClick: () => {
         void setEditDisplayNameOpen(true);
       },

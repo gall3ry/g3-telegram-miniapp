@@ -3,8 +3,8 @@ import { Button, Flex } from '@radix-ui/themes';
 import { useTonConnectModal } from '@tonconnect/ui-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { IconLogin } from '../../../../../../../packages/g3-miniapp/icons/src/lib/IconLogin';
 import { useIsAuthenticated } from '../../../_providers/useAuth';
-import { IconLogin } from '../../_icons/IconLogin';
 import { LoggedButton } from './LoggedButton';
 
 export const Header = () => {

@@ -9,8 +9,8 @@ export const ResetAccount = () => {
   return (
     <Button
       variant="surface"
-      mt="2"
       size="3"
+      className="w-full my-2"
       color="red"
       onClick={() => {
         toast.promise(resetAccount(), {

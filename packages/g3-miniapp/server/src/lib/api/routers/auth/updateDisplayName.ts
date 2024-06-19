@@ -28,8 +28,6 @@ export const updateDisplayName = protectedProcedure
 
       let avatarUrl: string | null = null;
 
-      console.log(_user);
-
       const shouldUpdateAvatar =
         telegramId &&
         (_user.telegramId === null ||
@@ -59,8 +57,6 @@ export const updateDisplayName = protectedProcedure
         telegramId: telegramId?.toString(),
         avatarUrl: avatarUrl ?? undefined,
       } satisfies Prisma.UserUpdateInput;
-
-      console.log({ toUpdate });
 
       if (!telegramId) delete toUpdate.telegramId;
       if (!displayName) delete toUpdate.displayName;

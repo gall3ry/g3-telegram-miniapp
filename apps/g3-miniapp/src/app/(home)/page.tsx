@@ -1,19 +1,10 @@
-import { Top } from './_components/Top';
-import { Leaderboard } from './Leaderboard';
-import { MyCurrentPosition } from './MyCurrentPosition';
+import { Home } from '@gall3ry/g3-miniapp-feature-home';
+import { Suspense } from 'react';
 
-export default function Home() {
+export default function Wrapper() {
   return (
-    <div>
-      <Top />
-
-      <MyCurrentPosition />
-
-      <div className="mt-4">
-        <Leaderboard />
-      </div>
-
-      {/* <MintOCC /> */}
-    </div>
+    <Suspense>
+      <Home />
+    </Suspense>
   );
 }

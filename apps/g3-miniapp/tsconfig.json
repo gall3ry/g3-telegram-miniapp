@@ -27,7 +27,9 @@
     "../../apps/g3-miniapp/.next/types/**/*.ts",
     "../../dist/apps/g3-miniapp/.next/types/**/*.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/g3-miniapp/feature-create/src/lib/Option.tsx",
+    "../../packages/g3-miniapp/feature-create/src/lib/SelectedAssets.tsx"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

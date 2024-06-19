@@ -8,6 +8,10 @@ export const envSchema = z.object({
   TELEGRAM_STRING_SESSION: z.string(),
   DATABASE_URL: z.string(),
   FRONTEND_URL: z.string().url().default('https://staging.miniapp.gall3ry.io'),
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number(),
+  REDIS_USERNAME: z.string().optional(),
+  REDIS_PASSWORD: z.string().optional(),
 });
 
 type Env = z.infer<typeof envSchema>;

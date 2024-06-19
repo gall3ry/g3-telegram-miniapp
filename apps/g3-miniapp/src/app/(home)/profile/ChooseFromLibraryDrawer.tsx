@@ -5,7 +5,10 @@ import { Button, IconButton, Slider, Spinner } from '@radix-ui/themes';
 import { useMemo, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import { Drawer as VauleDrawer } from 'vaul';
-import { DrawerContent, DrawerFooter } from '../_components/Drawer';
+import {
+  DrawerContent,
+  DrawerFooter,
+} from '../../../../../../packages/g3-miniapp/ui/src/lib/Drawer';
 import styles from './ChooseFromLibraryDrawer.module.scss';
 import { IconLeftArrow } from './_icon/IconLeftArrow';
 import { IconX } from './_icon/IconX';

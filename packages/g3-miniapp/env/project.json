@@ -6,12 +6,13 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/g3-miniapp/env",
         "main": "packages/g3-miniapp/env/src/index.ts",
         "tsConfig": "packages/g3-miniapp/env/tsconfig.lib.json",
+        "format": ["esm", "cjs"],
         "assets": []
       }
     }

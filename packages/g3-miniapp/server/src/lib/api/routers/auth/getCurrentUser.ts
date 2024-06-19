@@ -22,7 +22,6 @@ class GetCurrentUserService {
   } satisfies Prisma.UserSelect;
 }
 
-
 export const getCurrentUser = protectedProcedure.query(
   async ({ ctx: { session, headers } }) => {
     const userId = session.userId;
@@ -51,7 +50,7 @@ export const getCurrentUser = protectedProcedure.query(
     if (!user.countryCode) {
       // Currently we use Vercel as our serverless provider for Frontend
       // https://vercel.com/guides/geo-ip-headers-geolocation-vercel-functions
-      const countryCode = headers['x-vercel-ip-country'] as string;
+      const countryCode = headers.get('x-vercel-ip-country');
       // countryCode = 'VN';
       console.log('countryCode', countryCode);
       if (countryCode) {

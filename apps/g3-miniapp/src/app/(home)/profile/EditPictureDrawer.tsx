@@ -1,11 +1,14 @@
-"use client";
-import { Button } from "@radix-ui/themes";
-import { useMemo, useState } from "react";
-import { Drawer as VauleDrawer } from "vaul";
-import { DrawerContent, DrawerFooter } from "../_components/Drawer";
-import { ChooseFromLibraryDrawer } from "./ChooseFromLibraryDrawer";
-import { IconPicture } from "./_icon/IconPicture";
-import { useEditQueryState } from "./useEditQueryState";
+'use client';
+import { Button } from '@radix-ui/themes';
+import { useMemo, useState } from 'react';
+import { Drawer as VauleDrawer } from 'vaul';
+import {
+  DrawerContent,
+  DrawerFooter,
+} from '../../../../../../packages/g3-miniapp/ui/src/lib/Drawer';
+import { ChooseFromLibraryDrawer } from './ChooseFromLibraryDrawer';
+import { IconPicture } from './_icon/IconPicture';
+import { useEditQueryState } from './useEditQueryState';
 
 export const EditPictureDrawer = () => {
   const { editPictureList, setEditPictureList, setChooseFromLibrary } =
@@ -15,13 +18,13 @@ export const EditPictureDrawer = () => {
   const items = useMemo(
     () => [
       {
-        title: "Choose from library",
+        title: 'Choose from library',
         icon: <IconPicture className="size-8" />,
         onClick: () => {
           // ask the user to choose a picture from the library
-          const input = document.createElement("input");
-          input.type = "file";
-          input.accept = "image/*";
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = 'image/*';
           input.click();
 
           input.onchange = (e) => {
@@ -36,7 +39,7 @@ export const EditPictureDrawer = () => {
         },
       },
     ],
-    [setChooseFromLibrary],
+    [setChooseFromLibrary]
   );
 
   return (

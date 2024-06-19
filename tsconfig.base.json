@@ -40,14 +40,53 @@
       "@gall3ry/database-client": [
         "packages/shared/database-client/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-authentication": [
+        "packages/g3-miniapp/authentication/src/index.ts"
+      ],
       "@gall3ry/g3-miniapp-env": ["packages/g3-miniapp/env/src/index.ts"],
+      "@gall3ry/g3-miniapp-feature-create": [
+        "packages/g3-miniapp/feature-create/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-feature-create/server": [
+        "packages/g3-miniapp/feature-create/src/server.ts"
+      ],
       "@gall3ry/g3-miniapp-feature-home": [
         "packages/g3-miniapp/feature-home/src/index.ts"
       ],
       "@gall3ry/g3-miniapp-feature-home/server": [
         "packages/g3-miniapp/feature-home/src/server.ts"
       ],
+      "@gall3ry/g3-miniapp-global-store": [
+        "packages/g3-miniapp/global-store/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-icon": ["packages/g3-miniapp/icons/src/index.ts"],
+      "@gall3ry/g3-miniapp-icon/server": [
+        "packages/g3-miniapp/icons/src/server.ts"
+      ],
       "@gall3ry/g3-miniapp-server": ["packages/g3-miniapp/server/src/index.ts"],
+      "@gall3ry/g3-miniapp-sticker-templates": [
+        "packages/g3-miniapp/sticker-templates/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-sticker-templates/server": [
+        "packages/g3-miniapp/sticker-templates/src/server.ts"
+      ],
+      "@gall3ry/g3-miniapp-telegram-miniapp-utils": [
+        "packages/g3-miniapp/telegram-miniapp-utils/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-telegram-miniapp-utils/server": [
+        "packages/g3-miniapp/telegram-miniapp-utils/src/server.ts"
+      ],
+      "@gall3ry/g3-miniapp-trpc-client": [
+        "packages/g3-miniapp/trpc-client/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-trpc-client/server": [
+        "packages/g3-miniapp/trpc-client/src/server.ts"
+      ],
+      "@gall3ry/g3-miniapp-ui": ["packages/g3-miniapp/ui/src/index.ts"],
+      "@gall3ry/g3-miniapp-ui/server": ["packages/g3-miniapp/ui/src/server.ts"],
+      "@gall3ry/g3-worker-occ-minting": [
+        "packages/g3-worker/occ-minting/src/index.ts"
+      ],
       "@gall3ry/sample-module": [
         "packages/g3-worker/sample-module/src/index.ts"
       ],

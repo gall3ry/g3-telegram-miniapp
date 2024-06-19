@@ -36,10 +36,8 @@ const Page = () => {
         refetchOnWindowFocus: true,
       }
     );
-
   const [parent] = useAutoAnimate();
   const [parent2] = useAutoAnimate();
-
   const utils = api.useUtils();
   const { mutateAsync: completeTask } = api.quests.completeTask.useMutation({
     onSuccess: async () => {
@@ -79,6 +77,41 @@ const Page = () => {
                   const a = document.createElement('a');
                   // Telegram
                   a.href = `tg://resolve?domain=${chatId}`;
+                  a.click();
+
+                  return;
+                }
+
+                void toast.promise(completeTask({ taskId: item.id }), {
+                  loading: 'Completing task...',
+                  success: 'Task completed!',
+                  error: (error) => {
+                    if (error instanceof TRPCClientError) {
+                      return error.message;
+                    }
+                    return 'An error occurred';
+                  },
+                });
+              }}
+              isCompleted={item.isClaimed}
+            />
+          );
+        }
+
+        case QuestId.MINT_GM_EPIC_QUEST: {
+          return (
+            <QuestItem
+              key={item.id}
+              title={item.title}
+              description={item.description}
+              points={item.points}
+              text={item.text}
+              isClaimable={!item.isClaimed && item.isFinishedQuest}
+              disabled={item.isClaimed}
+              onClick={async () => {
+                if (!item.isFinishedQuest) {
+                  const a = document.createElement('a');
+                  a.href = '/create';
                   a.click();
 
                   return;
@@ -154,8 +187,7 @@ const Page = () => {
         </div>
 
         <Spinner loading={!isCompletedQuestsSuccess} size="3" className="mt-8">
-          {isCompletedQuestsSuccess &&
-            completedQuests.map((item) => renderItem(item))}
+          {isCompletedQuestsSuccess && completedQuests.map(renderItem)}
         </Spinner>
       </div>
     </div>

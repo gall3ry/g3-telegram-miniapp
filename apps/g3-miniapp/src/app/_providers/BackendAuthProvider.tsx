@@ -1,9 +1,9 @@
 'use client';
+import { useUser } from '@gall3ry/g3-miniapp-authentication';
 import { useQuery } from '@tanstack/react-query';
 import { useInitData } from '@tma.js/sdk-react';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useEffect } from 'react';
-import { useUser } from '../(home)/useUser';
 import { api, type RouterInputs } from '../../trpc/react';
 import { useAuth, useAuthHydrated, useIsAuthenticated } from './useAuth';
 

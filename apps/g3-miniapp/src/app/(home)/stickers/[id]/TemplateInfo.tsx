@@ -1,15 +1,15 @@
-"use client";
-import { useParams } from "next/navigation";
-import { parseAsBoolean, useQueryState } from "nuqs";
-import { z } from "zod";
-import { api } from "../../../../trpc/react";
-import { mapStickerTypeToTemplateComponent } from "../../_components/_templates";
-import styles from "./TemplateInfo.module.scss";
+'use client';
+import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-templates';
+import { useParams } from 'next/navigation';
+import { parseAsBoolean, useQueryState } from 'nuqs';
+import { z } from 'zod';
+import { api } from '../../../../trpc/react';
+import styles from './TemplateInfo.module.scss';
 
 export const TemplateInfo = () => {
   const [shouldRecord] = useQueryState(
-    "record",
-    parseAsBoolean.withDefault(false),
+    'record',
+    parseAsBoolean.withDefault(false)
   );
   const _params = useParams<{ id: string }>();
   const id = z.coerce.number().finite().parse(_params.id);
@@ -19,7 +19,7 @@ export const TemplateInfo = () => {
     },
     {
       enabled: isFinite(id),
-    },
+    }
   );
 
   return (

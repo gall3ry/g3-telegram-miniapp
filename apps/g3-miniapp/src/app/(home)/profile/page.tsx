@@ -1,15 +1,19 @@
 'use client';
 import { formatTonAddress } from '@g3-miniapp/utils';
+import { useUser } from '@gall3ry/g3-miniapp-authentication';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { Avatar, Button, IconButton, Skeleton } from '@radix-ui/themes';
 import { toUserFriendlyAddress } from '@tonconnect/sdk';
 import { memo, useMemo, useState } from 'react';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+} from '../../../../../../packages/g3-miniapp/ui/src/lib/Drawer';
 import { env } from '../../../env';
 import { api } from '../../../trpc/react';
-import { Drawer, DrawerContent, DrawerFooter } from '../_components/Drawer';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
 import { CurrentPoint } from '../quests/CurrentPoint';
-import { useUser } from '../useUser';
 import { IconMore } from './IconMore';
 import { IconSignOut } from './IconSignOut';
 import { ProfileDrawer } from './ProfileDrawer';
@@ -110,8 +114,6 @@ const Page = () => {
         ))}
       </div>
 
-      {env.NEXT_PUBLIC_G3_ENV !== 'production' && <ResetAccount />}
-
       <div className="flex-1"></div>
 
       <ProfileDrawer />
@@ -122,6 +124,8 @@ const Page = () => {
       />
 
       <div className="mt-4">
+        {env.NEXT_PUBLIC_G3_ENV !== 'production' && <ResetAccount />}
+
         <Button
           onClick={() => {
             setSignOutDrawerOpen(true);

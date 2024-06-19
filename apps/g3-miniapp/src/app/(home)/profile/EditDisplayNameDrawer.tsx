@@ -1,5 +1,6 @@
 'use client';
 import { cn } from '@g3-miniapp/utils';
+import { useUser } from '@gall3ry/g3-miniapp-authentication';
 import { updateInputNameSchema } from '@gall3ry/shared-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Spinner, Text, TextField } from '@radix-ui/themes';
@@ -8,13 +9,12 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Drawer as VauleDrawer } from 'vaul';
 import { type z } from 'zod';
-import { api } from '../../../trpc/react';
 import {
   DrawerContent,
   DrawerFooter,
   DrawerTitle,
-} from '../_components/Drawer';
-import { useUser } from '../useUser';
+} from '../../../../../../packages/g3-miniapp/ui/src/lib/Drawer';
+import { api } from '../../../trpc/react';
 import { useEditQueryState } from './useEditQueryState';
 
 export const EditDisplayNameDrawer = () => {

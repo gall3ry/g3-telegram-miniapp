@@ -1,0 +1,20 @@
+{
+  "name": "g3-worker-occ-minting",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-worker/occ-minting/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/g3-worker/occ-minting",
+        "tsConfig": "packages/g3-worker/occ-minting/tsconfig.lib.json",
+        "packageJson": "packages/g3-worker/occ-minting/package.json",
+        "main": "packages/g3-worker/occ-minting/src/index.ts",
+        "assets": ["packages/g3-worker/occ-minting/*.md"]
+      }
+    }
+  }
+}

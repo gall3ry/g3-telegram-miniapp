@@ -1,11 +1,11 @@
 'use client';
+import { useUser } from '@gall3ry/g3-miniapp-authentication';
+import { IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { IconButton, Spinner } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
 import { useIsAuthenticated } from '../../_providers/useAuth';
-import { IconPoints } from '../_icons/IconPoints';
-import { useUser } from '../useUser';
 import { IconTime } from './IconTime';
 
 export const CurrentPoint = memo(() => {

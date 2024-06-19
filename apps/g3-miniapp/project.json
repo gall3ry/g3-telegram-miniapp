@@ -9,7 +9,9 @@
     "build": {
       "dependsOn": ["^generate-types"]
     },
-    "dev": {
+    "serve": {
+      "executor": "@nx/next:server",
+      "options": { "buildTarget": "g3-miniapp:build", "port": 3000 },
       "configurations": {
         "development": {},
         "staging": {}

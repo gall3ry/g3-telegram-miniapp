@@ -1,8 +1,8 @@
 import { cn } from '@g3-miniapp/utils';
+import { IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { Button } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { IconPoints } from '../_icons/IconPoints';
 import { IconCheck } from './_icon/IconCheck';
 
 type QuestItemProps = {
@@ -33,7 +33,11 @@ export const QuestItem = ({
       return (
         <Button
           size="2"
-          onClick={onClick}
+          onClick={(e) => {
+            e.preventDefault();
+
+            onClick?.();
+          }}
           disabled={disabled}
           className="bg-white"
         >

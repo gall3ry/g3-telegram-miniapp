@@ -1,4 +1,5 @@
 'use client';
+import { IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { Avatar, DropdownMenu } from '@radix-ui/themes';
 import Link from 'next/link';
@@ -6,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { usePostHog } from 'posthog-js/react';
 import { api } from '../../../../trpc/react';
 import { useIsAuthenticated } from '../../../_providers/useAuth';
-import { IconPoints } from '../../_icons/IconPoints';
 
 function UserMenu() {
   const { isAuthenticated } = useIsAuthenticated();
