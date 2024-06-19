@@ -1,16 +1,21 @@
 'use client';
 import { Button } from '@radix-ui/themes';
+import { useInitData } from '@tma.js/sdk-react';
 import { memo } from 'react';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { z } from 'zod';
 import { api } from '../../../trpc/react';
 import { IconTelegram } from '../_icons/IconTelegram';
+import { useWebAppSwitchInlineQuery } from '../create/useWebAppSwitchInlineQuery';
 import { mapStickerTypeToTemplateComponent } from './_templates';
 
 export const TopSwiper = memo(() => {
   const { data } = api.sticker.getTopStickers.useQuery({
     limit: 10,
   });
+  const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
+  const initData = useInitData(true);
   const items = data?.items;
 
   return (
@@ -40,7 +45,24 @@ export const TopSwiper = memo(() => {
             </div>
 
             <div className="mt-3">
-              <Button size="4" className="w-full">
+              <Button
+                size="4"
+                className="w-full"
+                onClick={() => {
+                  const { telegramUserId } = z
+                    .object({
+                      telegramUserId: z.coerce.number(),
+                    })
+                    .parse({
+                      telegramUserId: initData?.user?.id,
+                    });
+
+                  postSwitchInlineQuery({
+                    query: `${item.id} ${telegramUserId}`,
+                    chatTypes: ['channels', 'groups', 'users'],
+                  });
+                }}
+              >
                 <div className="size-5">
                   <IconTelegram />
                 </div>

@@ -7,6 +7,7 @@ import { memo, useMemo, useState } from 'react';
 import { api } from '../../../trpc/react';
 import { Drawer, DrawerContent, DrawerFooter } from '../_components/Drawer';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
+import { CurrentPoint } from '../quests/CurrentPoint';
 import { useUser } from '../useUser';
 import { IconMore } from './IconMore';
 import { IconSignOut } from './IconSignOut';
@@ -43,41 +44,45 @@ const Page = () => {
 
   return (
     <>
-      <div className="flex h-[92px] items-center justify-between gap-4 rounded-xl bg-[#F0FFF5] p-4">
-        <div className="flex items-center gap-4">
-          {user?.displayName && (
-            <Avatar
-              fallback={user.displayName[0] ?? ''}
-              className="h-[60px] w-[60px] rounded-xl"
-              // src={user?.avatarUrl ?? ""}
-              src={IMAGES.avatar}
-              alt=""
-            />
-          )}
+      <div className="rounded-xl bg-[#F0FFF5] p-4">
+        <div className="flex h-[92px] items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            {user?.displayName && (
+              <Avatar
+                fallback={user.displayName[0] ?? ''}
+                className="h-[60px] w-[60px] rounded-xl"
+                // src={user?.avatarUrl ?? ""}
+                src={IMAGES.avatar}
+                alt=""
+              />
+            )}
 
-          <div>
-            <div className="text-2xl font-bold text-[#171B36]">
-              {user?.displayName ?? 'Loading...'}
-            </div>
-
-            <Skeleton loading={!tonProvider}>
-              <div className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-[#717D00]">
-                {tonProvider?.value &&
-                  formatTonAddress(toUserFriendlyAddress(tonProvider.value))}
+            <div>
+              <div className="text-2xl font-bold text-[#171B36]">
+                {user?.displayName ?? 'Loading...'}
               </div>
-            </Skeleton>
+
+              <Skeleton loading={!tonProvider}>
+                <div className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-[#717D00]">
+                  {tonProvider?.value &&
+                    formatTonAddress(toUserFriendlyAddress(tonProvider.value))}
+                </div>
+              </Skeleton>
+            </div>
           </div>
+
+          <IconButton
+            className="size-8"
+            variant="ghost"
+            onClick={() => {
+              void setEditProfileOpen(true);
+            }}
+          >
+            <IconMore />
+          </IconButton>
         </div>
 
-        <IconButton
-          className="size-8"
-          variant="ghost"
-          onClick={() => {
-            void setEditProfileOpen(true);
-          }}
-        >
-          <IconMore />
-        </IconButton>
+        <CurrentPoint />
       </div>
 
       <div className="mt-5">
