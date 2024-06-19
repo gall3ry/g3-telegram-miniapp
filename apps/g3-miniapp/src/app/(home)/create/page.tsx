@@ -34,7 +34,7 @@ const Page = () => {
             return (
               <div
                 className={cn(
-                  'relative flex h-[106px] w-20 cursor-pointer flex-col items-center rounded-xl bg-green-400 p-1',
+                  'relative flex h-[106px] w-20 cursor-pointer flex-col items-center rounded-xl bg-[#22F573] p-1',
                   {
                     'cursor-not-allowed border border-slate-300 bg-gray-200':
                       isDisabled,

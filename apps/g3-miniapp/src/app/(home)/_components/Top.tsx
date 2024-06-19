@@ -1,11 +1,9 @@
-'use client';
 import { IMAGES } from '@gall3ry/shared-constants';
 import Image from 'next/image';
-import { memo } from 'react';
 import { IconPoints } from '../_icons/IconPoints';
 import { TopSwiper } from './TopSwiper';
 
-export const Top = memo(() => {
+export const Top = () => {
   return (
     <div>
       <section className="relative">
@@ -124,6 +122,6 @@ export const Top = memo(() => {
       </div>
     </div>
   );
-});
+};
 
 Top.displayName = 'Top';

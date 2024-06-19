@@ -1,11 +1,11 @@
-"use client";
-import { useQuery } from "@tanstack/react-query";
-import { useInitData } from "@tma.js/sdk-react";
-import { useTonConnectUI } from "@tonconnect/ui-react";
-import { useEffect } from "react";
-import { useUser } from "../(home)/useUser";
-import { api, type RouterInputs } from "../../trpc/react";
-import { useAuth, useAuthHydrated, useIsAuthenticated } from "./useAuth";
+'use client';
+import { useQuery } from '@tanstack/react-query';
+import { useInitData } from '@tma.js/sdk-react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useEffect } from 'react';
+import { useUser } from '../(home)/useUser';
+import { api, type RouterInputs } from '../../trpc/react';
+import { useAuth, useAuthHydrated, useIsAuthenticated } from './useAuth';
 
 const payloadTTLMS = 1000 * 60 * 9; // 9 minutes
 
@@ -24,7 +24,7 @@ export const BackendAuthProvider = ({
     {
       refetchOnWindowFocus: false,
       enabled: false,
-    },
+    }
   );
   const { data, isSuccess } = useUser();
   const { isAuthenticated, isLoading } = useIsAuthenticated();
@@ -48,13 +48,13 @@ export const BackendAuthProvider = ({
   useEffect(() => {
     if (isSuccess && initData) {
       if (!initData?.user?.username) {
-        throw new Error("Username is missing");
+        throw new Error('Username is missing');
       }
 
       const _data = {
         displayName: initData.user.username,
         telegramId: initData.user.id,
-      } satisfies RouterInputs["auth"]["updateDisplayName"] as RouterInputs["auth"]["updateDisplayName"];
+      } satisfies RouterInputs['auth']['updateDisplayName'] as RouterInputs['auth']['updateDisplayName'];
 
       if (data.displayName) {
         delete _data.displayName;
@@ -68,22 +68,22 @@ export const BackendAuthProvider = ({
   // Fetch proof payload
   useQuery({
     queryKey: [
-      "custom",
-      "recreateProofPayload",
+      'custom',
+      'recreateProofPayload',
       {
         isHydrated,
       },
     ],
     queryFn: async () => {
-      tonConnectUI.setConnectRequestParameters({ state: "loading" });
+      tonConnectUI.setConnectRequestParameters({ state: 'loading' });
       const { data } = await fetchPayload();
       if (!data) {
-        throw new Error("Payload is missing");
+        throw new Error('Payload is missing');
       }
 
       if (data) {
         tonConnectUI.setConnectRequestParameters({
-          state: "ready",
+          state: 'ready',
           value: {
             tonProof: data.tonProof,
           },
@@ -100,49 +100,49 @@ export const BackendAuthProvider = ({
 
   // On login success, check proof and set access token
   useEffect(() => {
-    if (!tonConnectUI || !isHydrated) {
-      // check setAccessToken is to make sure store is initialized
-      return;
-    }
+    if (tonConnectUI && isHydrated) {
+      const unsubscribeModal = tonConnectUI.onStatusChange(async (w) => {
+        if (!w) {
+          reset();
+          void utils.invalidate();
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    tonConnectUI.onStatusChange(async (w) => {
-      if (!w) {
-        reset();
-        void utils.invalidate();
-
-        return;
-      }
-
-      let _accessToken = accessToken;
-
-      if (w.connectItems?.tonProof && "proof" in w.connectItems.tonProof) {
-        if (!w.account.publicKey) {
-          throw new Error("Public key is missing");
+          return;
         }
 
-        const { token } = await checkProof({
-          address: w.account.address,
-          network: w.account.chain,
-          public_key: w.account.publicKey,
-          proof: {
-            ...w.connectItems.tonProof.proof,
-            state_init: w.account.walletStateInit,
-          },
-        });
+        let _accessToken = accessToken;
 
-        _accessToken = token;
-        setAccessToken(_accessToken);
-        void utils.invalidate();
-      }
+        if (w.connectItems?.tonProof && 'proof' in w.connectItems.tonProof) {
+          if (!w.account.publicKey) {
+            throw new Error('Public key is missing');
+          }
 
-      if (!_accessToken) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        tonConnectUI.disconnect();
-        void utils.invalidate();
-        return;
-      }
-    });
+          const { token } = await checkProof({
+            address: w.account.address,
+            network: w.account.chain,
+            public_key: w.account.publicKey,
+            proof: {
+              ...w.connectItems.tonProof.proof,
+              state_init: w.account.walletStateInit,
+            },
+          });
+
+          _accessToken = token;
+          setAccessToken(_accessToken);
+          void utils.invalidate();
+        }
+
+        if (!_accessToken) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          tonConnectUI.disconnect();
+          void utils.invalidate();
+          return;
+        }
+      });
+
+      return () => {
+        unsubscribeModal();
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tonConnectUI, isHydrated]);
 

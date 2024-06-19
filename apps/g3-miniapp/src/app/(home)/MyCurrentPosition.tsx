@@ -1,11 +1,20 @@
+'use client';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { Spinner } from '@radix-ui/themes';
 import { api } from '../../trpc/react';
+import { useIsAuthenticated } from '../_providers/useAuth';
 import { LeaderboardItem } from './LeaderboardItem';
 
 export const MyCurrentPosition = () => {
+  const { isAuthenticated } = useIsAuthenticated();
   const { data, isPending, isSuccess } =
-    api.occ.getMyCurrentLeaderboardPosition.useQuery();
+    api.occ.getMyCurrentLeaderboardPosition.useQuery(undefined, {
+      enabled: isAuthenticated,
+    });
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Spinner loading={isPending}>

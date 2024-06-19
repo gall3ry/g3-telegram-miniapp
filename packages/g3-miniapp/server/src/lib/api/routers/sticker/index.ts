@@ -50,6 +50,28 @@ export const stickerRouter = createTRPCRouter({
     }
   ),
 
+  getTopStickers: publicProcedure
+    .input(z.object({ limit: z.number() }))
+    .query(async ({ input: { limit } }) => {
+      const items = await db.sticker.findMany({
+        take: limit,
+        include: {
+          GMNFT: {
+            select: {
+              imageUrl: true,
+            },
+          },
+        },
+        orderBy: {
+          shareCount: 'desc',
+        },
+      });
+
+      return {
+        items,
+      };
+    }),
+
   getSticker: publicProcedure
     .input(
       z.object({
