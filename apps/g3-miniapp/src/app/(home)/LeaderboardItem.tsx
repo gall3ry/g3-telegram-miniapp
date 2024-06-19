@@ -56,7 +56,7 @@ export const LeaderboardItem = ({
 
         <div className="mt-1">
           <div className="inline-flex h-11 items-end justify-start gap-1.5">
-            <div className="text-4xl font-bold text-[#BACF00]">
+            <div className="text-4xl font-bold text-[#06B94B]">
               {Intl.NumberFormat().format(shareCount)}
             </div>
             <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">

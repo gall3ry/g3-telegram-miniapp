@@ -19,7 +19,7 @@ export const MyCurrentPosition = () => {
   return (
     <Spinner loading={isPending}>
       {isSuccess && (
-        <div className="rounded-lg bg-[#FCFFE5] p-3">
+        <div className="rounded-lg bg-[#F0FFF5] p-3">
           <div className="text-base font-bold leading-normal text-slate-900">
             Your current position:
           </div>

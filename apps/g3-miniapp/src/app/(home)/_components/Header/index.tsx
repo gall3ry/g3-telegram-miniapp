@@ -1,11 +1,11 @@
-"use client";
-import { Button, Flex } from "@radix-ui/themes";
-import { useTonConnectModal } from "@tonconnect/ui-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useIsAuthenticated } from "../../../_providers/useAuth";
-import { IconLogin } from "../../_icons/IconLogin";
-import { LoggedButton } from "./LoggedButton";
+'use client';
+import { Button, Flex } from '@radix-ui/themes';
+import { useTonConnectModal } from '@tonconnect/ui-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useIsAuthenticated } from '../../../_providers/useAuth';
+import { IconLogin } from '../../_icons/IconLogin';
+import { LoggedButton } from './LoggedButton';
 
 export const Header = () => {
   const { isAuthenticated } = useIsAuthenticated();

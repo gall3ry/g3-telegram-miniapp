@@ -1,5 +1,5 @@
-@import "tailwindcss/base";
-@import "@radix-ui/themes/styles.css";
+@import 'tailwindcss/base';
+@import '@radix-ui/themes/styles.css';
 
 /* @tailwind base; */
 @tailwind components;
@@ -14,5 +14,17 @@
   /* .rt-BaseButton */
   .rt-BaseButton {
     @apply text-xl font-bold leading-7 text-slate-900;
+  }
+
+  .rt-BaseButton:where(.rt-variant-solid) {
+    @apply bg-[#22F573] transition;
+
+    &:hover {
+      @apply bg-[#06B94B];
+    }
+
+    &[data-disabled] {
+      @apply bg-slate-100 text-slate-300;
+    }
   }
 }
