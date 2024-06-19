@@ -122,6 +122,9 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.2
+      canvas:
+        specifier: ^2.11.2
+        version: 2.11.2
       database:
         specifier: workspace:*
         version: link:../../packages/database
@@ -249,6 +252,9 @@ importers:
       '@types/eslint':
         specifier: ^8.56.2
         version: 8.56.5
+      '@types/gifencoder':
+        specifier: ^2.0.1
+        version: 2.0.3
       '@types/jsonwebtoken':
         specifier: ^9.0.6
         version: 9.0.6
@@ -7016,6 +7022,12 @@ packages:
       '@types/express-serve-static-core': 4.19.0
       '@types/qs': 6.9.15
       '@types/serve-static': 1.15.7
+
+  /@types/gifencoder@2.0.3:
+    resolution: {integrity: sha512-P+d6p8WSkpIKChkGD65FjTu7A+pe8m7L+74tbuht6UUxFH9JLNE9N1EqNMKfkYpQ6Ih/jvbCA715BIXNCaUraQ==}
+    dependencies:
+      '@types/node': 20.14.2
+    dev: true
 
   /@types/graceful-fs@4.1.9:
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
