@@ -18,11 +18,6 @@ export const IMAGES = {
     5: '/images/mock-avatar/5.png',
   },
   MOCK_STICKER: {
-    // 1: "https://api.akord.com/files/f480eb9c-8ec0-4222-be57-70725a679fd2",
-    // 2: "https://api.akord.com/files/89a57953-f3da-45c2-ade5-93dec5d77c08",
-    // 3: "https://api.akord.com/files/ba203aa7-a01b-45b0-a870-8aeb94b065c3",
-    // 4: "https://api.akord.com/files/1ba68a0f-a8f4-49b8-a126-8e92633058ba",
-    // 5: "https://api.akord.com/files/687eac55-1705-4f20-b1e3-9dd89b4f7518",
     1: 'https://api.akord.com/files/a2a4c7ae-e611-4565-aa8a-7edc21d97dfd',
     2: 'https://api.akord.com/files/4f395b5b-1395-46ed-9532-ffd10fd14fe6',
     3: 'https://api.akord.com/files/180ca237-ce65-4d1e-a989-17188f7882cc',
@@ -43,4 +38,5 @@ export const IMAGES = {
 
   balance_bg: '/images/balance_bg.png',
   avatar: '/images/avatar.png',
+  no_items: '/images/no-items.png',
 } as const;

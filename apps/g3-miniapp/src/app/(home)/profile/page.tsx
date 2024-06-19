@@ -4,6 +4,7 @@ import { IMAGES } from '@gall3ry/shared-constants';
 import { Avatar, Button, IconButton, Skeleton } from '@radix-ui/themes';
 import { toUserFriendlyAddress } from '@tonconnect/sdk';
 import { memo, useMemo, useState } from 'react';
+import { env } from '../../../env';
 import { api } from '../../../trpc/react';
 import { Drawer, DrawerContent, DrawerFooter } from '../_components/Drawer';
 import { LoggedUserOnly } from '../_components/LoggedUserOnly';
@@ -12,6 +13,7 @@ import { useUser } from '../useUser';
 import { IconMore } from './IconMore';
 import { IconSignOut } from './IconSignOut';
 import { ProfileDrawer } from './ProfileDrawer';
+import { ResetAccount } from './ResetAccount';
 import { useEditQueryState } from './useEditQueryState';
 import { useLogout } from './useLogout';
 
@@ -107,6 +109,8 @@ const Page = () => {
           </div>
         ))}
       </div>
+
+      {env.NEXT_PUBLIC_G3_ENV !== 'production' && <ResetAccount />}
 
       <div className="flex-1"></div>
 

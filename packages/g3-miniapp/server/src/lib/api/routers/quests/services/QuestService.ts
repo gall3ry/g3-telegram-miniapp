@@ -123,7 +123,7 @@ export class QuestService {
       });
     }
 
-    if (task.isRequireWalletConnection && !this._hasWalletConnection(userId)) {
+    if (task.isRequiredWalletConnection && !this._hasWalletConnection(userId)) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Wallet connection required',

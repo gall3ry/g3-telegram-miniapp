@@ -7,7 +7,7 @@ export interface IQuest {
   readonly points: number;
   readonly description: string;
   readonly text?: string;
-  readonly isRequireWalletConnection: boolean;
+  readonly isRequiredWalletConnection: boolean;
 
   isQuestCompleted({ userId }: { userId: number }): Promise<boolean>;
   completeQuestOrThrow({ userId }: { userId: number }): Promise<void>;
@@ -36,7 +36,7 @@ export abstract class BaseQuest implements IQuest {
   abstract points: number;
   abstract description: string;
   text: string | undefined = undefined;
-  isRequireWalletConnection = false;
+  isRequiredWalletConnection = false;
 
   async isQuestCompleted({ userId }: { userId: number }): Promise<boolean> {
     return (

@@ -7,7 +7,7 @@ export class MintGMEpicQuest extends BaseQuest {
   points = 100;
   description = 'Mint GM Epic Quest';
   text = 'Mint GM Epic Quest';
-  isRequireWalletConnection = true;
+  isRequiredWalletConnection = true;
 
   async isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean> {
     const gmOCC = await db.gMSymbolOCC.findFirst({
