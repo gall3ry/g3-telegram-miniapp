@@ -97,6 +97,9 @@
       "@gall3ry/shared-database-schema": [
         "packages/shared/shared-database-schema/src/index.ts"
       ],
+      "@gall3ry/shared-multichain-signature-validation": [
+        "packages/shared/multichain-signature-validation/src/index.ts"
+      ],
       "@gall3ry/shared-schema": ["packages/shared/schema/src/index.ts"],
       "@gall3ry/shared-ton-utils": ["packages/shared/ton-utils/src/index.ts"],
       "@gall3ry/telegram-bot-recommendation": [

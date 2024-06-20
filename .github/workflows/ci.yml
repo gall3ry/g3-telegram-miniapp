@@ -39,6 +39,20 @@ jobs:
       # - run: pnpm exec nx-cloud record -- echo Hello World
       - run: pnpm exec nx affected -t test build
 
+  deploy-redis:
+    name: Deploy redis
+    runs-on: ubuntu-latest
+    concurrency: deploy-worker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy redis
+        run: flyctl deploy -c ./infra/fly.redis.toml --local-only
+
   deploy-worker:
     name: Deploy worker
     runs-on: ubuntu-latest

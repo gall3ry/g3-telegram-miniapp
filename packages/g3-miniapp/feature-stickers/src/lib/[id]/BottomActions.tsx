@@ -1,11 +1,13 @@
 'use client';
+import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp-utils';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Button } from '@radix-ui/themes';
-import { postEvent } from '@tma.js/sdk';
+import { useInitData } from '@tma.js/sdk-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFooter } from 'packages/g3-miniapp/ui/src/lib/Footer/useFooter';
 import { useEffect } from 'react';
 import { FaTelegram } from 'react-icons/fa6';
+import { z } from 'zod';
 
 export const BottomActions = () => {
   const { setFooter } = useFooter();
@@ -35,6 +37,8 @@ const Footer = () => {
       enabled: isFinite(+id),
     }
   );
+  const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
+  const initData = useInitData(true);
 
   return (
     <div className="sticky inset-x-0 bottom-0 z-50 flex h-20 items-center gap-3 bg-white px-5 shadow-2xl">
@@ -55,9 +59,17 @@ const Footer = () => {
         className="flex-1"
         onClick={() => {
           if (!sticker) return;
-          postEvent('web_app_switch_inline_query', {
-            query: `${id}`,
-            chat_types: ['channels', 'groups', 'users'],
+          const { telegramUserId } = z
+            .object({
+              telegramUserId: z.coerce.number(),
+            })
+            .parse({
+              telegramUserId: initData?.user?.id,
+            });
+
+          postSwitchInlineQuery({
+            query: `${sticker.id} ${telegramUserId}`,
+            chatTypes: ['channels', 'groups', 'users'],
           });
         }}
       >

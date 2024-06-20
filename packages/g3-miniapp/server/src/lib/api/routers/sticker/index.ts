@@ -183,19 +183,19 @@ export const stickerRouter = createTRPCRouter({
           skipDuplicates: true,
         });
 
-        if (env.NEXT_PUBLIC_G3_ENV !== 'development') {
-          const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
-          // send capturing
-          await publish({
-            body: {
-              stickerIds: stickers.map((sticker) => sticker.id),
-            },
-            url: urlToFetch,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-        }
+        const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
+        // send capturing
+        publish({
+          body: {
+            stickerIds: stickers.map((sticker) => sticker.id),
+          },
+          url: urlToFetch,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).catch((e) => {
+          console.error('Error sending to worker', e);
+        });
 
         return {
           stickers,

@@ -4,7 +4,7 @@
 #
 
 app = 'g3-v2-stg-worker'
-primary_region = 'hkg'
+primary_region = 'sin'
 
 
 [build]

@@ -7,7 +7,8 @@
     "build": "nx build",
     "graph": "nx graph --web",
     "postinstall": "pnpm exec nx run-many --target=generate-types",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "dev": "pnpm nx run-many -t=serve -p=g3-worker -p=g3-miniapp"
   },
   "private": true,
   "dependencies": {

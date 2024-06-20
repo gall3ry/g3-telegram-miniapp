@@ -1,4 +1,5 @@
 'use client';
+import { cn } from '@g3-miniapp/utils';
 import {
   useIsAuthenticated,
   useUser,
@@ -18,7 +19,7 @@ import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Drawer, DrawerContent } from '@gall3ry/g3-miniapp-ui';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { OccType } from '@gall3ry/types';
-import { Button, Spinner } from '@radix-ui/themes';
+import { Button, Spinner, Text } from '@radix-ui/themes';
 import { useInitData } from '@tma.js/sdk-react';
 import Image from 'next/image';
 import { parseAsBoolean, parseAsInteger, useQueryState } from 'nuqs';
@@ -691,6 +692,13 @@ export const AllStickers = memo(() => {
   const { data: stickersData, isPending: isStickersPending } =
     api.sticker.getStickers.useQuery(undefined, {
       enabled: isAuthenticated,
+      refetchInterval: ({ state }) => {
+        const data = state.data;
+        const atLeastOneStickerNotReady =
+          data?.items.some((sticker) => !sticker.imageUrl) ?? false;
+
+        return atLeastOneStickerNotReady ? 5000 : false;
+      },
     });
   const stickers = stickersData?.items;
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
@@ -737,15 +745,27 @@ export const AllStickers = memo(() => {
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            {stickers.map((sticker) => (
-              <div
-                key={sticker.id}
-                onClick={() => {
-                  void setStickerId(sticker.id);
-                }}
-                className="relative aspect-square w-full rounded-xl"
-              >
-                {
+            {stickers.map((sticker) => {
+              const stickerNotReady = !sticker.imageUrl;
+
+              return (
+                <div
+                  key={sticker.id}
+                  onClick={() => {
+                    if (stickerNotReady) {
+                      // Loading
+                      return;
+                    }
+
+                    void setStickerId(sticker.id);
+                  }}
+                  className={cn(
+                    'relative aspect-square w-full rounded-xl overflow-hidden',
+                    {
+                      'cursor-not-allowed': stickerNotReady,
+                    }
+                  )}
+                >
                   <div className="aspect-square cursor-pointer">
                     {sticker.GMNFT.imageUrl &&
                       mapStickerTypeToTemplateComponent(sticker.stickerType, {
@@ -753,16 +773,23 @@ export const AllStickers = memo(() => {
                         stickerTitle: `STICKER #${sticker.id}`,
                       })}
                   </div>
-                }
 
-                <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
-                  <div className="text-center text-sm font-bold leading-tight text-slate-900">
-                    {sticker.shareCount} share
-                    {sticker.shareCount === 1 ? '' : 's'}
+                  <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
+                    <div className="text-center text-sm font-bold leading-tight text-slate-900">
+                      {sticker.shareCount} share
+                      {sticker.shareCount === 1 ? '' : 's'}
+                    </div>
                   </div>
+
+                  {stickerNotReady && (
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center gap-2">
+                      <Spinner />
+                      <Text color="gray">Loading...</Text>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

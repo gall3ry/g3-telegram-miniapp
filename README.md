@@ -30,4 +30,3 @@ pnpm nx dev <app-name>
 ```bash
 pnpm nx build <app-name>
 ```
-

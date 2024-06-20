@@ -1,0 +1,19 @@
+{
+  "name": "shared-multichain-signature-validation",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/shared/multichain-signature-validation/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/shared/multichain-signature-validation",
+        "main": "packages/shared/multichain-signature-validation/src/index.ts",
+        "tsConfig": "packages/shared/multichain-signature-validation/tsconfig.lib.json",
+        "assets": ["packages/shared/multichain-signature-validation/*.md"]
+      }
+    }
+  }
+}
