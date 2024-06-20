@@ -8,8 +8,8 @@ import {
 } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
 import {
-  memo,
   Suspense,
+  memo,
   useCallback,
   useEffect,
   useRef,
@@ -81,7 +81,6 @@ const Sample1Inner = ({
     'idle' | 'recording' | 'done' | 'done_capturing_static_template'
   >('idle');
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
-
   const { RiveComponent, canvas, rive } = useRive({
     src: '/rive/sample1/untitled.riv',
     autoplay: true,
@@ -193,7 +192,6 @@ const Sample1Inner = ({
         setTimeout(() => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const image = canvas!.toDataURL();
-
           void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
             (image) => {
               // throw event
@@ -215,8 +213,8 @@ const Sample1Inner = ({
       rive.setTextRunValue('STICKER_TITLE', stickerTitle);
 
       loadAndDecodeImg(imageUrl, {
-        width: 1000,
-        height: 1000,
+        width: 1278,
+        height: 1278,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);
