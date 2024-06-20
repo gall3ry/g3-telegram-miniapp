@@ -1,6 +1,3 @@
 export async function register() {
-  await initializeMockOccEvent();
+  // do nothing
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export async function initializeMockOccEvent() {}

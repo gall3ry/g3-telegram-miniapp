@@ -1,7 +1,7 @@
+import { useIsAuthenticated } from '@gall3ry/g3-miniapp-authentication';
 import { IconLogin } from '@gall3ry/g3-miniapp-icon';
 import { Button, Spinner, Text } from '@radix-ui/themes';
 import { useTonConnectModal } from '@tonconnect/ui-react';
-import { useIsAuthenticated } from '..';
 
 export const LoggedUserOnly = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useIsAuthenticated();
