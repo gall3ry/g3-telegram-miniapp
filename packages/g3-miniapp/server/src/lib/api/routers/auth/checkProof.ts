@@ -4,8 +4,8 @@ import { db } from '../../../db';
 import { CheckProofRequest } from '../../../ton/_dto/check-proof-request-dto';
 import { TonApiService } from '../../../ton/_services/ton-api-service';
 import { TonProofService } from '../../../ton/_services/ton-proof-service';
-import { createAuthToken, verifyToken } from '../../../ton/_utils/jwt';
-import PostHogClient from '../../services/posthog';
+import { verifyToken } from '../../../ton/_utils/jwt';
+import { AuthenticationService } from '../../services/authentication';
 import { publicProcedure } from '../../trpc';
 
 class CheckProofService {
@@ -46,79 +46,6 @@ class CheckProofService {
       });
     }
   }
-
-  static async createUserWithProvider({
-    address,
-    network,
-  }: {
-    address: string;
-    network: z.infer<typeof CheckProofRequest>['network'];
-  }) {
-    const exist = await db.provider.findFirst({
-      where: { value: address, type: 'TON_WALLET' },
-    });
-
-    const client = PostHogClient();
-
-    const provider = await db.provider.upsert({
-      where: {
-        type_value: {
-          type: 'TON_WALLET',
-          value: address,
-        },
-      },
-      create: {
-        type: 'TON_WALLET',
-        value: address,
-        User: {
-          create: {},
-        },
-      },
-      update: {},
-      include: {
-        User: true,
-      },
-    });
-
-    const user = provider.User;
-    if (!user) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'No user associated with this address',
-      });
-    }
-
-    if (!exist) {
-      client.capture({
-        distinctId: user.id.toString(),
-        event: 'new_user',
-        properties: {
-          address: address,
-          network: network,
-          type: 'TON_WALLET',
-        },
-      });
-    } else {
-      client.capture({
-        distinctId: user.id.toString(),
-        event: 'returning_user',
-        properties: {
-          address: address,
-          network: network,
-          type: 'TON_WALLET',
-        },
-      });
-    }
-    await client.shutdown();
-
-    const token = await createAuthToken({
-      address: address,
-      network: network,
-      userId: user.id,
-    });
-
-    return { token };
-  }
 }
 
 export const checkProof = publicProcedure
@@ -131,10 +58,10 @@ export const checkProof = publicProcedure
       public_key,
     });
 
-    const { token } = await CheckProofService.createUserWithProvider({
+    const { token } = await AuthenticationService.createUserWithProvider({
       address,
-      network,
+      providerType: 'TON_WALLET',
     });
 
-    return { token: token };
+    return { token };
   });

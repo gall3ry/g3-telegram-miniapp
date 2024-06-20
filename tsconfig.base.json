@@ -53,14 +53,14 @@
       "@gall3ry/g3-miniapp-feature-profile": [
         "packages/g3-miniapp/feature-profile/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-feature-providers": [
+        "packages/g3-miniapp/feature-providers/src/index.ts"
+      ],
       "@gall3ry/g3-miniapp-feature-quests": [
         "packages/g3-miniapp/feature-quests/src/index.ts"
       ],
       "@gall3ry/g3-miniapp-feature-reward-logs": [
         "packages/g3-miniapp/feature-reward-logs/src/index.ts"
-      ],
-      "@gall3ry/g3-miniapp-feature-reward-logs/server": [
-        "packages/g3-miniapp/feature-reward-logs/src/server.ts"
       ],
       "@gall3ry/g3-miniapp-feature-stickers": [
         "packages/g3-miniapp/feature-stickers/src/index.ts"
@@ -89,6 +89,13 @@
       "@gall3ry/g3-miniapp-ui": ["packages/g3-miniapp/ui/src/index.ts"],
       "@gall3ry/g3-worker-occ-minting": [
         "packages/g3-worker/occ-minting/src/index.ts"
+      ],
+      "@gall3ry/multichain-types": ["packages/multichain/types/src/index.ts"],
+      "@gall3ry/multichain/shared-multichain-signature-validation": [
+        "packages/multichain/shared-multichain-signature-validation/src/index.ts"
+      ],
+      "@gall3ry/multichain/shared-react-multichain-connect": [
+        "packages/multichain/shared-react-multichain-connect/src/index.ts"
       ],
       "@gall3ry/sample-module": [
         "packages/g3-worker/sample-module/src/index.ts"

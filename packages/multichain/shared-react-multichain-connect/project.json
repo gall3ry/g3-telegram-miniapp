@@ -1,0 +1,9 @@
+{
+  "name": "multichain-shared-react-multichain-connect",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/multichain/shared-react-multichain-connect/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project multichain-shared-react-multichain-connect --web",
+  "targets": {}
+}

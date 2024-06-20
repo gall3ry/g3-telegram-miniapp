@@ -1,0 +1,19 @@
+{
+  "name": "multichain-types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/multichain/types/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/multichain/types",
+        "main": "packages/multichain/types/src/index.ts",
+        "tsConfig": "packages/multichain/types/tsconfig.lib.json",
+        "assets": ["packages/multichain/types/*.md"]
+      }
+    }
+  }
+}

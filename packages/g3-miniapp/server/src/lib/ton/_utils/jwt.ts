@@ -1,5 +1,5 @@
 import { env } from '@gall3ry/g3-miniapp-env';
-import { type CHAIN } from '@tonconnect/sdk';
+import { ProviderType } from '@prisma/client';
 import { SignJWT, decodeJwt, jwtVerify, type JWTPayload } from 'jose';
 /**
  * Secret key for the token.
@@ -12,7 +12,7 @@ const JWT_SECRET_KEY = env.JWT_SECRET;
 export type AuthToken = {
   userId: number;
   address: string;
-  network: CHAIN;
+  provider: ProviderType;
 };
 
 export type PayloadToken = {

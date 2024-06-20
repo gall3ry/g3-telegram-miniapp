@@ -1,0 +1,9 @@
+{
+  "name": "g3-miniapp-feature-providers",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-miniapp/feature-providers/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project g3-miniapp-feature-providers --web",
+  "targets": {}
+}

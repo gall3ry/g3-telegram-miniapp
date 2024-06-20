@@ -1,10 +1,8 @@
 import { type Prisma } from '@gall3ry/database-client';
 import { z } from 'zod';
 import { db } from '../../../db';
-import { uploadToAkord, VaultName } from '../../services/akord';
 import { capture } from '../../services/posthog';
 import { protectedProcedure } from '../../trpc';
-import { telegramInstance } from '../quests/services/telegramInstance';
 
 export const updateDisplayName = protectedProcedure
   .input(
@@ -16,7 +14,7 @@ export const updateDisplayName = protectedProcedure
   .mutation(
     async ({ ctx: { session }, input: { telegramId, displayName } }) => {
       const userId = session.userId;
-      const _user = await db.user.findUniqueOrThrow({ where: { id: userId } });
+      // const _user = await db.user.findUniqueOrThrow({ where: { id: userId } });
 
       void capture({
         distinctId: userId.toString(),
@@ -26,41 +24,39 @@ export const updateDisplayName = protectedProcedure
         },
       });
 
-      let avatarUrl: string | null = null;
+      // let avatarUrl: string | null = null;
 
-      const shouldUpdateAvatar =
-        telegramId &&
-        (_user.telegramId === null ||
-          (_user?.telegramId && +_user.telegramId !== telegramId));
+      // const shouldUpdateAvatar =
+      //   telegramId &&
+      //   (_user.telegramId === null ||
+      //     (_user?.telegramId && +_user.telegramId !== telegramId));
 
-      if (shouldUpdateAvatar) {
-        const _url = await telegramInstance
-          .getUserProfilePhoto({
-            telegramUserId: telegramId,
-          })
-          .catch((e: any) => {
-            console.log(e);
-            return null;
-          });
+      // if (shouldUpdateAvatar) {
+      //   const _url = await telegramInstance
+      //     .getUserProfilePhoto({
+      //       telegramUserId: telegramId,
+      //     })
+      //     .catch((e: any) => {
+      //       console.log(e);
+      //       return null;
+      //     });
 
-        avatarUrl = _url
-          ? await uploadToAkord({
-              vaultName: VaultName.AVATAR,
-              url: _url,
-              fileName: `avatar-${userId}`,
-            })
-          : null;
-      }
+      //   avatarUrl = _url
+      //     ? await uploadToAkord({
+      //         vaultName: VaultName.AVATAR,
+      //         url: _url,
+      //         fileName: `avatar-${userId}`,
+      //       })
+      //     : null;
+      // }
 
       const toUpdate = {
         displayName: displayName,
         telegramId: telegramId?.toString(),
-        avatarUrl: avatarUrl ?? undefined,
       } satisfies Prisma.UserUpdateInput;
 
       if (!telegramId) delete toUpdate.telegramId;
       if (!displayName) delete toUpdate.displayName;
-      if (!toUpdate.avatarUrl) delete toUpdate.avatarUrl;
 
       if (telegramId) {
         await db.user.updateMany({

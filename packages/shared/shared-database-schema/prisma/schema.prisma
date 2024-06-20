@@ -42,6 +42,8 @@ model RewardLogs {
 
 enum ProviderType {
     TON_WALLET
+    EVM_WALLET
+    SOLANA_WALLET
 }
 
 // Main provider will be the first creation provider and cannot be deleted

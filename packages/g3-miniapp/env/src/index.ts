@@ -1,1 +1,1 @@
-export * from './lib/g3-miniapp-env';
+export { env } from './lib/g3-miniapp-env';
