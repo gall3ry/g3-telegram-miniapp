@@ -87,6 +87,12 @@
         "packages/g3-miniapp/trpc-client/src/server.ts"
       ],
       "@gall3ry/g3-miniapp-ui": ["packages/g3-miniapp/ui/src/index.ts"],
+      "@gall3ry/g3-sticker-capturing": [
+        "packages/g3-capturing-worker/g3-sticker-capturing/src/index.ts"
+      ],
+      "@gall3ry/g3-sticker-capturing-env": [
+        "packages/g3-capturing-worker/g3-sticker-capturing-env/src/index.ts"
+      ],
       "@gall3ry/g3-worker-occ-minting": [
         "packages/g3-worker/occ-minting/src/index.ts"
       ],

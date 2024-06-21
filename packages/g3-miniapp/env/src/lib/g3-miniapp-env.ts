@@ -32,10 +32,10 @@ export const env = createEnv({
       .default(
         'eyJVc2VySUQiOiJlODdmNTIwNS1mOTQxLTRlZDgtYjRhNS0wMTljNmMwZjZmZDEiLCJQYXNzd29yZCI6IjZlZDE2YWZmYzJjNDQxMDBiMTc3MzNlZThjNzM2NTA1In0='
       ),
-    WORKER_PUBLIC_URL: z
+    CAPTURING_WORKER_PUBLIC_URL: z
       .string()
       .url()
-      .default('https://g3-stg-telegram-worker.fly.dev'),
+      .default('https://g3-stg-telegram-capturing-worker.fly.dev'),
 
     AKORD_EMAIL: z.string().default('tin@platfarm.net'),
     AKORD_PASSWORD: z.string().default('PlatFarm123!@#'),
@@ -95,7 +95,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: process.env['UPSTASH_REDIS_REST_URL'],
     UPSTASH_REDIS_REST_TOKEN: process.env['UPSTASH_REDIS_REST_TOKEN'],
     UPSTASH_QSTASH_TOKEN: process.env['UPSTASH_QSTASH_TOKEN'],
-    WORKER_PUBLIC_URL: process.env['WORKER_PUBLIC_URL'],
+    CAPTURING_WORKER_PUBLIC_URL: process.env['CAPTURING_WORKER_PUBLIC_URL'],
     AKORD_EMAIL: process.env['AKORD_EMAIL'],
     AKORD_PASSWORD: process.env['AKORD_PASSWORD'],
   },

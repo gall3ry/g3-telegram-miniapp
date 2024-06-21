@@ -1,0 +1,26 @@
+{
+  "name": "g3-capturing-worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/g3-capturing-worker/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "defaultConfiguration": "development",
+      "options": {
+        "watch": true,
+        "command": "concurrently -n \"runner,builder-watcher\" \"pnpm exec tsx --watch dist/apps/g3-capturing-worker/main.js\" \"pnpm exec nx watch --projects=g3-capturing-worker -d -- pnpm exec nx build g3-capturing-worker\""
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/g3-capturing-worker/Dockerfile . -t g3-capturing-worker"
+    }
+  }
+}

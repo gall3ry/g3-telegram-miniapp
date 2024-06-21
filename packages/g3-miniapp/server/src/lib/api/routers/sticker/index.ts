@@ -183,7 +183,7 @@ export const stickerRouter = createTRPCRouter({
           skipDuplicates: true,
         });
 
-        const urlToFetch = `${env.WORKER_PUBLIC_URL}/webhook/sticker/capture-gif`;
+        const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-gif`;
         // send capturing
         publish({
           body: {

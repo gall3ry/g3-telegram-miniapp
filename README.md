@@ -2,8 +2,11 @@
  
 ## Ports
 
-Worker: 3100
-Backend: 3200
+| Service                   | Port |
+|---------------------------|------|
+| Nextjs (frontend/backend) | 3000 |
+| Worker (complex tasks)    | 3100 |
+| Capturing Worker (heavy tasks)          | 3200 |
 
 ## Development server
 

@@ -39,7 +39,8 @@
         "g3-telegram-bot-e2e/**/*",
         "apps/g3-telegram-bot-e2e/**/*",
         "apps/g3-worker-e2e/**/*",
-        "apps/g3-backend-e2e/**/*"
+        "apps/g3-backend-e2e/**/*",
+        "apps/capturing-worker-e2e/**/*"
       ]
     },
     {
