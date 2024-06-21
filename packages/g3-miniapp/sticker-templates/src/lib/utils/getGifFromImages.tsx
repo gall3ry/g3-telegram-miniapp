@@ -16,11 +16,11 @@ export const getGifFromImages = (images: string[]) => {
     gifshot.createGIF(
       {
         images,
-        gifWidth: 1278,
-        gifHeight: 1278,
+        gifWidth: 512,
+        gifHeight: 512,
         numFrames: 20, // 2s
         frameDuration: 1,
-        sampleInterval: 1,
+        sampleInterval: 3,
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (obj: any) {

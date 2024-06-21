@@ -213,8 +213,8 @@ const Sample1Inner = ({
       rive.setTextRunValue('STICKER_TITLE', stickerTitle);
 
       loadAndDecodeImg(imageUrl, {
-        width: 1278,
-        height: 1278,
+        width: 1000,
+        height: 1000,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);
