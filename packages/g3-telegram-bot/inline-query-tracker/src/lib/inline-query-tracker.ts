@@ -33,12 +33,11 @@ export class InlineQueryTrackerModule extends BaseModule {
       try {
         // TODO: split to handlers
         const { query, from, chat_type } = ctx.inlineQuery;
-        const [_id, _telegramUserId] = query.split(' ');
+        const [_id] = query.split(' ');
 
         // Validate inputs
         logger.debug({
           _id,
-          _telegramUserId,
         });
         const { stickerId } = parseInlineQuerySchema({
           stickerId: _id,
@@ -58,14 +57,6 @@ export class InlineQueryTrackerModule extends BaseModule {
           return;
         }
 
-        // Main flow
-        logger.info(
-          {
-            stickerId,
-            chatType: chat_type,
-          },
-          `[MY NODE APP] Append user data`
-        );
         persistentDb.appendUserData(ctx.inlineQuery.from.id, {
           stickerId,
           chatType: ctx.inlineQuery.chat_type,
@@ -117,7 +108,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     bot.on('chosen_inline_result', async (ctx) => {
       const { query } = ctx.chosenInlineResult;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_id, _telegramUserId] = query.split(' ');
+      const [_id] = query.split(' ');
 
       // Validate inputs
       const { stickerId } = parseInlineQuerySchema({

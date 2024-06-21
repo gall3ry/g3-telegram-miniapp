@@ -4,7 +4,7 @@
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
 # Run the container with `docker run --env-file ./apps/g3-worker/.env.local -p 3100:3100 -t g3-worker`.
-FROM mcr.microsoft.com/playwright:v1.44.1-jammy
+FROM node:20-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.5 \

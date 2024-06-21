@@ -25,7 +25,6 @@ import Image from 'next/image';
 import { parseAsBoolean, parseAsInteger, useQueryState } from 'nuqs';
 import { memo, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { z } from 'zod';
 import { useNftContract } from './_hooks/useNftContract';
 import { mockAssets } from './MOCK_ASSET';
 import { MOCK_TX_HASH } from './MOCK_TX_HASH';
@@ -231,16 +230,8 @@ export const MintOCC = () => {
               <Button
                 size="4"
                 onClick={() => {
-                  const { telegramUserId } = z
-                    .object({
-                      telegramUserId: z.coerce.number(),
-                    })
-                    .parse({
-                      telegramUserId: initData?.user?.id,
-                    });
-
                   postSwitchInlineQuery({
-                    query: `${stickerId} ${telegramUserId}`,
+                    query: `${stickerId}`,
                     chatTypes: ['channels', 'groups', 'users'],
                   });
                 }}

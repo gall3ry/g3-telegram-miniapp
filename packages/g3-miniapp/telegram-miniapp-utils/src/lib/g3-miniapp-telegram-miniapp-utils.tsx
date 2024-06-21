@@ -21,6 +21,7 @@ export const useWebAppSwitchInlineQuery = () => {
           }
         );
       } catch (error) {
+        console.error(error);
         toast.error(`Your device does not support this feature`, { id });
       }
     },

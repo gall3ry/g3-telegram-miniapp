@@ -18,7 +18,7 @@ worker = "pnpm exec tsx main.js"
 [[vm]]
 memory = '2gb'
 cpu_kind = 'shared'
-cpus = 4
+cpus = 1
 
 # worker webservice
 [http_service]

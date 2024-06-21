@@ -7,7 +7,6 @@ import { useInitData } from '@tma.js/sdk-react';
 import { memo } from 'react';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { z } from 'zod';
 import { IconTelegram } from '../_icons/IconTelegram';
 
 export const TopSwiper = memo(() => {
@@ -49,16 +48,8 @@ export const TopSwiper = memo(() => {
                 size="4"
                 className="w-full"
                 onClick={() => {
-                  const { telegramUserId } = z
-                    .object({
-                      telegramUserId: z.coerce.number(),
-                    })
-                    .parse({
-                      telegramUserId: initData?.user?.id,
-                    });
-
                   postSwitchInlineQuery({
-                    query: `${item.id} ${telegramUserId}`,
+                    query: `${item.id}`,
                     chatTypes: ['channels', 'groups', 'users'],
                   });
                 }}
