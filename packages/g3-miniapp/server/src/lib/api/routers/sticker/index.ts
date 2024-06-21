@@ -185,7 +185,7 @@ export const stickerRouter = createTRPCRouter({
 
         const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-gif`;
         // send capturing
-        publish({
+        await publish({
           body: {
             stickerIds: stickers.map((sticker) => sticker.id),
           },

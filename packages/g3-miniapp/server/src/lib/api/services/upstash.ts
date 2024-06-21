@@ -48,7 +48,7 @@ export const publish = async <T>(request: PublishRequest<T>) => {
       throw new Error('request.url is required');
     }
 
-    await axios.post(request.url, request.body);
+    void axios.post(request.url, request.body);
 
     return `mocked-message-id-${Math.random()}`;
   }
