@@ -25,20 +25,6 @@ jobs:
       - name: Deploy redis
         run: flyctl deploy -c ./infra/fly.redis.toml --local-only
 
-  deploy-redis:
-    name: Deploy redis
-    runs-on: ubuntu-latest
-    concurrency: deploy-worker
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-
-      - name: Deploy redis
-        run: flyctl deploy -c ./infra/fly.redis.toml --local-only
-
   deploy-worker:
     name: Deploy worker
     runs-on: ubuntu-latest
@@ -68,6 +54,36 @@ jobs:
 
       - name: Deploy worker
         run: flyctl deploy -c ./infra/fly.worker.toml --local-only
+
+  deploy-capturing-worker:
+    name: Deploy capturing worker
+    runs-on: ubuntu-latest
+    concurrency: deploy-capturing-worker # optional: ensure only one action runs at a time
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Cache node_modules
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - uses: nrwl/nx-set-shas@v4
+
+      - name: Build worker
+        run: pnpm nx build g3-capturing-worker
+
+      - name: Deploy worker
+        run: flyctl deploy -c ./infra/fly.capturing-worker.toml --local-only
 
   deploy-bot:
     name: Deploy bot
