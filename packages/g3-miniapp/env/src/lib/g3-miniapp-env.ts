@@ -32,10 +32,7 @@ export const env = createEnv({
       .default(
         'eyJVc2VySUQiOiJlODdmNTIwNS1mOTQxLTRlZDgtYjRhNS0wMTljNmMwZjZmZDEiLCJQYXNzd29yZCI6IjZlZDE2YWZmYzJjNDQxMDBiMTc3MzNlZThjNzM2NTA1In0='
       ),
-    CAPTURING_WORKER_PUBLIC_URL: z
-      .string()
-      .url()
-      .default('https://g3-stg-telegram-capturing-worker.fly.dev'),
+    CAPTURING_WORKER_PUBLIC_URL: z.string().url(),
 
     AKORD_EMAIL: z.string().default('tin@platfarm.net'),
     AKORD_PASSWORD: z.string().default('PlatFarm123!@#'),
