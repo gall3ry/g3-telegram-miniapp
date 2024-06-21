@@ -20,7 +20,7 @@ export const getGifFromImages = (images: string[]) => {
         gifHeight: 800,
         numFrames: 20, // 2s
         frameDuration: 1,
-        sampleInterval: 2,
+        sampleInterval: 1,
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function (obj: any) {
