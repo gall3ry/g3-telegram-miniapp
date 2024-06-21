@@ -4,8 +4,9 @@ import { multichainSignatureValidationList } from '@gall3ry/multichain/shared-mu
 import { Button } from '@radix-ui/themes';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
+import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import { Providers } from './Providers';
 
 export const ConnectButton: React.FC = () => {
@@ -20,8 +21,10 @@ const Inner = () => {
   const { openConnectModal } = useConnectModal();
   const { signMessageAsync } = useSignMessage();
   const { isConnected, address } = useAccount();
+  const { disconnectAsync } = useDisconnect();
   const { mutateAsync: signIn } = api.auth.web3SignIn.useMutation();
   const { setAccessToken } = useAuth();
+  const buttonClicked = useRef(false);
 
   const signMessage = async () => {
     if (!isConnected || !address) {
@@ -62,11 +65,29 @@ const Inner = () => {
     setAccessToken(token);
   };
 
+  useEffect(() => {
+    if (isConnected && buttonClicked.current) {
+      signMessage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
+
   return (
     <div>
       <Button
         onClick={async () => {
-          signMessage();
+          buttonClicked.current = true;
+          await disconnectAsync(
+            {},
+            {
+              onSuccess: () => {
+                if (!openConnectModal) {
+                  throw new Error('Open connect modal not found');
+                }
+                openConnectModal?.();
+              },
+            }
+          );
         }}
         className="w-full"
       >

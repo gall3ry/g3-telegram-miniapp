@@ -23,6 +23,15 @@
         "cwd": "packages/shared/shared-database-schema"
       }
     },
+    "deploy": {
+      "command": "prisma migrate deploy",
+      "options": {
+        "cwd": "packages/shared/shared-database-schema"
+      },
+      "configurations": {
+        "staging": {}
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],

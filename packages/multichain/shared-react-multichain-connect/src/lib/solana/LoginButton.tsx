@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import { Providers } from './Providers';
 
 const Inner = () => {
-  const { publicKey } = useWallet();
+  const { publicKey, disconnect } = useWallet();
   const { mutateAsync: signIn } = api.auth.web3SignIn.useMutation();
   const { setAccessToken } = useAuth();
   const { signMessage: signMessageAsync, signIn: solanaSignIn } = useWallet();
@@ -88,13 +88,10 @@ const Inner = () => {
 
   return (
     <Button
-      onClick={() => {
-        if (buttonState === 'connected') {
-          signMessage();
-        } else {
-          buttonClicked.current = true;
-          setVisible(true);
-        }
+      onClick={async () => {
+        await disconnect();
+        buttonClicked.current = true;
+        setVisible(true);
       }}
       className="w-full"
     >

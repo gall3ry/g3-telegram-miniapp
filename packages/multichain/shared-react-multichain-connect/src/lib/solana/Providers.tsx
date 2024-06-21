@@ -4,7 +4,14 @@ import {
   WalletProvider,
 } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
+import {
+  Coin98WalletAdapter,
+  HuobiWalletAdapter,
+  PhantomWalletAdapter,
+  SafePalWalletAdapter,
+  SolflareWalletAdapter,
+  TrustWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
 import { useMemo } from 'react';
 
@@ -32,7 +39,14 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
        * instantiate its legacy wallet adapter here. Common legacy adapters can be found
        * in the npm package `@solana/wallet-adapter-wallets`.
        */
-      new UnsafeBurnerWalletAdapter(),
+      // new UnsafeBurnerWalletAdapter(),
+
+      new SolflareWalletAdapter(),
+      new PhantomWalletAdapter(),
+      new TrustWalletAdapter(),
+      new Coin98WalletAdapter(),
+      new HuobiWalletAdapter(),
+      new SafePalWalletAdapter(),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [network]
