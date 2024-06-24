@@ -12,6 +12,6 @@ dockerfile = "../apps/g3-telegram-bot/Dockerfile"
 [env]
 
 [[vm]]
-memory = '2gb'
+memory = '1gb'
 cpu_kind = 'shared'
-cpus = 2
+cpus = 1

@@ -3,7 +3,7 @@ import { RewardService } from '@gall3ry/data-access-rewards';
 import { Prisma } from '@gall3ry/database-client';
 import { QuestId } from '@gall3ry/types';
 import { Context, NarrowedContext } from 'telegraf';
-import { InlineQueryResultCachedGif, Update } from 'telegraf/types';
+import { InlineQueryResultGif, Update } from 'telegraf/types';
 import { z } from 'zod';
 import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
@@ -53,28 +53,14 @@ export class InlineQueryTrackerModule extends BaseModule {
       chatType: ctx.inlineQuery.chat_type,
     });
 
-    const message = await ctx.telegram.sendAnimation(
-      ctx.inlineQuery.from.id,
-      imageUrl, // Assuming `imageUrl` is the URL or file path of the GIF
-      {
-        width: 1000,
-        height: 1000,
-        disable_notification: true,
-      }
-    );
-
-    // Retrieve the file_id of the uploaded GIF
-    const gifFileId = message.animation.file_id;
-    logger.debug(gifFileId);
-
     await ctx.telegram.answerInlineQuery(
       ctx.inlineQuery.id,
       [
         {
-          gif_file_id: gifFileId,
+          gif_url: imageUrl,
           id: stickerId.toString(),
           type: 'gif',
-        } as InlineQueryResultCachedGif,
+        } as InlineQueryResultGif,
       ],
       {
         cache_time: 1,
@@ -128,30 +114,13 @@ export class InlineQueryTrackerModule extends BaseModule {
 
     const results = await Promise.all(
       stickers.map(async (sticker) => {
-        const { imageUrl, telegramFileId, id } = sticker;
-
-        // Retrieve the file_id of the uploaded GIF
-        let gif_file_id = telegramFileId;
-
-        if (!gif_file_id) {
-          gif_file_id = await this._uploadAnimation({
-            url: imageUrl,
-            ctx,
-          });
-
-          await db.sticker.update({
-            where: { id: sticker.id },
-            data: {
-              telegramFileId: gif_file_id,
-            },
-          });
-        }
+        const { imageUrl, id } = sticker;
 
         return {
-          gif_file_id,
+          gif_url: imageUrl,
           id: id.toString(),
           type: 'gif',
-        } as InlineQueryResultCachedGif;
+        } as InlineQueryResultGif;
       })
     );
 
@@ -173,30 +142,13 @@ export class InlineQueryTrackerModule extends BaseModule {
 
     const results = await Promise.all(
       stickers.map(async (sticker) => {
-        const { imageUrl, telegramFileId, id } = sticker;
-
-        // Retrieve the file_id of the uploaded GIF
-        let gif_file_id = telegramFileId;
-
-        if (!gif_file_id) {
-          gif_file_id = await this._uploadAnimation({
-            url: imageUrl,
-            ctx,
-          });
-
-          await db.sticker.update({
-            where: { id: sticker.id },
-            data: {
-              telegramFileId: gif_file_id,
-            },
-          });
-        }
+        const { imageUrl, id } = sticker;
 
         return {
-          gif_file_id,
+          gif_url: imageUrl,
           id: id.toString(),
           type: 'gif',
-        } as InlineQueryResultCachedGif;
+        } as InlineQueryResultGif;
       })
     );
 
