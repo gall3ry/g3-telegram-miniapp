@@ -3,15 +3,24 @@ import { Logger } from 'pino';
 import { Telegraf } from 'telegraf';
 
 type Payload = {
-  bot: Telegraf;
   db: PrismaClient;
   logger: Logger;
+  telegraf: Telegraf;
 };
 
 export abstract class BaseModule {
   name: string;
   description: string;
+  logger: Logger;
+  db: PrismaClient;
+  bot: Telegraf;
 
-  abstract onInitializeListeners(payload: Payload): Promise<void>;
-  abstract onInitializeCommands(payload: Payload): Promise<void>;
+  constructor({ telegraf, db, logger }: Payload) {
+    this.logger = logger.child({ module: this.name });
+    this.db = db;
+    this.bot = telegraf;
+  }
+
+  abstract onInitializeListeners(): Promise<void>;
+  abstract onInitializeCommands(): Promise<void>;
 }

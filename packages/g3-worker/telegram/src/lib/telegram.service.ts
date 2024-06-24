@@ -1,10 +1,11 @@
-import { EnvService } from '@g3-worker/env';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import input from 'input';
 import groupBy from 'lodash.groupby';
 import mapValues from 'lodash.mapvalues';
 import { Api, TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions';
+import { ConfigModuleOptions } from './telegram-module-options.interface';
+import { MODULE_OPTIONS_TOKEN } from './telegram.module-definition';
 
 export interface Dictionary<T> {
   [index: string]: T;
@@ -14,12 +15,11 @@ export interface Dictionary<T> {
 export class TelegramService {
   private telegramClient: TelegramClient;
 
-  constructor(private envService: EnvService) {
-    const apiId = this.envService.get('TELEGRAM_API_ID');
-    const apiHash = this.envService.get('TELEGRAM_API_HASH');
-    const stringSession = new StringSession(
-      this.envService.get('TELEGRAM_STRING_SESSION')
-    );
+  constructor(
+    @Inject(MODULE_OPTIONS_TOKEN) private options: ConfigModuleOptions
+  ) {
+    const { apiId, apiHash } = options;
+    const stringSession = new StringSession(options.stringSession);
 
     this.telegramClient = new TelegramClient(stringSession, apiId, apiHash, {
       connectionRetries: 5,

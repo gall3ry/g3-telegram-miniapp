@@ -1,24 +1,19 @@
 import { PrismaService } from '@g3-worker/prisma-client';
 import { G3StickerCapturingEnvService } from '@gall3ry/g3-sticker-capturing-env';
-import {
-  OnQueueCompleted,
-  OnQueueFailed,
-  Process,
-  Processor,
-} from '@nestjs/bull';
+import { G3TelegramBotService } from '@gall3ry/g3-telegram-bot-service-module';
+import { Injectable } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
-import { QUEUE_NAME as UNIQUE_QUEUE_NAME } from './constants';
 
-@Processor(UNIQUE_QUEUE_NAME)
-export class G3StickerCapturingProcessor {
+@Injectable()
+export class G3StickerCapturingService {
   constructor(
     private db: PrismaService,
-    private envService: G3StickerCapturingEnvService
+    private envService: G3StickerCapturingEnvService,
+    private telegramService: G3TelegramBotService
   ) {}
 
-  @Process('capture-gif')
   async getGif(payload: {
     stickerIds: number[];
   }): Promise<{ stickerId: number; cdnUrl: string }[]> {
@@ -113,18 +108,10 @@ export class G3StickerCapturingProcessor {
         }
       });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return fn(payload) as any;
-  }
+    const result = await fn(payload);
 
-  @OnQueueCompleted()
-  async onQueueCompleted(jobId: number) {
-    console.log(`[onQueueCompleted] jobId: ${jobId}`);
-  }
-
-  @OnQueueFailed()
-  async onQueueFailed(jobId: number, error: Error) {
-    console.error(`[onQueueFailed] jobId: ${jobId}, error: ${error}`);
+    await this.telegramService.setStickers(result);
+    return result;
   }
 
   private _uploadGif(payload: { base64: string }) {

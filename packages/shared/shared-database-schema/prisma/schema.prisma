@@ -162,6 +162,8 @@ model Sticker {
     shareCount Int     @default(0)
     Share      Share[]
 
+    telegramFileId String?
+
     GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id], onDelete: Cascade)
     gMSymbolOCCId Int?
 

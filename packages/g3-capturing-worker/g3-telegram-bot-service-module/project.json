@@ -1,0 +1,9 @@
+{
+  "name": "g3-telegram-bot-service-module",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-capturing-worker/g3-telegram-bot-service-module/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project g3-telegram-bot-service-module --web",
+  "targets": {}
+}

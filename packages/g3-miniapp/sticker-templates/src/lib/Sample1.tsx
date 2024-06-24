@@ -1,11 +1,6 @@
 'use client';
 import { Spinner } from '@radix-ui/themes';
-import {
-  decodeFont,
-  decodeImage,
-  type FontAsset,
-  type ImageAsset,
-} from '@rive-app/canvas';
+import { type FontAsset, type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
 import {
   Suspense,
@@ -15,44 +10,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { loadAndDecodeFont, loadAndDecodeImg } from './loadAndDecodeFont';
 import { getGifFromImages } from './utils/getGifFromImages';
-
-const loadAndDecodeImg = async (
-  url: string,
-  size?: {
-    width: number;
-    height: number;
-  }
-) => {
-  const res = await fetch(url);
-
-  const data = await res.arrayBuffer();
-
-  // resize
-  const { width, height } = size ?? { width: 1000, height: 1000 };
-  // convert Uint8Array to ImageBitmap
-  const image = await createImageBitmap(new Blob([new Uint8Array(data)]));
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  ctx?.drawImage(image, 0, 0, width, height);
-
-  const arrBuffer = await new Promise<ArrayBuffer>((resolve) => {
-    canvas.toBlob((blob) => {
-      void blob?.arrayBuffer().then((arrBuffer) => {
-        resolve(arrBuffer);
-      });
-    });
-  });
-
-  return await decodeImage(new Uint8Array(arrBuffer));
-};
-const loadAndDecodeFont = async (url: string) => {
-  const res = await fetch(url);
-  const data = await res.arrayBuffer();
-  return await decodeFont(new Uint8Array(data));
-};
 
 type Sample1Props = {
   shouldRecord?: boolean;
@@ -60,15 +19,13 @@ type Sample1Props = {
   stickerTitle: string;
 };
 
-export const Sample1 = memo(
-  ({ shouldRecord = false, imageUrl, stickerTitle }: Sample1Props) => {
-    return (
-      <Suspense fallback={<></>}>
-        <Sample1Inner {...{ shouldRecord, imageUrl, stickerTitle }} />
-      </Suspense>
-    );
-  }
-);
+export const Sample1 = memo((props: Sample1Props) => {
+  return (
+    <Suspense>
+      <Sample1Inner {...props} />
+    </Suspense>
+  );
+});
 
 const Sample1Inner = ({
   imageUrl,
@@ -127,17 +84,12 @@ const Sample1Inner = ({
 
       return false;
     },
-
     onLoop: () => {
       if (interval.current) {
         clearInterval(interval.current);
 
         setRecording('done');
       }
-    },
-    onLoad: () => {
-      // Prevent a blurry canvas by using the device pixel ratio
-      rive?.resizeDrawingSurfaceToCanvas();
     },
   });
 

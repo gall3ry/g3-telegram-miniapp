@@ -38,6 +38,16 @@
       "options": {
         "lintFilePatterns": ["packages/shared/shared-database-schema/**/*.ts"]
       }
+    },
+    "studio": {
+      "command": "prisma studio",
+      "options": {
+        "cwd": "packages/shared/shared-database-schema"
+      },
+      "configurations": {
+        "development": {},
+        "staging": {}
+      }
     }
   }
 }

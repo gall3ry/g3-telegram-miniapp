@@ -1,12 +1,12 @@
 import { PrismaService } from '@g3-worker/prisma-client';
 import { Body, Controller, Get, HttpException, Post } from '@nestjs/common';
 import { z, ZodError } from 'zod';
-import { G3StickerCapturingProcessor } from './g3-sticker-capturing.processor';
+import { G3StickerCapturingService } from './g3-sticker-capturing.service';
 
 @Controller()
 export class G3StickerCapturingController {
   constructor(
-    private readonly g3StickerCapturingService: G3StickerCapturingProcessor,
+    private readonly g3StickerCapturingService: G3StickerCapturingService,
     private readonly db: PrismaService
   ) {}
 

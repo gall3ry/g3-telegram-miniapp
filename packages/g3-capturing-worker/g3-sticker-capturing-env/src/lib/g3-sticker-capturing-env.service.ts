@@ -9,6 +9,10 @@ export const envSchema = z.object({
   REDIS_PORT: z.coerce.number(),
   REDIS_USERNAME: z.string().optional(),
   REDIS_PASSWORD: z.string().optional(),
+  TELEGRAM_STRING_SESSION: z.string(),
+  TELEGRAM_API_ID: z.coerce.number(),
+  TELEGRAM_API_HASH: z.string(),
+  TELEGRAM_BOT_API_KEY: z.string(),
 });
 
 type Env = z.infer<typeof envSchema>;
