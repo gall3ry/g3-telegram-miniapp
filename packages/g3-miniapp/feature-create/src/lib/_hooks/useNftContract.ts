@@ -1,7 +1,8 @@
+import { env } from '@gall3ry/g3-miniapp-env';
+import { getTxByBOC } from '@gall3ry/shared-ton-utils';
 import { CHAIN } from '@tonconnect/protocol';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { Address, beginCell, toNano } from 'ton-core';
-import { v4 as uuidv4 } from 'uuid';
 import NftCollection from '../_contracts/NftCollection';
 import { setItemContentCell } from '../_contracts/nftContent/onChain';
 import { useAsyncInitialize } from './useAsyncInitialize';
@@ -71,19 +72,26 @@ export function useNftContract() {
         .storeCoins(toNano('0.014'))
         .storeRef(nftMessage) // body
         .endCell();
-      const boc = await tonConnectUI.sendTransaction({
-        messages: [
-          {
-            address: nftContract.address.toString(),
-            amount: toNano('0.02').toString(),
-            payload: body.toBoc().toString('base64'),
-          },
-        ],
-        validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
-      });
+      const boc = await tonConnectUI.sendTransaction(
+        {
+          messages: [
+            {
+              address: nftContract.address.toString(),
+              amount: toNano('0.02').toString(),
+              payload: body.toBoc().toString('base64'),
+            },
+          ],
+          validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes for user to approve
+        },
+        {
+          twaReturnUrl:
+            env.NEXT_PUBLIC_TWA_RETURN_URL as `${string}://${string}`,
+          returnStrategy: 'back',
+        }
+      );
       // TODO: Use real txHash and nftAddress later - now just for recording
-      // const txhash = await getTxByBOC(boc.boc, wallet);
-      const txhash = uuidv4();
+      const txhash = await getTxByBOC(boc.boc, wallet);
+      // const txhash = uuidv4();
 
       console.log('txhash', txhash);
 

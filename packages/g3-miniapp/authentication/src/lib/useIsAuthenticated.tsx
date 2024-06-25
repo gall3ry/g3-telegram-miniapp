@@ -23,7 +23,7 @@ export const useUser = () => {
 
   const tonProvider = useMemo(() => {
     return result.data?.Provider.find((p) => p.type === 'TON_WALLET');
-  }, [result.data]);
+  }, [result]);
 
   return {
     ...result,

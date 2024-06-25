@@ -87,6 +87,7 @@ export const useOpenConnectTonProviderModal = () => {
       }
       case 'connecting': {
         setShowDrawer(null);
+
         tonConnectUI.openModal();
         setModalState('idle');
 
@@ -101,7 +102,6 @@ export const useOpenConnectTonProviderModal = () => {
   }, [modalState]);
 
   const openModal = useCallback(async () => {
-    console.log(`connectTonWallet`);
     setModalState('disconnecting');
   }, []);
 

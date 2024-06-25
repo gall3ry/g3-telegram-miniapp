@@ -1,4 +1,3 @@
-import { TRPCError } from '@trpc/server';
 import { db } from '../../../db';
 import { protectedProcedure } from '../../trpc';
 
@@ -13,7 +12,9 @@ export const getOcc = protectedProcedure.query(
       orderBy: { createdAt: 'desc' },
     });
 
-    if (!provider) throw new TRPCError({ code: 'NOT_FOUND' });
+    if (!provider) {
+      return null;
+    }
 
     const providerId = provider.id;
 
@@ -71,7 +72,9 @@ export const getOcc = protectedProcedure.query(
       },
     });
 
-    if (!result) throw new TRPCError({ code: 'NOT_FOUND' });
+    if (!result) {
+      return null;
+    }
 
     const partnerShare = await db.share.count({
       where: {

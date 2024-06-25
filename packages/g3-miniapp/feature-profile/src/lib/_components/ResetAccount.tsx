@@ -4,7 +4,13 @@ import { Button } from '@radix-ui/themes';
 import { toast } from 'react-hot-toast';
 
 export const ResetAccount = () => {
-  const { mutateAsync: resetAccount } = api.occ.resetAccount.useMutation();
+  const utils = api.useUtils();
+  const { mutateAsync: resetAccount } = api.occ.resetAccount.useMutation({
+    onSuccess: () => {
+      utils.occ.invalidate();
+      utils.auth.invalidate();
+    },
+  });
 
   return (
     <Button

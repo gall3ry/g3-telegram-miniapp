@@ -10,8 +10,6 @@ export const OuterProvider = ({ children }: { children: React.ReactNode }) => (
     manifestUrl={env.NEXT_PUBLIC_TWA_MANIFEST_URL}
     actionsConfiguration={{
       returnStrategy: 'back',
-      modals: 'all',
-      notifications: 'all',
       twaReturnUrl: env.NEXT_PUBLIC_TWA_RETURN_URL as `${string}://${string}`,
     }}
   >

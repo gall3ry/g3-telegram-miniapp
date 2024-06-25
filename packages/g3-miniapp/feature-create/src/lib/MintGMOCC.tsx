@@ -14,7 +14,10 @@ import { Option } from './Option';
 import { useMintByTon } from './useMintByTon';
 
 function MintingDrawer() {
-  const [mintByEpicPoint, setMintByEpicPoint] = useState(true);
+  const [mintByEpicPoint, setMintByEpicPoint] = useQueryState(
+    'mintByEpicPoint',
+    parseAsBoolean.withDefault(true)
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [showDrawer, setShowDrawer] = useQueryState(
     'showDrawer',

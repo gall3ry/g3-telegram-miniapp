@@ -23,6 +23,11 @@ export const useMintByTon = () => {
   const mintByTon = async () => {
     if (!tonProvider || !tonConnectUI.connected) {
       await openModal();
+
+      // For the modal to open
+      await new Promise((resolve) => {
+        setTimeout(resolve, 5000);
+      });
       return;
     }
     try {

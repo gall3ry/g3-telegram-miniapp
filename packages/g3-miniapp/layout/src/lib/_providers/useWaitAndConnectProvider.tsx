@@ -1,36 +1,40 @@
 'use client';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { useTonConnectUI } from '@tonconnect/ui-react';
-import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 export const useWaitAndConnectProvider = () => {
   const [tonConnectUI] = useTonConnectUI();
   const { mutateAsync: connectMoreProvider } =
     api.auth.connectMoreProvider.useMutation();
+  const [goToCreate, setGoToCreate] = useState(false);
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    if (goToCreate && router) {
+      router.push('/create?showDrawer=true&mintByEpicPoint=false');
+      router.refresh();
+    }
+  }, [goToCreate, router]);
 
   useEffect(() => {
     if (tonConnectUI) {
       console.log(`registering onStatusChange`);
       return tonConnectUI.onStatusChange(
         async (w) => {
-          console.log(`onStatusChange`, w);
           if (!w) {
             return;
           }
 
           if (w.connectItems?.tonProof && 'proof' in w.connectItems.tonProof) {
-            console.log({
-              tonProof: w.connectItems.tonProof,
-              account: w.account,
-              publicKey: w.account.publicKey,
-            });
             if (!w.account.publicKey) {
               throw new Error('Public key is missing');
             }
 
             // Require is authenticated
-            await toast.promise(
-              connectMoreProvider({
+            connectMoreProvider(
+              {
                 type: 'TON_WALLET',
                 proof: {
                   address: w.account.address,
@@ -41,16 +45,15 @@ export const useWaitAndConnectProvider = () => {
                     state_init: w.account.walletStateInit,
                   },
                 },
-              }),
+              },
               {
-                loading: 'Connecting...',
-                success: () => {
-                  // void utils.invalidate();
-                  return 'Connected';
+                onSuccess: () => {
+                  setGoToCreate(true);
+
+                  toast.success('TON Wallet connected');
                 },
-                error: (e) => {
+                onError: (e) => {
                   console.error('Failed to connect', e);
-                  return 'Failed to connect';
                 },
               }
             );

@@ -30,14 +30,6 @@ export const occRouter = createTRPCRouter({
     }
 
     await db.$transaction([
-      db.occ.deleteMany({
-        where: {
-          Provider: {
-            userId: session.userId,
-            type: 'TON_WALLET',
-          },
-        },
-      }),
       db.user.update({
         where: {
           id: session.userId,
@@ -46,6 +38,11 @@ export const occRouter = createTRPCRouter({
           point: 0,
           RewardLogs: {
             deleteMany: {},
+          },
+          Provider: {
+            deleteMany: {
+              type: 'TON_WALLET',
+            },
           },
         },
       }),
