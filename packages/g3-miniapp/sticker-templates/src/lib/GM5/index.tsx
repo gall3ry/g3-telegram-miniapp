@@ -38,7 +38,6 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
-      console.log(asset.name, imageUrl);
 
       // If the asset has a `cdnUuid`, return false to let the runtime handle
       // loading it in from a CDN. Or if there are bytes found for the asset
@@ -158,17 +157,26 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
 
   useEffect(() => {
     if (imageUrl && nftAsset && rive) {
-      loadAndDecodeImg(imageUrl, {
+      const load = loadAndDecodeImg(imageUrl, {
         width: 1000,
         height: 1000,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);
           rive.play();
+          return image;
         })
         .catch((e) => {
           console.error(e);
         });
+
+      return () => {
+        load.then((image) => {
+          if (image) {
+            image.unref();
+          }
+        });
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl, nftAsset?.name, rive]);
