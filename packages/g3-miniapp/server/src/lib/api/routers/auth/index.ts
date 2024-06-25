@@ -10,7 +10,6 @@ import {
   SolanaSignInOutput,
 } from '@solana/wallet-standard-features';
 import { parse, validate } from '@tma.js/init-data-node';
-import { TRPCError } from '@trpc/server';
 import { destr } from 'destr';
 import { generateNonce } from 'siwe';
 import { z } from 'zod';
@@ -108,14 +107,7 @@ export const authRouter = createTRPCRouter({
           });
 
           const authData = parse(dataCheckString);
-          const id = authData.user?.id;
-
-          if (isNaN(id)) {
-            throw new TRPCError({
-              code: 'BAD_REQUEST',
-              message: 'Invalid dataCheckString',
-            });
-          }
+          const id = z.coerce.number().parse(authData.user?.id);
 
           value = id.toString();
 

@@ -140,7 +140,6 @@ export const getTopOccs = protectedProcedure
     })
   )
   .query(async ({ input }) => {
-    console.log(`getTopOccs: ${input.page} ${input.limit}`);
     const occs = await db.occ.findMany({
       take: input.limit,
       skip: (input.page - 1) * input.limit,
@@ -148,6 +147,5 @@ export const getTopOccs = protectedProcedure
         shareCount: 'desc',
       },
     });
-    console.log(`getTopOccs: ${occs.length}`);
     return { occs };
   });

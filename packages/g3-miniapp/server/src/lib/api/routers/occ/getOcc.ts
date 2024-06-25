@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { db } from '../../../db';
 import { protectedProcedure } from '../../trpc';
 
@@ -7,10 +8,14 @@ export const getOcc = protectedProcedure.query(
       session: { userId },
     },
   }) => {
-    const { id: providerId } = await db.provider.findFirstOrThrow({
+    const provider = await db.provider.findFirst({
       where: { userId, type: 'TON_WALLET' },
       orderBy: { createdAt: 'desc' },
     });
+
+    if (!provider) throw new TRPCError({ code: 'NOT_FOUND' });
+
+    const providerId = provider.id;
 
     const totalReaction = await db.reaction.aggregate({
       where: {
@@ -47,7 +52,7 @@ export const getOcc = protectedProcedure.query(
       },
     });
 
-    const result = await db.occ.findFirstOrThrow({
+    const result = await db.occ.findFirst({
       where: {
         providerId,
       },
@@ -65,6 +70,8 @@ export const getOcc = protectedProcedure.query(
         },
       },
     });
+
+    if (!result) throw new TRPCError({ code: 'NOT_FOUND' });
 
     const partnerShare = await db.share.count({
       where: {
