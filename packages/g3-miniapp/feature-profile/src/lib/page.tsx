@@ -118,7 +118,7 @@ const Page = () => {
       <div className="mt-4">
         {env.NEXT_PUBLIC_G3_ENV !== 'production' && <ResetAccount />}
 
-        <Button
+        {/* <Button
           onClick={() => {
             setSignOutDrawerOpen(true);
           }}
@@ -131,7 +131,7 @@ const Page = () => {
           <div className="size-5">
             <IconSignOut />
           </div>
-        </Button>
+        </Button> */}
       </div>
     </>
   );

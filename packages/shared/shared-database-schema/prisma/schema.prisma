@@ -154,6 +154,7 @@ model GMNFT {
 
 enum StickerType {
     Sample1
+    GM5
 }
 
 model Sticker {

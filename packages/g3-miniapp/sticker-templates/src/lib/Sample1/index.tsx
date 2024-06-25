@@ -10,8 +10,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { loadAndDecodeFont, loadAndDecodeImg } from './loadAndDecodeFont';
-import { getGifFromImages } from './utils/getGifFromImages';
+import { loadAndDecodeFont, loadAndDecodeImg } from '../loadAndDecodeFont';
+import { getGifFromImages } from '../utils/getGifFromImages';
 
 type Sample1Props = {
   shouldRecord?: boolean;

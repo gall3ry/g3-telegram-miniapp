@@ -92,6 +92,8 @@ export const AllStickers = memo(() => {
                       mapStickerTypeToTemplateComponent(sticker.stickerType, {
                         imageUrl: sticker.GMNFT.imageUrl,
                         stickerTitle: `STICKER #${sticker.id}`,
+                        shouldRecord: false,
+                        type: sticker.stickerType,
                       })}
                   </div>
 

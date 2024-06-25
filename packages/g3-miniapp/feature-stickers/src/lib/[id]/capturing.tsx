@@ -3,7 +3,6 @@ import { api } from '@gall3ry/g3-miniapp-trpc-client/server';
 import { type Metadata } from 'next';
 import { unstable_noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
-import { BottomActions } from './BottomActions';
 import { TemplateInfo } from './TemplateInfo';
 
 export async function generateMetadata({
@@ -12,7 +11,7 @@ export async function generateMetadata({
   params: {
     id: string;
   };
-}) {
+}): Promise<Metadata> {
   unstable_noStore();
   const sticker = await db.sticker.findUnique({
     where: {
@@ -39,7 +38,7 @@ export async function generateMetadata({
       title,
       images,
     },
-  } satisfies Metadata;
+  };
 }
 
 const Page = async ({
@@ -59,10 +58,8 @@ const Page = async ({
 
   return (
     <div>
-      <TemplateInfo sticker={sticker} />
-      <BottomActions />
+      <TemplateInfo sticker={sticker} shouldRecord />
     </div>
   );
 };
-
-export default Page;
+export { Page };

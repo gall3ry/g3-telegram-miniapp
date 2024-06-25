@@ -3,7 +3,6 @@ import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-t
 import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp-utils';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Button } from '@radix-ui/themes';
-import { useInitData } from '@tma.js/sdk-react';
 import { memo } from 'react';
 import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,7 +13,6 @@ export const TopSwiper = memo(() => {
     limit: 10,
   });
   const { postSwitchInlineQuery } = useWebAppSwitchInlineQuery();
-  const initData = useInitData(true);
   const items = data?.items;
 
   return (
@@ -40,6 +38,8 @@ export const TopSwiper = memo(() => {
                 imageUrl:
                   item.GMNFT.imageUrl || 'https://via.placeholder.com/150',
                 stickerTitle: `STICKER #${item.id}`,
+                shouldRecord: false,
+                type: item.stickerType,
               })}
             </div>
 

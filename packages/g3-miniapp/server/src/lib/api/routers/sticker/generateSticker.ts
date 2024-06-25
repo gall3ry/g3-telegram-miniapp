@@ -62,31 +62,41 @@ export const generateSticker = protectedProcedure
       });
 
       const data = nfts.flatMap((nft) => {
-        return Object.values(StickerType).map((stickerType) => ({
-          nftAddress: nft.nftAddress,
-          stickerType: stickerType,
-          gMSymbolOCCId: gmSymbolOCCId.id,
-        }));
-      });
+        return Object.values(StickerType).map((stickerType) => {
+          switch (stickerType) {
+            case 'GM5':
+            default: {
+              return {
+                nftAddress: nft.nftAddress,
+                stickerType: stickerType,
+                gMSymbolOCCId: gmSymbolOCCId.id,
+              };
+            }
+          }
+        });
+      }) satisfies Prisma.StickerCreateManyInput[];
 
       const stickers = await db.sticker.createManyAndReturn({
-        data: data satisfies Prisma.StickerCreateManyInput[],
+        data: data,
         skipDuplicates: true,
       });
 
-      const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-gif`;
-      // send capturing
-      await publish({
-        body: {
-          stickerIds: stickers.map((sticker) => sticker.id),
-        },
-        url: urlToFetch,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).catch((e) => {
-        console.error('Error sending to worker', e);
-      });
+      if (stickers.length > 0) {
+        const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-gif`;
+        // send capturing
+
+        await publish({
+          body: {
+            stickerIds: stickers.map((sticker) => sticker.id),
+          },
+          url: urlToFetch,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).catch((e) => {
+          console.error('Error sending to worker', e);
+        });
+      }
 
       return {
         stickers,

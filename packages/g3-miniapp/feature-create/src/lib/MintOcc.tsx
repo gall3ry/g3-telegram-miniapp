@@ -113,6 +113,8 @@ export const MintOCC = memo(() => {
                 mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
                   stickerTitle: `STICKER #${selectedSticker.id}`,
                   imageUrl: selectedSticker.GMNFT.imageUrl,
+                  shouldRecord: false,
+                  type: selectedSticker.stickerType,
                 })}
             </div>
           </div>

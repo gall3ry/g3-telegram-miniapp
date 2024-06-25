@@ -11,7 +11,12 @@ export const mapStickerTypeToStickerTemplate: Record<
   StickerTemplate
 > = {
   Sample1: {
-    title: 'GM Sticker',
+    title: 'Sample1',
+    description: 'We use this sticker to greet good morning',
+    messageText: 'GM fam!',
+  },
+  GM5: {
+    title: 'GM5',
     description: 'We use this sticker to greet good morning',
     messageText: 'GM fam!',
   },

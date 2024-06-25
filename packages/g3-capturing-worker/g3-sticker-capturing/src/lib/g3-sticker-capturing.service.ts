@@ -1,7 +1,7 @@
 import { PrismaService } from '@g3-worker/prisma-client';
 import { G3StickerCapturingEnvService } from '@gall3ry/g3-sticker-capturing-env';
 import { G3TelegramBotService } from '@gall3ry/g3-telegram-bot-service-module';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
 import { z } from 'zod';
@@ -19,7 +19,7 @@ export class G3StickerCapturingService {
   }): Promise<{ stickerId: number; cdnUrl: string }[]> {
     const db = this.db;
 
-    console.log(`[getGif] Start, payload: ${JSON.stringify(payload)}`);
+    Logger.debug(payload, `[getGif] Start`);
     const fn = z
       .function()
       .args(
@@ -69,7 +69,7 @@ export class G3StickerCapturingService {
               });
               const url = `${this.envService.get(
                 'FRONTEND_URL'
-              )}/stickers/${id}?record=true`;
+              )}/stickers/${id}/capturing`;
 
               await page.goto(url);
               // add event listener (gif)
@@ -109,6 +109,8 @@ export class G3StickerCapturingService {
       });
 
     const result = await fn(payload);
+
+    Logger.debug(payload, `[getGif] End`);
 
     await this.telegramService.setStickers(result);
     return result;
