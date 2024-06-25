@@ -39,12 +39,21 @@ export const mintOCCbyTON = protectedProcedure
     // TODO: Use real txHash and nftAddress later - now just for testing
     const nftAddress = uuidv4();
 
-    const { id: providerId } = await db.provider.findFirstOrThrow({
+    const provider = await db.provider.findFirst({
       where: {
         type: 'TON_WALLET',
         userId: session.userId,
       },
     });
+
+    if (!provider) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Provider not found',
+      });
+    }
+
+    const providerId = provider.id;
 
     if (await db.occ.findFirst({ where: { nftAddress } })) {
       throw new TRPCError({

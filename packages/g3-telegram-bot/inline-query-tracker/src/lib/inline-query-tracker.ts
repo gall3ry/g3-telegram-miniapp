@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
 
+const URL_TO_WEB_APP = 'https://gall3ry.io';
+
 export class InlineQueryTrackerModule extends BaseModule {
   name = 'InlineQueryTrackerModule';
   description = 'Module to track inline query';
@@ -23,13 +25,10 @@ export class InlineQueryTrackerModule extends BaseModule {
     ctx: NarrowedContext<Context<Update>, Update.InlineQueryUpdate>;
     id: number;
   }) {
-    const { db, logger } = this;
+    const { db } = this;
     const { from, chat_type } = ctx.inlineQuery;
 
     // Validate inputs
-    this.logger.debug({
-      id,
-    });
     const { stickerId } = parseInlineQuerySchema({
       stickerId: id,
     });
@@ -37,14 +36,33 @@ export class InlineQueryTrackerModule extends BaseModule {
       where: { id: stickerId },
     });
     if (!sticker) {
-      this.logger.error({ stickerId }, `Sticker not found`);
+      ctx.answerInlineQuery([], {
+        cache_time: 1,
+        button: {
+          text: 'Sticker not found',
+          start_parameter: 'start',
+          web_app: {
+            url: URL_TO_WEB_APP,
+          },
+        },
+      });
       return;
     }
 
     const { imageUrl } = sticker;
 
-    if (!from.username || !chat_type) {
-      // This will not happen
+    if (!from.username || !chat_type || !imageUrl) {
+      ctx.answerInlineQuery([], {
+        cache_time: 1,
+        button: {
+          text: 'Invalid input',
+          start_parameter: 'start',
+          web_app: {
+            url: URL_TO_WEB_APP,
+          },
+        },
+      });
+
       return;
     }
 
@@ -53,13 +71,13 @@ export class InlineQueryTrackerModule extends BaseModule {
       chatType: ctx.inlineQuery.chat_type,
     });
 
-    await ctx.telegram.answerInlineQuery(
-      ctx.inlineQuery.id,
+    await ctx.answerInlineQuery(
       [
         {
           gif_url: imageUrl,
           id: stickerId.toString(),
           type: 'gif',
+          thumbnail_url: imageUrl,
         } as InlineQueryResultGif,
       ],
       {
@@ -68,32 +86,13 @@ export class InlineQueryTrackerModule extends BaseModule {
     );
   }
 
-  async _uploadAnimation({
-    ctx,
-    url,
-  }: {
-    ctx: NarrowedContext<Context<Update>, Update.InlineQueryUpdate>;
-    url: string;
-  }) {
-    const {
-      animation: { file_id },
-    } = await ctx.telegram.sendAnimation(
-      ctx.inlineQuery.from.id,
-      url, // Assuming `url` is the URL or file path of the GIF
-      {
-        disable_notification: true,
-      }
-    );
-    return file_id;
-  }
-
   async _selectMany({
     ctx,
   }: {
     ctx: NarrowedContext<Context<Update>, Update.InlineQueryUpdate>;
   }) {
     const telegramUserId = ctx.inlineQuery.from.id;
-    const { db } = this;
+    const { db, logger } = this;
     const stickers = await db.sticker.findMany({
       // take: 10,
       orderBy: {
@@ -103,26 +102,38 @@ export class InlineQueryTrackerModule extends BaseModule {
         GMSymbolOCC: {
           Occ: {
             Provider: {
-              User: {
-                telegramId: telegramUserId.toString(),
-              },
+              type: 'TELEGRAM',
+              value: telegramUserId.toString(),
             },
           },
         },
       },
     });
 
-    const results = await Promise.all(
-      stickers.map(async (sticker) => {
+    logger.debug({ stickers, telegramUserId }, 'Stickers');
+
+    const results = stickers
+      .map((sticker) => {
         const { imageUrl, id } = sticker;
+
+        if (!imageUrl) {
+          return null;
+        }
 
         return {
           gif_url: imageUrl,
           id: id.toString(),
           type: 'gif',
+          thumbnail_url: imageUrl,
         } as InlineQueryResultGif;
       })
-    );
+      .filter((result) => result !== null);
+
+    if (results.length === 0) {
+      await this._get20NewestStickers(ctx);
+
+      return;
+    }
 
     await ctx.answerInlineQuery(results, {
       cache_time: 1,
@@ -140,20 +151,39 @@ export class InlineQueryTrackerModule extends BaseModule {
       },
     });
 
-    const results = await Promise.all(
-      stickers.map(async (sticker) => {
+    const results = stickers
+      .map((sticker) => {
         const { imageUrl, id } = sticker;
+
+        if (!imageUrl) {
+          return null;
+        }
 
         return {
           gif_url: imageUrl,
           id: id.toString(),
           type: 'gif',
+          thumbnail_url: imageUrl,
         } as InlineQueryResultGif;
       })
-    );
+      .filter((result) => result !== null);
+
+    if (results.length === 0) {
+      await ctx.answerInlineQuery([], {
+        cache_time: 1,
+        button: {
+          text: 'No stickers found or your stickers are processing',
+          start_parameter: 'start',
+          web_app: {
+            url: URL_TO_WEB_APP,
+          },
+        },
+      });
+      return;
+    }
 
     await ctx.answerInlineQuery(results, {
-      cache_time: 30,
+      cache_time: 1,
     });
   }
 
@@ -165,7 +195,6 @@ export class InlineQueryTrackerModule extends BaseModule {
     const rewardService = new RewardService(db);
 
     bot.on('inline_query', async (ctx) => {
-      logger.debug({ ctx }, 'Inline query');
       try {
         // TODO: split to handlers
         const { query } = ctx.inlineQuery;
@@ -173,16 +202,15 @@ export class InlineQueryTrackerModule extends BaseModule {
 
         const isRegistered = !!(await db.user.findFirst({
           where: {
-            telegramId: ctx.inlineQuery.from.id.toString(),
+            Provider: {
+              some: {
+                type: 'TELEGRAM',
+                value: ctx.inlineQuery.from.id.toString(),
+              },
+            },
           },
         }));
         const isSelectOne = id.length > 0;
-
-        if (!isRegistered) {
-          await this._get20NewestStickers(ctx);
-
-          return;
-        }
 
         if (isSelectOne) {
           const { success, data } = z.coerce.number().safeParse(id);
@@ -194,7 +222,7 @@ export class InlineQueryTrackerModule extends BaseModule {
                 text: 'Invalid input',
                 start_parameter: 'start',
                 web_app: {
-                  url: 'https://www.google.com',
+                  url: URL_TO_WEB_APP,
                 },
               },
             });
@@ -206,6 +234,12 @@ export class InlineQueryTrackerModule extends BaseModule {
             id: data,
           });
         } else {
+          if (!isRegistered) {
+            await this._get20NewestStickers(ctx);
+
+            return;
+          }
+
           await this._selectMany({
             ctx,
           });
@@ -226,7 +260,6 @@ export class InlineQueryTrackerModule extends BaseModule {
       });
       if (!sticker) {
         logger.error({ stickerId }, `Sticker not found`);
-
         return;
       }
       const storage = PersistentDb.getInstance();
@@ -251,11 +284,18 @@ export class InlineQueryTrackerModule extends BaseModule {
             },
           },
         },
+        include: {
+          Provider: true,
+        },
       });
 
       // 2 cases here
-      const isOwner =
-        user?.telegramId && +user.telegramId === ctx.chosenInlineResult.from.id;
+      const isOwner = user.Provider.some((provider) => {
+        return (
+          provider.type === 'TELEGRAM' &&
+          +provider.value === ctx.chosenInlineResult.from.id
+        );
+      });
 
       if (isOwner) {
         await rewardOwner({
@@ -279,17 +319,34 @@ export class InlineQueryTrackerModule extends BaseModule {
       });
 
       async function rewardSharerAndOwner() {
-        const sharer = await db.user.findFirstOrThrow({
+        const sharer = await db.user.findFirst({
           where: {
-            telegramId: ctx.chosenInlineResult.from.id.toString(),
+            Provider: {
+              some: {
+                type: 'TELEGRAM',
+                value: ctx.chosenInlineResult.from.id.toString(),
+              },
+            },
           },
         });
         // create account for user
         // reward for sharer
         if (!sharer) {
+          const createData = {
+            type: 'TELEGRAM',
+            value: ctx.chosenInlineResult.from.id.toString(),
+          } as const;
+
           const newSharer = await db.user.create({
             data: {
-              telegramId: ctx.chosenInlineResult.from.id.toString(),
+              Provider: {
+                connectOrCreate: {
+                  where: {
+                    type_value: createData,
+                  },
+                  create: createData,
+                },
+              },
             },
           });
 
@@ -329,8 +386,10 @@ export class InlineQueryTrackerModule extends BaseModule {
     bot.on('message', async (ctx) => {
       // delay 1s to make sure this callback will run after the chosen_inline_result
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const { message } = ctx;
 
+      if (ctx.message.from.id !== ctx.botInfo.id) return;
+
+      const { message } = ctx;
       switch (true) {
         case message.chat.type === 'supergroup': {
           // get from db

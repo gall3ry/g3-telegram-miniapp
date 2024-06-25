@@ -3,12 +3,11 @@ import {
   useIsAuthenticated,
   useUser,
 } from '@gall3ry/g3-miniapp-authentication';
-import { IconPoints } from '@gall3ry/g3-miniapp-icon';
+import { IconPoints, IconTime } from '@gall3ry/g3-miniapp-icon';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { IconButton, Spinner } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
-import { IconTime } from '../../../feature-quests/src/lib/IconTime';
 
 export const CurrentPoint = memo(() => {
   const router = useRouter();

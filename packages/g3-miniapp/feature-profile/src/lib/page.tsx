@@ -5,7 +5,7 @@ import { env } from '@gall3ry/g3-miniapp-env';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Drawer, DrawerContent, DrawerFooter } from '@gall3ry/g3-miniapp-ui';
 import { IMAGES } from '@gall3ry/shared-constants';
-import { Avatar, Button, IconButton, Skeleton } from '@radix-ui/themes';
+import { Avatar, Button, IconButton } from '@radix-ui/themes';
 import { toUserFriendlyAddress } from '@tonconnect/sdk';
 import { memo, useMemo, useState } from 'react';
 import { IconMore } from './_components/IconMore';
@@ -17,12 +17,10 @@ import { useLogout } from './_components/useLogout';
 import { CurrentPoint } from './CurrentPoint';
 
 const Page = () => {
-  const { data: user } = useUser();
+  const { data: user, tonProvider } = useUser();
   const { data: stats, isSuccess } = api.auth.getMyStats.useQuery();
   const { setEditProfileOpen } = useEditQueryState();
   const [signOutDrawerOpen, setSignOutDrawerOpen] = useState(false);
-
-  const tonProvider = user?.tonProvider;
 
   const items = useMemo(() => {
     return isSuccess
@@ -63,12 +61,11 @@ const Page = () => {
                 {user?.displayName ?? 'Loading...'}
               </div>
 
-              <Skeleton loading={!tonProvider}>
+              {tonProvider?.value && (
                 <div className="mt-0.5 text-sm font-medium leading-tight tracking-tight text-[#717D00]">
-                  {tonProvider?.value &&
-                    formatTonAddress(toUserFriendlyAddress(tonProvider.value))}
+                  {formatTonAddress(toUserFriendlyAddress(tonProvider.value))}
                 </div>
-              </Skeleton>
+              )}
             </div>
           </div>
 

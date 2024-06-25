@@ -25,7 +25,8 @@ const createQueryClient = () =>
         if (
           err instanceof TRPCClientError &&
           err.shape?.data?.code === 'UNAUTHORIZED' &&
-          err.shape?.message === ErrorMessage.UserNotFound
+          err.shape?.message === ErrorMessage.UserNotFound &&
+          useAuth.getState().accessToken !== undefined
         ) {
           useAuth.setState({ accessToken: undefined });
         }
@@ -35,6 +36,7 @@ const createQueryClient = () =>
     defaultOptions: {
       queries: {
         retry: 0,
+        staleTime: 2000,
       },
     },
   });

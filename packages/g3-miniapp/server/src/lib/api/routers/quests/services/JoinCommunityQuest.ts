@@ -12,8 +12,8 @@ export class JoinCommunityTask extends BaseQuest {
   text = 'Join now';
 
   async isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean> {
-    const { telegramId } = await db.user.findFirstOrThrow({
-      where: { id: userId },
+    const { value: telegramId } = await db.provider.findUnique({
+      where: { id: userId, type: 'TELEGRAM' },
     });
 
     if (!telegramId) {

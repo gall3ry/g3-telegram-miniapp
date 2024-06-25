@@ -1,18 +1,23 @@
+import { env } from '@gall3ry/g3-miniapp-env';
 import { BLOCKCHAIN_TYPES } from '@gall3ry/multichain-types';
 import {
   multichainSignatureValidationList,
   SolanaValidation,
 } from '@gall3ry/multichain/shared-multichain-signature-validation';
+import { ProviderType } from '@prisma/client';
 import {
   SolanaSignInInput,
   SolanaSignInOutput,
 } from '@solana/wallet-standard-features';
+import { parse, validate } from '@tma.js/init-data-node';
+import { TRPCError } from '@trpc/server';
 import { destr } from 'destr';
 import { generateNonce } from 'siwe';
 import { z } from 'zod';
+import { db } from '../../../db';
 import { AuthenticationService } from '../../services/authentication';
 import { createTRPCRouter, publicProcedure } from '../../trpc';
-import { checkProof } from './checkProof';
+import { checkProof, connectMoreProvider } from './checkProof';
 import { generatePayload } from './generatePayload';
 import { getCurrentUser } from './getCurrentUser';
 import { getMyStats } from './getMyStats';
@@ -20,16 +25,16 @@ import { updateDisplayName } from './updateDisplayName';
 
 export const authRouter = createTRPCRouter({
   checkProof: checkProof,
+  connectMoreProvider: connectMoreProvider,
   generatePayload: generatePayload,
   getCurrentUser: getCurrentUser,
-  updateDisplayName,
   getMyStats,
   getNonce: publicProcedure.query(() => {
     return {
       nonce: generateNonce(),
     };
   }),
-  web3SignIn: publicProcedure
+  signIn: publicProcedure
     .input(
       z.discriminatedUnion('type', [
         z.object({
@@ -46,16 +51,19 @@ export const authRouter = createTRPCRouter({
           input: z.string(),
           output: z.string(),
         }),
+        z.object({
+          type: z.enum([ProviderType.TELEGRAM]),
+          dataCheckString: z.string(),
+        }),
       ])
     )
     .mutation(async ({ input }) => {
       const type = input.type;
-
-      const validator = multichainSignatureValidationList[type];
-      let address: string;
+      let value: string;
 
       switch (type) {
         case 'SOLANA_WALLET': {
+          const validator = multichainSignatureValidationList[type];
           const _validator = validator as SolanaValidation;
           const _input = destr<SolanaSignInInput>(input.input);
           const _output = destr<{
@@ -87,13 +95,36 @@ export const authRouter = createTRPCRouter({
             },
           };
 
-          address = (await _validator.validateSolanaMessage(payload)).address;
+          value = (await _validator.validateSolanaMessage(payload)).address;
+
+          break;
+        }
+        case 'TELEGRAM': {
+          const { dataCheckString } = input;
+          const botToken = env.BOT_TOKEN;
+
+          validate(dataCheckString, botToken, {
+            expiresIn: 0,
+          });
+
+          const authData = parse(dataCheckString);
+          const id = authData.user?.id;
+
+          if (isNaN(id)) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: 'Invalid dataCheckString',
+            });
+          }
+
+          value = id.toString();
 
           break;
         }
         default: {
+          const validator = multichainSignatureValidationList[type];
           const { message, signature, address: _address } = input;
-          address = (
+          value = (
             await validator.validateOrThrow({
               message,
               signature,
@@ -103,13 +134,31 @@ export const authRouter = createTRPCRouter({
         }
       }
 
-      const { token } = await AuthenticationService.createUserWithProvider({
-        address,
-        providerType: type,
-      });
+      const { token, userId } =
+        await AuthenticationService.upsertUserWithProvider({
+          value,
+          providerType: type,
+        });
+
+      if (type === 'TELEGRAM') {
+        const authData = parse(input.dataCheckString);
+
+        if (authData.user.username) {
+          await db.user.updateMany({
+            data: {
+              displayName: authData.user.username,
+            },
+            where: {
+              id: userId,
+              displayName: null,
+            },
+          });
+        }
+      }
 
       return {
         token,
       };
     }),
+  updateDisplayName,
 });

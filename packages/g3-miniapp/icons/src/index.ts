@@ -5,3 +5,4 @@ export * from './lib/IconLock';
 export * from './lib/IconLogin';
 export * from './lib/IconPoints';
 export * from './lib/IconTelegram';
+export * from './lib/IconTime';

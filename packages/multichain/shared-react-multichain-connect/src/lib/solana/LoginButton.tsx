@@ -16,7 +16,7 @@ import { Providers } from './Providers';
 
 const Inner = () => {
   const { publicKey, disconnect } = useWallet();
-  const { mutateAsync: signIn } = api.auth.web3SignIn.useMutation();
+  const { mutateAsync: signIn } = api.auth.signIn.useMutation();
   const { setAccessToken } = useAuth();
   const { signMessage: signMessageAsync, signIn: solanaSignIn } = useWallet();
   const [, setWalletModalConfig] = useState<Readonly<{

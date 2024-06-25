@@ -49,6 +49,11 @@ export const EditDisplayNameDrawer = () => {
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(async (data) => {
+              if (!data.displayName) {
+                console.log('Display name is required');
+                return;
+              }
+
               await toast.promise(
                 updateDisplayName({
                   displayName: data.displayName,

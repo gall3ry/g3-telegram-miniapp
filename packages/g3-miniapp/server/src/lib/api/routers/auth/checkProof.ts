@@ -1,12 +1,13 @@
+import { ProviderType } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
-import { type z } from 'zod';
+import { z } from 'zod';
 import { db } from '../../../db';
 import { CheckProofRequest } from '../../../ton/_dto/check-proof-request-dto';
 import { TonApiService } from '../../../ton/_services/ton-api-service';
 import { TonProofService } from '../../../ton/_services/ton-proof-service';
 import { verifyToken } from '../../../ton/_utils/jwt';
 import { AuthenticationService } from '../../services/authentication';
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure, publicProcedure } from '../../trpc';
 
 class CheckProofService {
   static async checkProofOrThrow({
@@ -58,10 +59,51 @@ export const checkProof = publicProcedure
       public_key,
     });
 
-    const { token } = await AuthenticationService.createUserWithProvider({
-      address,
+    const { token } = await AuthenticationService.upsertUserWithProvider({
+      value: address,
       providerType: 'TON_WALLET',
     });
 
     return { token };
   });
+
+export const connectMoreProvider = protectedProcedure
+  .input(
+    z.discriminatedUnion('type', [
+      z.object({
+        type: z.literal(ProviderType.TON_WALLET),
+        proof: CheckProofRequest,
+      }),
+    ])
+  )
+  .mutation(
+    async ({
+      input: { type, ...rest },
+      ctx: {
+        session: { userId },
+      },
+    }) => {
+      switch (type) {
+        case 'TON_WALLET': {
+          await CheckProofService.checkProofOrThrow(rest.proof);
+
+          await AuthenticationService.connectProvider({
+            value: rest.proof.address,
+            providerType: 'TON_WALLET',
+            userId,
+          });
+
+          return {
+            success: true,
+          };
+        }
+
+        default: {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Invalid provider type',
+          });
+        }
+      }
+    }
+  );

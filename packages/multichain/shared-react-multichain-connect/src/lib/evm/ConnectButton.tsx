@@ -22,7 +22,7 @@ const Inner = () => {
   const { signMessageAsync } = useSignMessage();
   const { isConnected, address } = useAccount();
   const { disconnectAsync } = useDisconnect();
-  const { mutateAsync: signIn } = api.auth.web3SignIn.useMutation();
+  const { mutateAsync: signIn } = api.auth.signIn.useMutation();
   const { setAccessToken } = useAuth();
   const buttonClicked = useRef(false);
 

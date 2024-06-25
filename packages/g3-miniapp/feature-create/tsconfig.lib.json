@@ -8,7 +8,9 @@
       "@nx/react/typings/image.d.ts",
       "next",
       "@nx/next/typings/image.d.ts"
-    ]
+    ],
+    "moduleResolution": "Bundler",
+    "module": "ES2022"
   },
   "exclude": [
     "jest.config.ts",

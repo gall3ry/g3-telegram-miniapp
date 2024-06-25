@@ -1,6 +1,7 @@
 'use client';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { LoggedUserOnly } from '@gall3ry/g3-miniapp-authentication';
+import { CurrentPoint } from '@gall3ry/g3-miniapp-feature-profile';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { QuestId, QuestStatus } from '@gall3ry/types';
 import { Spinner } from '@radix-ui/themes';
@@ -8,7 +9,6 @@ import { TRPCClientError } from '@trpc/client';
 import { useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { CurrentPoint } from '../../../feature-profile/src/lib/CurrentPoint';
 import { AllQuestsCompleted } from './AllQuestsCompleted';
 import { QuestItem } from './QuestItem';
 

@@ -5,15 +5,15 @@ import { createAuthToken } from '../../ton/_utils/jwt';
 import PostHogClient from './posthog';
 
 export class AuthenticationService {
-  static async createUserWithProvider({
-    address,
+  static async upsertUserWithProvider({
+    value,
     providerType,
   }: {
-    address: string;
+    value: string;
     providerType: ProviderType;
   }) {
     const exist = await db.provider.findFirst({
-      where: { value: address, type: 'TON_WALLET' },
+      where: { value: value, type: 'TON_WALLET' },
     });
 
     const client = PostHogClient();
@@ -22,12 +22,12 @@ export class AuthenticationService {
       where: {
         type_value: {
           type: providerType,
-          value: address,
+          value: value,
         },
       },
       create: {
         type: providerType,
-        value: address,
+        value: value,
         User: {
           create: {},
         },
@@ -51,7 +51,7 @@ export class AuthenticationService {
         distinctId: user.id.toString(),
         event: 'new_user',
         properties: {
-          address: address,
+          address: value,
           type: providerType,
         },
       });
@@ -60,7 +60,7 @@ export class AuthenticationService {
         distinctId: user.id.toString(),
         event: 'returning_user',
         properties: {
-          address: address,
+          address: value,
           type: providerType,
         },
       });
@@ -68,11 +68,56 @@ export class AuthenticationService {
     await client.shutdown();
 
     const token = await createAuthToken({
-      address: address,
+      address: value,
       provider: providerType,
       userId: user.id,
     });
 
-    return { token };
+    return { token, userId: user.id };
+  }
+
+  // connectProvider
+  static async connectProvider({
+    value,
+    providerType,
+    userId,
+  }: {
+    value: string;
+    providerType: ProviderType;
+    userId: number;
+  }) {
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'User not found',
+      });
+    }
+
+    const provider = await db.provider.upsert({
+      where: {
+        type_value: {
+          type: providerType,
+          value: value,
+        },
+      },
+      create: {
+        type: providerType,
+        value: value,
+        User: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+      update: {},
+    });
+
+    return provider;
   }
 }

@@ -1,40 +1,31 @@
-import { useIsAuthenticated } from '@gall3ry/g3-miniapp-authentication';
-import { IconLogin } from '@gall3ry/g3-miniapp-icon';
-import { Button, Spinner, Text } from '@radix-ui/themes';
-import { useTonConnectModal } from '@tonconnect/ui-react';
+import { Spinner, Text } from '@radix-ui/themes';
+import { memo } from 'react';
+import { useIsAuthenticated } from './useIsAuthenticated';
 
-export const LoggedUserOnly = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useIsAuthenticated();
-  const { open } = useTonConnectModal();
+export const LoggedUserOnly = memo(
+  ({ children }: { children: React.ReactNode }) => {
+    const { isAuthenticated, isLoading } = useIsAuthenticated();
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center">
-        <Spinner />
-      </div>
-    );
-  }
+    if (isLoading) {
+      return (
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
+      );
+    }
 
-  if (!isAuthenticated) {
-    return (
+    return !isAuthenticated ? (
       <div>
         <div className="text-center">
           <Text color="gray">
             This page is only available to logged in users
           </Text>
         </div>
-
-        <div className="mt-4 flex justify-center">
-          <Button size="3" onClick={open}>
-            <span>Connect wallet</span>
-            <div className="size-5">
-              <IconLogin />
-            </div>
-          </Button>
-        </div>
       </div>
+    ) : (
+      children
     );
   }
+);
 
-  return children;
-};
+LoggedUserOnly.displayName = 'LoggedUserOnly';

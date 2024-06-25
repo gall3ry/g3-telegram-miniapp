@@ -10,7 +10,6 @@ class GetCurrentUserService {
     point: true,
     displayName: true,
     avatarUrl: true,
-    telegramId: true,
     countryCode: true,
     Provider: {
       select: {
