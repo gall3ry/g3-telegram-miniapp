@@ -1,7 +1,6 @@
 import { IconLogin } from '@gall3ry/g3-miniapp-icon';
 import { Button } from '@radix-ui/themes';
 import { useTonConnectModal } from '@tonconnect/ui-react';
-import { OuterProvider } from './Providers';
 
 const Inner = () => {
   const { open } = useTonConnectModal();
@@ -19,9 +18,5 @@ const Inner = () => {
 };
 
 export const LoginButton = () => {
-  return (
-    <OuterProvider>
-      <Inner />
-    </OuterProvider>
-  );
+  return <Inner />;
 };

@@ -1,5 +1,4 @@
 'use client';
-import { env } from '@gall3ry/g3-miniapp-env';
 import { LeaderboardAvatar } from '@gall3ry/g3-miniapp-feature-home';
 import { IconLock, IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
@@ -7,14 +6,12 @@ import { Drawer, DrawerContent } from '@gall3ry/g3-miniapp-ui';
 import { IMAGES } from '@gall3ry/shared-constants';
 import { OccType } from '@gall3ry/types';
 import { Button } from '@radix-ui/themes';
-import { useTonConnectUI } from '@tonconnect/ui-react';
 import Image from 'next/image';
 import { parseAsBoolean, useQueryState } from 'nuqs';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { MOCK_TX_HASH } from './MOCK_TX_HASH';
 import { Option } from './Option';
-import { useNftContract } from './_hooks/useNftContract';
+import { useMintByTon } from './useMintByTon';
 
 function MintingDrawer() {
   const [mintByEpicPoint, setMintByEpicPoint] = useState(true);
@@ -23,168 +20,45 @@ function MintingDrawer() {
     'showDrawer',
     parseAsBoolean.withDefault(false)
   );
-  const { mutateAsync } = api.occ.mintOCCbyTON.useMutation();
   const { mutateAsync: mintByEpicMutateAsync } =
     api.occ.mintOCCbyEpic.useMutation();
   const utils = api.useUtils();
-  const { sendMintNftFromFaucet } = useNftContract();
-  const [tonUI] = useTonConnectUI();
-  const { refetch: fetchPayload } = api.auth.generatePayload.useQuery(
-    undefined,
-    {
-      enabled: false,
-    }
-  );
-  const isButtonClicked = useRef(false);
-  const { mutateAsync: connectMoreProvider } =
-    api.auth.connectMoreProvider.useMutation();
-
-  useEffect(() => {
-    if (tonUI) {
-      const unsubscribe = tonUI.onStatusChange(async (w) => {
-        if (!isButtonClicked.current) {
-          return;
-        }
-
-        if (!w) {
-          return;
-        }
-
-        if (w.connectItems?.tonProof && 'proof' in w.connectItems.tonProof) {
-          if (!w.account.publicKey) {
-            throw new Error('Public key is missing');
-          }
-
-          console.log(
-            'Connecting...',
-            w.account.address,
-            w.account.chain,
-            w.account.publicKey,
-            w.connectItems.tonProof.proof
-          );
-
-          await toast.promise(
-            connectMoreProvider({
-              type: 'TON_WALLET',
-              proof: {
-                address: w.account.address,
-                network: w.account.chain,
-                public_key: w.account.publicKey,
-                proof: {
-                  ...w.connectItems.tonProof.proof,
-                  state_init: w.account.walletStateInit,
-                },
-              },
-            }),
-            {
-              loading: 'Connecting...',
-              success: () => {
-                return 'Connected';
-              },
-              error: (e) => {
-                console.error('Failed to connect', e);
-                return 'Failed to connect';
-              },
-            }
-          );
-        }
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tonUI]);
+  const { mintByTon } = useMintByTon();
 
   const mintByEpic = async () => {
-    setIsLoading(true);
-    try {
-      await toast.promise(
-        mintByEpicMutateAsync({
-          type: OccType.GMSymbolOCC,
-        }),
-        {
-          loading: 'Creating OCC...',
-          success: () => {
-            void utils.occ.getOcc.invalidate();
-            void setShowDrawer(null);
+    await toast.promise(
+      mintByEpicMutateAsync({
+        type: OccType.GMSymbolOCC,
+      }),
+      {
+        loading: 'Creating OCC...',
+        success: () => {
+          void utils.occ.getOcc.invalidate();
+          void setShowDrawer(null);
 
-            return 'OCC created';
-          },
-          error: (e) => {
-            console.log(`Failed to create OCC:`, e);
-
-            return 'Failed to create OCC';
-          },
-        }
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const mintByTon = async () => {
-    isButtonClicked.current = true;
-    if (!tonUI.connected) {
-      setShowDrawer(false);
-      const tonProof = (await fetchPayload()).data?.tonProof;
-      if (!tonProof) {
-        console.error('Payload is missing');
-        return;
-      }
-      tonUI.setConnectRequestParameters({
-        state: 'ready',
-        value: {
-          tonProof,
+          return 'OCC created';
         },
-      });
-      await tonUI.openModal();
-      return;
-    }
+        error: (e) => {
+          console.log(`Failed to create OCC:`, e);
 
-    setIsLoading(true);
-    try {
-      const txHash =
-        env.NEXT_PUBLIC_G3_ENV === 'development'
-          ? MOCK_TX_HASH
-          : await sendMintNftFromFaucet({
-              name: 'Name Of NFT #6',
-              description: 'NFT Description',
-              image:
-                'ipfs://QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx/logo.jpg',
-            });
-
-      await toast.promise(
-        mutateAsync({
-          type: OccType.GMSymbolOCC,
-          txHash,
-        }),
-        {
-          loading: 'Creating OCC...',
-          success: () => {
-            void utils.occ.getOcc.invalidate();
-            void setShowDrawer(null);
-
-            return 'OCC created';
-          },
-          error: (e) => {
-            console.log(`Failed to create OCC:`, e);
-
-            return 'Failed to create OCC';
-          },
-        }
-      );
-    } finally {
-      setIsLoading(false);
-    }
+          return 'Failed to create OCC';
+        },
+      }
+    );
   };
 
   const mintOCC = async () => {
-    if (mintByEpicPoint) {
-      await mintByEpic();
-    } else {
-      await mintByTon();
+    try {
+      setIsLoading(true);
+      if (mintByEpicPoint) {
+        await mintByEpic();
+      } else {
+        await mintByTon();
+      }
+    } catch (error) {
+      console.error('Failed to mint OCC:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -256,7 +130,12 @@ function MintingDrawer() {
 }
 
 export const MintGMOCC = memo(() => {
-  const { data: topOccs } = api.occ.getTopOccs.useQuery({ limit: 5 });
+  const { data: topOccs } = api.occ.getTopOccs.useQuery(
+    { limit: 5 },
+    {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    }
+  );
   const [, setShowDrawer] = useQueryState(
     'showDrawer',
     parseAsBoolean.withDefault(false)

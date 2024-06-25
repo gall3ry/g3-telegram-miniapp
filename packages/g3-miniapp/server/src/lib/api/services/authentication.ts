@@ -115,7 +115,13 @@ export class AuthenticationService {
           },
         },
       },
-      update: {},
+      update: {
+        User: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
     });
 
     return provider;

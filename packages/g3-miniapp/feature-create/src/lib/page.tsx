@@ -1,6 +1,5 @@
 'use client';
 import { LoggedUserOnly } from '@gall3ry/g3-miniapp-authentication';
-import { ton } from '@gall3ry/multichain/shared-react-multichain-connect';
 import { Spinner } from '@radix-ui/themes';
 import { memo, Suspense } from 'react';
 import { MintOCC } from './MintOcc';
@@ -10,10 +9,7 @@ const Page = memo(() => {
   return (
     <div>
       <TopSection />
-
-      <ton.OuterProvider>
-        <MintOCC />
-      </ton.OuterProvider>
+      <MintOCC />
     </div>
   );
 });

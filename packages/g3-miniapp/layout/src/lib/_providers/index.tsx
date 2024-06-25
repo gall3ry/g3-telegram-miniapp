@@ -2,6 +2,7 @@
 
 import { env } from '@gall3ry/g3-miniapp-env';
 import { TRPCReactProvider } from '@gall3ry/g3-miniapp-trpc-client';
+import { ton } from '@gall3ry/multichain/shared-react-multichain-connect';
 import { SDKProvider } from '@tma.js/sdk-react';
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import { posthog } from 'posthog-js';
@@ -34,15 +35,17 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <PostHogProvider client={posthog}>
-      <TRPCReactProvider>
-        <SDKProvider acceptCustomStyles>
-          <BackendAuthProvider>
-            {children}
+      <ton.OuterProvider>
+        <TRPCReactProvider>
+          <SDKProvider acceptCustomStyles>
+            <BackendAuthProvider>
+              {children}
 
-            <ProgressBar color="#14DB60" />
-          </BackendAuthProvider>
-        </SDKProvider>
-      </TRPCReactProvider>
+              <ProgressBar color="#14DB60" />
+            </BackendAuthProvider>
+          </SDKProvider>
+        </TRPCReactProvider>
+      </ton.OuterProvider>
     </PostHogProvider>
   );
 };
