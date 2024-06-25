@@ -135,7 +135,7 @@ export const authRouter = createTRPCRouter({
       if (type === 'TELEGRAM') {
         const authData = parse(input.dataCheckString);
 
-        if (authData.user.username) {
+        if (authData.user?.username) {
           await db.user.updateMany({
             data: {
               displayName: authData.user.username,

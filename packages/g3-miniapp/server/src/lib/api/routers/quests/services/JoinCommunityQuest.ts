@@ -12,16 +12,15 @@ export class JoinCommunityTask extends BaseQuest {
   text = 'Join now';
 
   async isUserFinishedQuest({ userId }: { userId: number }): Promise<boolean> {
-    const { value: telegramId } = await db.provider.findUnique({
+    const provider = await db.provider.findUnique({
       where: { id: userId, type: 'TELEGRAM' },
     });
 
-    if (!telegramId) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'User has not set telegram username',
-      });
+    if (!provider) {
+      return false;
     }
+
+    const { value: telegramId } = provider;
 
     const isUserJoinedCommunity = await telegramInstance
       .hasUserJoinedGroup({
