@@ -34,7 +34,7 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
   >('idle');
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/gm5/untitled.riv',
+    src: '/rive/gm5/template.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
@@ -86,6 +86,7 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
         setRecording('done');
       }
     },
+    artboard: 'Artboard 2',
   });
 
   const isInitialPlaying =

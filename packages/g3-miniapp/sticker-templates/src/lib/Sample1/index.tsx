@@ -39,7 +39,7 @@ const Sample1Inner = ({
   >('idle');
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/sample1/untitled.riv',
+    src: '/rive/gm5/template.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
@@ -55,7 +55,7 @@ const Sample1Inner = ({
         case _asset.isImage: {
           const asset = _asset as ImageAsset;
 
-          if (asset.name === 'NFT') {
+          if (asset.name === 'avatar') {
             setNftAsset(asset);
 
             return true;
@@ -165,8 +165,8 @@ const Sample1Inner = ({
       rive.setTextRunValue('STICKER_TITLE', stickerTitle);
 
       loadAndDecodeImg(imageUrl, {
-        width: 1000,
-        height: 1000,
+        width: 1300,
+        height: 1300,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);
