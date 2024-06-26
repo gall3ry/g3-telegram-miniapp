@@ -41,13 +41,19 @@ function UserMenu() {
               }}
             >
               <div className="flex items-center gap-3">
-                <div className="5 flex items-center gap-1">
-                  <div className="size-6">
-                    <IconPoints />
-                  </div>
-
-                  <div className="text-right text-xl font-bold leading-7 text-slate-900">
-                    {user.point}
+                <div className="flex items-center gap-1">
+                  <div>
+                    <div className="text-right text-slate-900 text-xl font-bold leading-7">
+                      {user.displayName}
+                    </div>
+                    <div className="text-right text-slate-500 text-sm font-semibold leading-tight tracking-tight flex items-center justify-end">
+                      <span className="w-3.5 h-3.5">
+                        <IconPoints />
+                      </span>
+                      <span className="inline-block ml-[3px]">
+                        {user.point}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <Avatar
