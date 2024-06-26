@@ -30,6 +30,7 @@ export const useMintByTon = () => {
       });
       return;
     }
+
     try {
       console.log('NEXT_PUBLIC_G3_ENV');
       const txHash =

@@ -1,6 +1,5 @@
 'use client';
-import { LeaderboardAvatar } from '@gall3ry/g3-miniapp-feature-home';
-import { IconLock, IconPoints } from '@gall3ry/g3-miniapp-icon';
+import { IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Drawer, DrawerContent } from '@gall3ry/g3-miniapp-ui';
 import { IMAGES } from '@gall3ry/shared-constants';
@@ -8,12 +7,12 @@ import { OccType } from '@gall3ry/types';
 import { Button } from '@radix-ui/themes';
 import Image from 'next/image';
 import { parseAsBoolean, useQueryState } from 'nuqs';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Option } from './Option';
 import { useMintByTon } from './useMintByTon';
 
-function MintingDrawer() {
+export function MintingDrawer() {
   const [mintByEpicPoint, setMintByEpicPoint] = useQueryState(
     'mintByEpicPoint',
     parseAsBoolean.withDefault(true)
@@ -131,94 +130,3 @@ function MintingDrawer() {
     </Drawer>
   );
 }
-
-export const MintGMOCC = memo(() => {
-  const { data: topOccs } = api.occ.getTopOccs.useQuery(
-    { limit: 5 },
-    {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    }
-  );
-  const [, setShowDrawer] = useQueryState(
-    'showDrawer',
-    parseAsBoolean.withDefault(false)
-  );
-
-  return (
-    <div>
-      <div className="mt-4 px-4">
-        <div className="text-center text-2xl font-bold leading-9 text-black">
-          Unlock Your Creativity
-          <br />
-          with GM EPIC
-        </div>
-
-        <div className="mt-2 text-center text-sm font-light leading-tight tracking-tight text-slate-700">
-          Want to show off your sticker ownership with daily messages? Mint GM,
-          customize your content, and share more to level up and collect points
-          for the $EPIC Airdrops (TBA).
-        </div>
-
-        <div className="mt-6">
-          <Image
-            className="aspect-square w-full rounded-xl"
-            src={IMAGES.create.gm}
-            alt=""
-            width="335"
-            height="335"
-          />
-        </div>
-
-        <div className="mt-5">
-          <div className="text-center text-xl font-bold leading-7 text-slate-900">
-            Top 5 GMs
-          </div>
-        </div>
-
-        <div className="mt-4 flex">
-          {topOccs?.occs.map(
-            (item, index) =>
-              item.imageUrl && (
-                <div key={item.id}>
-                  <LeaderboardAvatar
-                    key={index}
-                    occId={item.id}
-                    occImageUrl={IMAGES.create.gm}
-                    rank={index + 1}
-                  />
-                  <div className="ml-3 mt-1.5 flex items-center gap-1.5">
-                    <div className="text-xl font-bold leading-7 text-green-600">
-                      {item.shareCount}
-                    </div>
-                    <div className="text-sm font-medium leading-tight tracking-tight text-slate-900">
-                      share{item.shareCount === 1 ? '' : 's'}
-                    </div>
-                  </div>
-                </div>
-              )
-          )}
-        </div>
-      </div>
-
-      <MintingDrawer />
-
-      <div className="container sticky -left-4 -right-4 bottom-20 mt-7 bg-white px-5 py-3 shadow-xl">
-        <Button
-          className="w-full"
-          radius="large"
-          size="4"
-          onClick={() => {
-            void setShowDrawer(true);
-          }}
-        >
-          <div className="size-6">
-            <IconLock />
-          </div>
-          MINT GM UGC TEMPLATE
-        </Button>
-      </div>
-    </div>
-  );
-});
-
-MintGMOCC.displayName = 'MintGMOCC';

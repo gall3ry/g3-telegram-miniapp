@@ -2,15 +2,21 @@
 import { LoggedUserOnly } from '@gall3ry/g3-miniapp-authentication';
 import { Spinner } from '@radix-ui/themes';
 import { memo, Suspense } from 'react';
-import { MintOCC } from './MintOcc';
-import { TopSection } from './TopSection';
+import { ForMintedOccPage } from './ForMintedOccPage';
+import { Introduction } from './Introduction';
+import { MintEPICButton } from './MintEPICButton';
+import { useGMOcc } from './useGMOcc';
 
 const Page = memo(() => {
-  return (
-    <div>
-      <TopSection />
-      <MintOCC />
-    </div>
+  const [occ] = useGMOcc();
+
+  return occ ? (
+    <ForMintedOccPage />
+  ) : (
+    <>
+      <Introduction />
+      <MintEPICButton />
+    </>
   );
 });
 

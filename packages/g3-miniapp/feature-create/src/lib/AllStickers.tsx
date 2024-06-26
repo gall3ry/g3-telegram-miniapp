@@ -36,11 +36,6 @@ export const AllStickers = memo(() => {
             height={176}
           />
 
-          <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-            Mint and say GM!
-            <br />
-            with your assets
-          </div>
           <div className="mt-1 text-center text-base font-light leading-normal tracking-tight text-slate-500">
             Select your assets to start creating.
           </div>
@@ -53,7 +48,7 @@ export const AllStickers = memo(() => {
                 void setSelectAssetsDrawer(true);
               }}
             >
-              Select assets
+              Select TON assets
             </Button>
           </div>
         </div>
@@ -62,7 +57,7 @@ export const AllStickers = memo(() => {
       {stickers && stickers.length > 0 && (
         <div className="mt-5">
           <div className="text-xl font-bold leading-7 text-slate-900">
-            Created UGC list
+            Sticker set
           </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2">

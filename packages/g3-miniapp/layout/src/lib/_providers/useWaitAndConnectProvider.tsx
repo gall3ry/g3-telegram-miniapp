@@ -10,6 +10,7 @@ export const useWaitAndConnectProvider = () => {
     api.auth.connectMoreProvider.useMutation();
   const [goToCreate, setGoToCreate] = useState(false);
   const router = useRouter();
+  const utils = api.useUtils();
 
   useLayoutEffect(() => {
     if (goToCreate && router) {
@@ -49,6 +50,7 @@ export const useWaitAndConnectProvider = () => {
               {
                 onSuccess: () => {
                   setGoToCreate(true);
+                  utils.auth.getCurrentUser.invalidate();
 
                   toast.success('TON Wallet connected');
                 },

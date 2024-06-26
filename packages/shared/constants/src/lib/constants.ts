@@ -31,6 +31,20 @@ export const IMAGES = {
     icon_chart_2: '/images/create/icon-chart-2.png',
     icon_level_1: '/images/create/icon-level-1.png',
     ton_logo: '/images/create/ton-logo.png',
+
+    fairy: '/images/create/fairy.png',
+    fairy_gold: '/images/create/fairy-gold.png',
+    connect_ton_required: '/images/create/connect-ton-required.png',
+
+    help: {
+      1: '/images/create/help/1.png',
+      2: '/images/create/help/2.png',
+      3: '/images/create/help/3.png',
+      timer: '/images/create/help/timer.png',
+    },
+  },
+  level: {
+    1: '/images/level/1.png',
   },
   home: {
     home_bg: '/images/home/home-bg.png',
