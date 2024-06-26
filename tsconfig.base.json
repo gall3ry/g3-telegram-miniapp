@@ -121,6 +121,9 @@
       "@gall3ry/telegram-bot-recommendation": [
         "packages/g3-worker/telegram-bot-recommendation/src/index.ts"
       ],
+      "@gall3ry/third-parties-ton-nfts-api": [
+        "packages/third-parties/ton-nfts-api/src/index.ts"
+      ],
       "@gall3ry/types": ["packages/shared/types/src/index.ts"]
     }
   },
