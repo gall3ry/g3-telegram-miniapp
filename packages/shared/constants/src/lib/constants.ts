@@ -51,6 +51,7 @@ export const IMAGES = {
   },
 
   balance_bg: '/images/balance_bg.png',
+  balance_bg2: '/images/balance_bg2.png',
   avatar: '/images/avatar.png',
   no_items: '/images/no-items.png',
 } as const;

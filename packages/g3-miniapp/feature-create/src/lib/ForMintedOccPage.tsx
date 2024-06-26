@@ -37,6 +37,7 @@ export const ForMintedOccPage = () => {
         open={showRevealSoonDrawer}
         onOpenChange={setShowRevealSoonDrawer}
       />
+      <SingleStickerDetailDrawer />
     </div>
   );
 };
