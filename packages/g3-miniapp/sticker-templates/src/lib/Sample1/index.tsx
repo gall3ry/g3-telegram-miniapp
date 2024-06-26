@@ -1,6 +1,6 @@
 'use client';
 import { Spinner } from '@radix-ui/themes';
-import { type FontAsset, type ImageAsset } from '@rive-app/canvas';
+import { type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
 import {
   Suspense,
@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { loadAndDecodeFont, loadAndDecodeImg } from '../loadAndDecodeFont';
+import { loadAndDecodeImg } from '../loadAndDecodeFont';
 import { getGifFromImages } from '../utils/getGifFromImages';
 
 type Sample1Props = {
@@ -63,23 +63,23 @@ const Sample1Inner = ({
 
           break;
         }
-        case _asset.isFont: {
-          const asset = _asset as FontAsset;
+        // case _asset.isFont: {
+        //   const asset = _asset as FontAsset;
 
-          // Bebas Neue-593220.ttf
-          if (asset.name === 'Bebas Neue') {
-            loadAndDecodeFont('/rive/sample1/Bebas Neue-593220.ttf')
-              .then((font) => {
-                asset.setFont(font);
-              })
-              .catch((e) => {
-                console.error(e);
-              });
+        //   // Bebas Neue-593220.ttf
+        //   if (asset.name === 'Bebas Neue') {
+        //     loadAndDecodeFont('/rive/sample1/Bebas Neue-593220.ttf')
+        //       .then((font) => {
+        //         asset.setFont(font);
+        //       })
+        //       .catch((e) => {
+        //         console.error(e);
+        //       });
 
-            return true;
-          }
-          break;
-        }
+        //     return true;
+        //   }
+        //   break;
+        // }
       }
 
       return false;
@@ -165,8 +165,8 @@ const Sample1Inner = ({
       rive.setTextRunValue('STICKER_TITLE', stickerTitle);
 
       loadAndDecodeImg(imageUrl, {
-        width: 1300,
-        height: 1300,
+        width: 1450,
+        height: 1450,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);

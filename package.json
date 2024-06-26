@@ -71,6 +71,8 @@
     "eruda": "^3.0.1",
     "express": "~4.18.1",
     "gifshot": "^0.4.5",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.0",
     "input": "^1.0.1",
     "joi": "^17.13.1",
     "jose": "^5.4.0",
