@@ -75,7 +75,7 @@ export class InlineQueryTrackerModule extends BaseModule {
             [
               {
                 text: '💎 Earn more points 💎',
-                url: URL_TO_TMA_QUEST,
+                url: URL_TO_TMA,
               },
             ],
           ],
