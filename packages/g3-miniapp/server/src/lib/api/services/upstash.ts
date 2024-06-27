@@ -10,17 +10,14 @@ import axios from 'axios';
 
 export enum Key {
   LEADERBOARD = 'leaderboard',
-  getGMNFTs = 'getGMNFTs',
 }
 
 const mapCacheKeyToTimeExpiry: Record<Key, number> = {
   [Key.LEADERBOARD]: 60,
-  [Key.getGMNFTs]: 5,
 };
 
 const dynamicCacheKey = {
   [Key.LEADERBOARD]: () => 'leaderboard',
-  [Key.getGMNFTs]: ({ userId }: { userId: number }) => `getGMNFTs-${userId}`,
 } satisfies Record<Key, (args: any) => string>;
 
 const redis = new Redis({
@@ -41,6 +38,8 @@ export const callOrGetFromCache = async <T, D extends Key>(
     return callback();
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const cacheKey = dynamicCacheKey[key]({
     // no way to make it, but we have typesafe already at args
     ...(args as any),

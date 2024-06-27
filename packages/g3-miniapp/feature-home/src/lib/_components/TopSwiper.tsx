@@ -46,7 +46,7 @@ export const TopSwiper = memo(() => {
             <div className="mt-3">
               <Button
                 size="4"
-                className="w-full"
+                className="w-full whitespace-nowrap"
                 onClick={() => {
                   postSwitchInlineQuery({
                     query: `${item.id}`,

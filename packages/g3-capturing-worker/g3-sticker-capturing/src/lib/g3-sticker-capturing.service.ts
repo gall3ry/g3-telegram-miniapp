@@ -1,8 +1,6 @@
 import { PrismaService } from '@g3-worker/prisma-client';
-import { Prisma } from '@gall3ry/database-client';
 import { G3StickerCapturingEnvService } from '@gall3ry/g3-sticker-capturing-env';
 import { G3TelegramBotService } from '@gall3ry/g3-telegram-bot-service-module';
-import { TonNFTsAPI } from '@gall3ry/third-parties-ton-nfts-api';
 import { Injectable, Logger } from '@nestjs/common';
 import PQueue from 'p-queue';
 import { Browser, chromium } from 'playwright';
@@ -144,86 +142,5 @@ export class G3StickerCapturingService {
 
         return { url: url as string };
       })(payload);
-  }
-
-  async getNFTs({ providerIds }: { providerIds: number[] }) {
-    const providers = await this.db.provider.findMany({
-      where: {
-        id: {
-          in: providerIds,
-        },
-      },
-    });
-
-    const gMSymbolOCC = await this.db.gMSymbolOCC.findFirst({
-      where: {
-        Occ: {
-          providerId: {
-            in: providerIds,
-          },
-        },
-      },
-    });
-
-    if (!gMSymbolOCC) {
-      Logger.error('gMSymbolOCC not found');
-      throw new Error('gMSymbolOCC not found');
-    }
-
-    const gMSymbolOCCId = gMSymbolOCC.id;
-
-    const result = await Promise.all(
-      providers.map(async (provider) => {
-        switch (provider.type) {
-          case 'TON_WALLET': {
-            const nfts = await TonNFTsAPI.getNFTs(provider.value);
-
-            // get all nfts that is not exist any more
-            const removedNfts = await this.db.gMNFT.findMany({
-              where: {
-                gMSymbolOCCId,
-                nftAddress: {
-                  notIn: nfts.map(({ nftAddress }) => nftAddress),
-                },
-              },
-            });
-
-            // TODO: make action with removed NFTs, for example, gray scaled sticker...
-            Logger.log(
-              `Removed NFTs: ${JSON.stringify(removedNfts.map(({ id }) => id))}`
-            );
-
-            // insert
-            await this.db.gMNFT.createMany({
-              skipDuplicates: true,
-              data: nfts.map(
-                ({ image, metadata, name, nftAddress, nftId, price }) => {
-                  return {
-                    nftAddress: nftAddress,
-                    metadata: metadata,
-                    gMSymbolOCCId,
-                    imageUrl: image,
-                    templateMetadata: {
-                      name,
-                      price,
-                      nftId,
-                    },
-                  } satisfies Prisma.GMNFTCreateManyInput;
-                }
-              ),
-            });
-
-            break;
-          }
-          default: {
-            throw new Error(`Provider type ${provider.type} is not supported`);
-          }
-        }
-      })
-    );
-
-    return {
-      updatedCount: result.length,
-    };
   }
 }

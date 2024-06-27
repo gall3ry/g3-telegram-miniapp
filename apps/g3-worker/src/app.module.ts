@@ -1,5 +1,6 @@
 import { EnvModule, envSchema, EnvService } from '@g3-worker/env';
 import { TelegramReactionCrawlingModule } from '@g3-worker/telegram-reaction-crawling';
+import { G3WorkerNftCrawlingModule } from '@gall3ry/g3-worker-nft-crawling';
 import { G3WorkerOccMintingModule } from '@gall3ry/g3-worker-occ-minting';
 import { SampleModuleModule } from '@gall3ry/sample-module';
 import { TelegramRecommendationModule } from '@gall3ry/telegram-bot-recommendation';
@@ -35,6 +36,7 @@ import { AllExceptionsFilter } from './http-exception.filter';
     TelegramRecommendationModule,
     SampleModuleModule,
     G3WorkerOccMintingModule,
+    G3WorkerNftCrawlingModule,
   ],
   providers: [
     {

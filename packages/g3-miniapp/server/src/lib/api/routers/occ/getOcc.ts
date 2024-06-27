@@ -58,6 +58,9 @@ export const getOcc = protectedProcedure.query(
         providerId,
       },
       include: {
+        GMSymbolOCC: {
+          select: { nftLastUpdatedAt: true },
+        },
         Provider: {
           select: {
             User: {

@@ -15,7 +15,7 @@ export const SelectedAssets = () => {
 
   return (
     <Spinner loading={!isSuccess}>
-      {isSuccess && gmNFTs.length > 0 && (
+      {isSuccess && (gmNFTs.result?.length || 0) > 0 && (
         <Button
           size="big"
           variant="secondary"

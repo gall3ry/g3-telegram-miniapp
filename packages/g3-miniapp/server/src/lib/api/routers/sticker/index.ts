@@ -1,10 +1,6 @@
 import { type Prisma } from '@gall3ry/database-client';
-import { env } from '@gall3ry/g3-miniapp-env';
-import { ErrorMessage } from '@gall3ry/types';
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';
-import { getMessageId, publish } from '../../services/upstash';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -101,41 +97,63 @@ export const stickerRouter = createTRPCRouter({
         session: { userId },
       },
     }) => {
-      const addressList = await db.provider.findMany({
+      const shouldShowPending = await db.gMSymbolOCC.findFirst({
         where: {
-          type: 'TON_WALLET',
-        },
-      });
-
-      // Make cron job for this
-      const messageId = await publish({
-        contentBasedDeduplication: true,
-        url: `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/get-nfts`,
-        body: {
-          providerIds: addressList.map((address) => address.id),
-        },
-      });
-
-      const { state } = await getMessageId(messageId);
-
-      if (state !== 'DELIVERED') {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: ErrorMessage.Fetching,
-        });
-      }
-
-      return db.gMNFT.findMany({
-        where: {
-          GMSymbolOCC: {
-            Occ: {
-              Provider: {
-                userId,
-              },
+          Occ: {
+            Provider: {
+              userId,
             },
+          },
+          nftLastUpdatedAt: {
+            equals: null,
           },
         },
       });
+
+      if (shouldShowPending) {
+        return {
+          state: 'pending',
+        };
+      }
+
+      // Refetch if last update was more than 3 minutes ago
+      await db.gMSymbolOCC.updateMany({
+        data: {
+          nftLastUpdatedAt: null,
+        },
+        where: {
+          Occ: {
+            Provider: {
+              userId: userId,
+            },
+          },
+          nftLastUpdatedAt: {
+            lt: new Date(Date.now() - 3 * 60 * 1000),
+          },
+        },
+      });
+
+      return {
+        state: 'success',
+        result: await db.gMNFT.findMany({
+          where: {
+            GMSymbolOCC: {
+              Occ: {
+                Provider: {
+                  userId,
+                },
+              },
+            },
+          },
+          include: {
+            _count: {
+              select: {
+                Sticker: true,
+              },
+            },
+          },
+        }),
+      };
     }
   ),
 

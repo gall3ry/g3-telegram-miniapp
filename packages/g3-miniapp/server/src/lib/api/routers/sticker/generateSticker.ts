@@ -9,12 +9,12 @@ import { protectedProcedure } from '../../trpc';
 export const generateSticker = protectedProcedure
   .input(
     z.object({
-      nfts: z.array(z.object({ imageUrl: z.string(), nftAddress: z.string() })),
+      nfts: z.array(z.object({ nftAddress: z.string() })),
     })
   )
   .mutation(
     async ({
-      input: { nfts: _nfts },
+      input: { nfts },
       ctx: {
         session: { userId },
       },
@@ -35,31 +35,6 @@ export const generateSticker = protectedProcedure
           message: 'GM Symbol OCC not found',
         });
       }
-
-      // delete all existing nfts not including in nfts
-      await db.gMNFT.deleteMany({
-        where: {
-          gMSymbolOCCId: gmSymbolOCCId.id,
-          nftAddress: {
-            notIn: _nfts.map((nft) => nft.nftAddress),
-          },
-        },
-      });
-
-      await db.gMNFT.createManyAndReturn({
-        data: _nfts.map((nft) => ({
-          gMSymbolOCCId: gmSymbolOCCId.id,
-          nftAddress: nft.nftAddress,
-          imageUrl: nft.imageUrl,
-        })),
-        skipDuplicates: true,
-      });
-
-      const nfts = await db.gMNFT.findMany({
-        where: {
-          gMSymbolOCCId: gmSymbolOCCId.id,
-        },
-      });
 
       const data = nfts.flatMap((nft) => {
         return Object.values(StickerType).map((stickerType) => {

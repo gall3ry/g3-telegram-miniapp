@@ -5,5 +5,16 @@
   "projectType": "library",
   "tags": [],
   "// targets": "to see all targets run: nx show project third-parties-ton-nfts-api --web",
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/third-parties/ton-nfts-api",
+        "main": "packages/third-parties/ton-nfts-api/src/index.ts",
+        "tsConfig": "packages/third-parties/ton-nfts-api/tsconfig.lib.json",
+        "assets": ["packages/third-parties/ton-nfts-api/*.md"]
+      }
+    }
+  }
 }

@@ -133,6 +133,8 @@ model GMSymbolOCC {
     Sticker     Sticker[]
     selectedNFT GMNFT[]
 
+    nftLastUpdatedAt DateTime?
+
     Occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
     occId Int @unique
 }

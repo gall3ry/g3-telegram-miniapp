@@ -53,17 +53,4 @@ export class G3StickerCapturingController {
       success: true,
     };
   }
-
-  // Split to other services
-  @Post('/webhook/get-nfts')
-  async getNFTs(@Body() { providerIds }: { providerIds: number[] }) {
-    const { updatedCount } = await this.g3StickerCapturingService.getNFTs({
-      providerIds,
-    });
-
-    return {
-      success: true,
-      updatedCount,
-    };
-  }
 }

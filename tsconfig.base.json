@@ -99,6 +99,9 @@
       "@gall3ry/g3-telegram-bot-service-module": [
         "packages/g3-capturing-worker/g3-telegram-bot-service-module/src/index.ts"
       ],
+      "@gall3ry/g3-worker-nft-crawling": [
+        "packages/g3-worker/nft-crawling/src/index.ts"
+      ],
       "@gall3ry/g3-worker-occ-minting": [
         "packages/g3-worker/occ-minting/src/index.ts"
       ],

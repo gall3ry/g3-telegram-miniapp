@@ -21,7 +21,7 @@ export const AllStickers = memo(() => {
       const atLeastOneStickerNotReady =
         data?.items.some((sticker) => !sticker.imageUrl) ?? false;
 
-      return atLeastOneStickerNotReady ? 5000 : false;
+      return atLeastOneStickerNotReady ? 10000 : false;
     },
   });
   const stickers = stickersData?.items || [];
