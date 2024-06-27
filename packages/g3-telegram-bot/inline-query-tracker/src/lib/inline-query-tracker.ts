@@ -9,6 +9,8 @@ import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
 
 const URL_TO_WEB_APP = 'https://gall3ry.io';
+const URL_TO_TMA = 'https://t.me/g3stg1bot/test';
+const URL_TO_TMA_QUEST = 'https://staging.miniapp.gall3ry.io/quests';
 
 export class InlineQueryTrackerModule extends BaseModule {
   name = 'InlineQueryTrackerModule';
@@ -33,7 +35,7 @@ export class InlineQueryTrackerModule extends BaseModule {
             [
               {
                 text: "Hello, Good Morning",
-                url: `https://t.me/g3stg1bot/test`,
+                url: URL_TO_TMA,
               },
             ],
           ],
@@ -41,6 +43,46 @@ export class InlineQueryTrackerModule extends BaseModule {
       } as InlineQueryResultCachedSticker
     });
     return results;
+  }
+
+  async _sendRewardMessage(userId: number, $this = this) {
+    const user = await $this.db.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        Provider: true,
+      }
+    });
+    if (!user) {
+      console.log(`User ${userId} not found`);
+      return;
+    }
+
+    const provider = user.Provider.find((provider) => provider.type === 'TELEGRAM');
+    if (!provider) {
+      console.log(`Provider TELEGRAM not found`);
+      return;
+    }
+
+    await $this.bot.telegram.sendMessage(
+      provider.value,
+      `🎉 *Congratulations\\! You have earned 25 points\\!* \n\nCurrent balance: ${user.point} points\n\nVisit daily quest to earn more points`,
+      {
+        parse_mode: 'MarkdownV2',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: '💎 Earn more points 💎',
+                url: URL_TO_TMA_QUEST,
+              },
+            ],
+          ],
+        },
+      }
+    );
+    return;
   }
 
   async _selectOne({
@@ -216,6 +258,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     const db = this.db;
     const logger = this.logger;
     const bot = this.bot;
+    const $this = this;
 
     const rewardService = new RewardService(db);
 
@@ -287,7 +330,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       // const { stickerId } = parseInlineQuerySchema({
       //   stickerId: result_id,
       // });
-      
+
       // FIXME: HARD Sticker ID for Demo Point Release System - Need Update Later
       const stickerId = 242;
       const sticker = await db.sticker.findUnique({
@@ -337,6 +380,7 @@ export class InlineQueryTrackerModule extends BaseModule {
         await rewardOwner({
           userId: user.id,
         });
+        await this._sendRewardMessage(user.id);
       } else {
         await rewardSharerAndOwner();
       }
@@ -386,7 +430,6 @@ export class InlineQueryTrackerModule extends BaseModule {
               },
             },
           });
-
           if (!user?.id) {
             logger.error(`[CRITICAL] Owner of the sticker not found`);
             return;
@@ -404,12 +447,15 @@ export class InlineQueryTrackerModule extends BaseModule {
               metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
             }),
           ]);
+          await $this._sendRewardMessage(newSharer.id, $this);
+          await $this._sendRewardMessage(user.id, $this);
         } else {
           await rewardService.rewardUser({
             taskId: QuestId.SHARING_FRIEND_STICKER,
             userId: sharer.id,
             metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
           });
+          await $this._sendRewardMessage(sharer.id, $this);
         }
       }
 
@@ -419,6 +465,7 @@ export class InlineQueryTrackerModule extends BaseModule {
           userId,
           taskId: QuestId.SHARING_MY_STICKER,
         });
+        await $this._sendRewardMessage(userId);
       }
     });
     bot.on('message', async (ctx) => {
