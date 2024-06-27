@@ -22,7 +22,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     const bot = this.bot;
     const stickers = await bot.telegram.getStickerSet(packName);
     const results = stickers.stickers.map((sticker, index) => {
-      console.log(sticker);
+      // console.log(sticker);
       return {
         id: `${index}`,
         type: 'sticker',
@@ -293,6 +293,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       const sticker = await db.sticker.findUnique({
         where: { id: stickerId },
       });
+      console.log(sticker);
       if (!sticker) {
         logger.error({ stickerId }, `Sticker not found`);
         return;
@@ -354,6 +355,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       });
 
       async function rewardSharerAndOwner() {
+        console.log('rewardSharerAndOwner');
         const sharer = await db.user.findFirst({
           where: {
             Provider: {
@@ -412,6 +414,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       }
 
       async function rewardOwner({ userId }: { userId: number }) {
+        console.log('rewardOwner', userId);
         await rewardService.rewardUser({
           userId,
           taskId: QuestId.SHARING_MY_STICKER,
