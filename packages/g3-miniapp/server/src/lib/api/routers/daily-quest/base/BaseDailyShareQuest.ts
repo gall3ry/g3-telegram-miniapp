@@ -1,7 +1,6 @@
-import { DailyQuestType, Prisma } from '@prisma/client';
-import { db } from '../../../../db';
 import {
   BaseDailyQuest,
+  DailyShareQuestType,
   IsCompletePayload,
   mapTypeToPoint,
   mapTypeToShareCount,
@@ -10,27 +9,15 @@ import {
 
 export abstract class BaseDailyShareQuest extends BaseDailyQuest {
   public readonly SHARE_COUNT: number;
-  constructor(type: DailyQuestType) {
+  constructor(type: DailyShareQuestType) {
     super(type);
 
     this.SHARE_COUNT = mapTypeToShareCount[type];
   }
 
-  async isCompleted({ userId }: IsCompletePayload) {
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-
-    const log = await db.dailyQuestLog.findFirst({
-      where: {
-        userId,
-        type: this.type,
-        createdAt: {
-          gte: today,
-        },
-      },
-    });
-
-    if (log) {
+  override async isPassed({ userId, db }: IsCompletePayload) {
+    const isPassed = await super.isPassed({ userId, db });
+    if (!isPassed) {
       return false;
     }
 
@@ -47,47 +34,45 @@ export abstract class BaseDailyShareQuest extends BaseDailyQuest {
     return !!row;
   }
 
-  override async complete({ userId }: IsCompletePayload) {
-    await db.$transaction(async (db: Prisma.TransactionClient) => {
-      await super.complete({ userId, db });
+  override async complete({ userId, db }: IsCompletePayload) {
+    await super.complete({ userId, db });
 
-      const point = mapTypeToPoint[this.type];
-      const xp = mapTypeToXP[this.type];
+    const point = mapTypeToPoint[this.type];
+    const xp = mapTypeToXP[this.type];
 
-      await Promise.all([
-        db.dailyQuestLog.create({
-          data: {
-            type: this.type,
-            userId,
-            point: point,
-            exp: xp,
+    await Promise.all([
+      db.dailyQuestLog.create({
+        data: {
+          type: this.type,
+          userId,
+          point: point,
+          exp: xp,
+        },
+      }),
+      db.user.update({
+        data: {
+          point: {
+            increment: point,
           },
-        }),
-        db.user.update({
-          data: {
-            point: {
-              increment: point,
+        },
+        where: {
+          id: userId,
+        },
+      }),
+      db.gMSymbolOCC.updateMany({
+        data: {
+          exp: {
+            increment: xp,
+          },
+        },
+        where: {
+          Occ: {
+            Provider: {
+              userId,
             },
           },
-          where: {
-            id: userId,
-          },
-        }),
-        db.gMSymbolOCC.updateMany({
-          data: {
-            exp: {
-              increment: xp,
-            },
-          },
-          where: {
-            Occ: {
-              Provider: {
-                userId,
-              },
-            },
-          },
-        }),
-      ]);
-    });
+        },
+      }),
+    ]);
   }
 }

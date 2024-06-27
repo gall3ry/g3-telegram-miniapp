@@ -39,6 +39,12 @@ export const mapTypeToShareCount = {
 
 export class NotCompletedError extends Error {
   constructor() {
+    super('Not completed');
+  }
+}
+
+export class AlreadyCompletedError extends Error {
+  constructor() {
     super('Already completed');
   }
 }
@@ -46,11 +52,54 @@ export class NotCompletedError extends Error {
 export abstract class BaseDailyQuest {
   constructor(public type: DailyQuestType) {}
 
-  abstract isCompleted(payload: IsCompletePayload): Promise<boolean>;
-  async complete({ userId, db }: IsCompletePayload): Promise<void> {
-    const isCompleted = await this.isCompleted({ userId, db });
+  /**
+   * Check if the quest is completed or not
+   * If user claims the reward, it should always return true
+   *
+   * @param payload
+   */
+  async isPassed(payload: IsCompletePayload): Promise<boolean> {
+    const isClaimed = await this.isClaimed(payload);
 
-    if (isCompleted) {
+    // if time === 0:00, we should not allow user to claim the reward
+    if (new Date().getHours() === 0 && new Date().getMinutes() === 0) {
+      return false;
+    }
+
+    if (isClaimed) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Check if the quest is claimed or not
+   *
+   * @param payload
+   */
+  async isClaimed({ db, userId }: IsCompletePayload): Promise<boolean> {
+    // 0:00 GMT+0 of new Date
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    const row = await db.dailyQuestLog.findFirst({
+      where: {
+        userId,
+        createdAt: {
+          gte: today,
+        },
+        type: this.type,
+      },
+    });
+
+    return !!row;
+  }
+
+  async complete({ userId, db }: IsCompletePayload): Promise<void> {
+    const isPassed = await this.isPassed({ userId, db });
+
+    if (!isPassed) {
       throw new NotCompletedError();
     }
   }

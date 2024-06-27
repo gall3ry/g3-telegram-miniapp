@@ -19,7 +19,7 @@ export const CurrentPoint = memo(() => {
       <div
         className="relative rounded-xl px-4 pb-[22px] pt-4"
         style={{
-          backgroundImage: `url(${IMAGES.balance_bg})`,
+          backgroundImage: `url(${IMAGES.balance_bg2})`,
           backgroundSize: 'cover',
         }}
       >

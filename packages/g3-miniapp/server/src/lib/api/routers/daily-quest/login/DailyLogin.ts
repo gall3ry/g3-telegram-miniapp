@@ -11,17 +11,35 @@ export class DailyLogin extends BaseDailyQuest {
     super(DailyQuestType.DAILY_LOGIN);
   }
 
-  async isCompleted({ userId, db }: IsCompletePayload) {
+  async isPassed({ userId, db }: IsCompletePayload) {
+    const isPassed = await super.isPassed({ userId, db });
+    if (!isPassed) {
+      return false;
+    }
+
     // 0:00 GMT+0 of new Date
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
 
     const row = await db.dailyQuestUserInfo.findFirst({
       where: {
-        userId,
-        lastLoginAt: {
-          gte: today,
-        },
+        AND: [
+          {
+            userId,
+          },
+          {
+            OR: [
+              {
+                lastLoginAt: {
+                  gte: today,
+                },
+              },
+              {
+                lastLoginAt: null,
+              },
+            ],
+          },
+        ],
       },
     });
 
@@ -48,9 +66,13 @@ export class DailyLogin extends BaseDailyQuest {
       db.dailyQuestLog.create({
         data: {
           type: this.type,
-          userId,
           point: point,
           exp: xp,
+          User: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       }),
       db.gMSymbolOCC.updateMany({
@@ -67,10 +89,13 @@ export class DailyLogin extends BaseDailyQuest {
           },
         },
       }),
-      db.dailyQuestUserInfo.update({
-        data: {
-          lastLoginAt: new Date(),
+      db.dailyQuestUserInfo.upsert({
+        create: {
           userId,
+          lastLoginAt: new Date(),
+        },
+        update: {
+          lastLoginAt: new Date(),
         },
         where: {
           userId,

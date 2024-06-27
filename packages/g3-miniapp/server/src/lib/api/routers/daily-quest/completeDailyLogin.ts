@@ -13,7 +13,7 @@ export const completeDailyLogin = protectedProcedure.mutation(
     const instance = new DailyLogin();
 
     await db.$transaction(async (db) => {
-      return instance.complete({ userId, db }).catch((err) => {
+      await instance.complete({ userId, db }).catch((err) => {
         if (err instanceof NotCompletedError) {
           throw new TRPCError({
             code: 'BAD_REQUEST',

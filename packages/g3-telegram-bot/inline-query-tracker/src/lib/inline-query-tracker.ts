@@ -3,7 +3,11 @@ import { RewardService } from '@gall3ry/data-access-rewards';
 import { Prisma } from '@gall3ry/database-client';
 import { QuestId } from '@gall3ry/types';
 import { Context, NarrowedContext } from 'telegraf';
-import { InlineQueryResultGif, Update, InlineQueryResultCachedSticker } from 'telegraf/types';
+import {
+  InlineQueryResultCachedSticker,
+  InlineQueryResultGif,
+  Update,
+} from 'telegraf/types';
 import { z } from 'zod';
 import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
@@ -32,13 +36,13 @@ export class InlineQueryTrackerModule extends BaseModule {
           inline_keyboard: [
             [
               {
-                text: "Hello, Good Morning",
+                text: 'Hello, Good Morning',
                 url: `https://t.me/g3stg1bot/test`,
               },
             ],
           ],
-        }
-      } as InlineQueryResultCachedSticker
+        },
+      } as InlineQueryResultCachedSticker;
     });
     return results;
   }
@@ -287,7 +291,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       // const { stickerId } = parseInlineQuerySchema({
       //   stickerId: result_id,
       // });
-      
+
       // FIXME: HARD Sticker ID for Demo Point Release System - Need Update Later
       const stickerId = 242;
       const sticker = await db.sticker.findUnique({
@@ -333,28 +337,48 @@ export class InlineQueryTrackerModule extends BaseModule {
         );
       });
 
+      let sharerId: number | null = null;
+
       if (isOwner) {
-        await rewardOwner({
+        sharerId = await rewardOwner({
           userId: user.id,
         });
       } else {
-        await rewardSharerAndOwner();
+        sharerId = await rewardSharerAndOwner();
       }
 
       storage.appendUserData(ctx.chosenInlineResult.from.id, {
         stickerId,
         chatType,
       });
-      await db.sticker.update({
-        where: { id: stickerId },
-        data: {
-          shareCount: {
-            increment: 1,
-          },
-        },
-      });
 
-      async function rewardSharerAndOwner() {
+      await Promise.all([
+        db.sticker.update({
+          where: { id: stickerId },
+          data: {
+            shareCount: {
+              increment: 1,
+            },
+          },
+        }),
+        db.dailyQuestUserInfo.upsert({
+          where: {
+            userId: sharerId,
+          },
+          create: {
+            userId: sharerId,
+            dailyShareCount: 1,
+          },
+          update: {
+            dailyShareCount: {
+              increment: 1,
+            },
+          },
+        }),
+      ]);
+
+      // return sharer Id
+      async function rewardSharerAndOwner(): Promise<number> {
         console.log('rewardSharerAndOwner');
         const sharer = await db.user.findFirst({
           where: {
@@ -404,21 +428,28 @@ export class InlineQueryTrackerModule extends BaseModule {
               metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
             }),
           ]);
+
+          return newSharer.id;
         } else {
           await rewardService.rewardUser({
             taskId: QuestId.SHARING_FRIEND_STICKER,
             userId: sharer.id,
             metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
           });
+
+          return sharer.id;
         }
       }
 
+      // return owner Id
       async function rewardOwner({ userId }: { userId: number }) {
         console.log('rewardOwner', userId);
         await rewardService.rewardUser({
           userId,
           taskId: QuestId.SHARING_MY_STICKER,
         });
+
+        return userId;
       }
     });
     bot.on('message', async (ctx) => {

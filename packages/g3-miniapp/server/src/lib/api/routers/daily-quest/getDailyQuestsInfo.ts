@@ -27,11 +27,15 @@ export const getDailyQuestsInfo = protectedProcedure.query(
 
     const results = await Promise.all(
       quests.map(async (quest) => {
-        const isCompleted = await quest.isCompleted({ userId, db });
+        const [isPassed, isClaimed] = await Promise.all([
+          quest.isPassed({ userId, db }),
+          quest.isClaimed({ userId, db }),
+        ]);
 
         return {
           type: quest.type,
-          isCompleted,
+          isPassed,
+          isClaimed,
           point: mapTypeToPoint[quest.type],
         };
       })

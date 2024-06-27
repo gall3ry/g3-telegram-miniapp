@@ -9,11 +9,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-[#22F573] hover:bg-[#06B94B] focus:bg-[#06B94B]',
-        // <div className="w-[73px] h-10 px-3 py-2 bg-gray-200 rounded-lg justify-center items-center gap-1.5 inline-flex">
-        //   <div className="text-slate-900 text-base font-bold font-['Kanit'] leading-normal">Create</div>
-        //   </div>
-        secondary: 'bg-[#E5E7EC] hover:bg-[#BEC3D1] focus:bg-[#BEC3D1]',
+        primary: 'bg-[#22F573] hover:bg-[#06B94B]',
+        secondary: 'bg-[#E5E7EC] hover:bg-[#BEC3D1]',
+        outline:
+          'bg-white rounded-[32px] border border-slate-300 hover:bg-[#F2F6F9]',
       },
       size: {
         small: 'h-8 px-2 py-1 text-base font-bold leading-normal',
@@ -26,6 +25,11 @@ const buttonVariants = cva(
       },
       isLoading: {
         true: 'bg-[#F2F6F9] hover:bg-[#F2F6F9] text-[#BEC3D1] cursor-not-allowed',
+      },
+      rounded: {
+        small: 'rounded-[8px]',
+        medium: 'rounded-[16px]',
+        big: 'rounded-[32px]',
       },
     },
     defaultVariants: {
@@ -63,6 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       isLoading,
       children,
+      rounded,
       ...props
     },
     ref
@@ -75,6 +80,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             variant,
             size,
             className,
+            rounded,
             isDisabled: props.disabled,
             isLoading,
           })
