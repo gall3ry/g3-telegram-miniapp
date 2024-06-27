@@ -1,11 +1,12 @@
-import { marketPlaceDocument, marketPlaceUrl, NftInfo } from './graphql';
+import { getNFT, NftInfo } from './graphql';
 
 type NFT = {
   nftId: number;
   price: number;
-  currentDate: Date;
-  stickerId: number;
-  epicSaved: boolean;
+  image: string;
+  metadata: NftInfo;
+  name: string;
+  nftAddress: string;
 };
 
 export class TonNFTsAPI {
@@ -14,23 +15,9 @@ export class TonNFTsAPI {
   }
 
   public static async getNFT(nftAddress: string): Promise<NFT> {
-    const { request } = await import('graphql-request');
-    const res = (await request(marketPlaceUrl, marketPlaceDocument, {
-      address: nftAddress,
-    })) as {
-      alphaNftItemByAddress: NftInfo;
-    };
-    console.log(res);
-    if (!res.alphaNftItemByAddress) {
-      throw new Error('NFT not found');
-    }
+    const nft = await getNFT(nftAddress);
 
-    return {
-      nftId: 1,
-      price: 100,
-      currentDate: new Date(),
-      stickerId: 1,
-      epicSaved: true,
-    };
+    // TODO: correct this
+    return nft as any;
   }
 }
