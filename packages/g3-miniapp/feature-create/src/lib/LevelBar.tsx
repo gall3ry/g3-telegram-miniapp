@@ -1,5 +1,3 @@
-'use client';
-
 export const LevelBar = ({ percentage }: { percentage: number }) => {
   return (
     <div className="h-[5px] bg-opacity-20 bg-white rounded-sm relative">

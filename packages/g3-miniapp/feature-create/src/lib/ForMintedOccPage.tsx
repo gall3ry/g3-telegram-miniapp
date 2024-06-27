@@ -142,6 +142,9 @@ export const SingleStickerDetailDrawer = () => {
 
 export const TopOCCInfo = () => {
   const [showHelpDrawer, setShowHelpDrawer] = useHelpDrawer();
+  const [data] = api.occ.getOcc.useSuspenseQuery();
+  const exp = data?.GMSymbolOCC?.exp ?? 0;
+  const max = 100;
 
   return (
     <>
@@ -183,19 +186,16 @@ export const TopOCCInfo = () => {
 
                   <div>
                     <span className="text-white text-sm font-semibold leading-tight tracking-tight">
-                      0
+                      {exp}
                     </span>
                     <span className="opacity-60 text-white text-sm font-semibold leading-tight tracking-tight">
-                      /100
+                      /{max}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-1">
-                  {/* <div className="h-[5px] bg-opacity-20 bg-white rounded-sm relative">
-                    <div className="w-[98.80px] h-[5px] bg-green-400 rounded-tl-sm rounded-bl-sm absolute" />
-                  </div> */}
-                  <LevelBar percentage={0} />
+                  <LevelBar percentage={exp / max} />
                 </div>
               </div>
             </div>

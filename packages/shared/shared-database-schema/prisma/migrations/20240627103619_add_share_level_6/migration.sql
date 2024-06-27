@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "DailyQuestType" ADD VALUE 'DAILY_SHARE_LEVEL_6';

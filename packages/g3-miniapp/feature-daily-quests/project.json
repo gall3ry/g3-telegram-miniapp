@@ -1,0 +1,9 @@
+{
+  "name": "g3-miniapp-feature-daily-quests",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/g3-miniapp/feature-daily-quests/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project g3-miniapp-feature-daily-quests --web",
+  "targets": {}
+}

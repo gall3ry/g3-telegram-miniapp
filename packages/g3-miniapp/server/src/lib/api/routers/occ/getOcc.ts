@@ -59,7 +59,7 @@ export const getOcc = protectedProcedure.query(
       },
       include: {
         GMSymbolOCC: {
-          select: { nftLastUpdatedAt: true },
+          select: { nftLastUpdatedAt: true, exp: true },
         },
         Provider: {
           select: {

@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE "GMSymbolOCC" ADD COLUMN     "exp" INTEGER NOT NULL DEFAULT 0;
+
+-- CreateTable
+CREATE TABLE "ExpLog" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "metadata" JSONB,
+    "exp" INTEGER NOT NULL,
+    "gMSymbolOCCId" INTEGER,
+
+    CONSTRAINT "ExpLog_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "ExpLog" ADD CONSTRAINT "ExpLog_gMSymbolOCCId_fkey" FOREIGN KEY ("gMSymbolOCCId") REFERENCES "GMSymbolOCC"("id") ON DELETE SET NULL ON UPDATE CASCADE;
