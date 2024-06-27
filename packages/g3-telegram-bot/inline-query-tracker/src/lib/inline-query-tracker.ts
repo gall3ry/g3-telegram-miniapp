@@ -284,9 +284,12 @@ export class InlineQueryTrackerModule extends BaseModule {
       const { result_id } = ctx.chosenInlineResult;
 
       // Validate inputs
-      const { stickerId } = parseInlineQuerySchema({
-        stickerId: result_id,
-      });
+      // const { stickerId } = parseInlineQuerySchema({
+      //   stickerId: result_id,
+      // });
+      
+      // FIXME: HARD Sticker ID for Demo Point Release System - Need Update Later
+      const stickerId = 242;
       const sticker = await db.sticker.findUnique({
         where: { id: stickerId },
       });
