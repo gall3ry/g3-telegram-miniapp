@@ -57,7 +57,7 @@ export const SelectAssetDrawer = memo(() => {
         <div className="min-h-[80vh] flex-col flex px-5">
           <div className="flex justify-between items-center">
             <div className="text-center text-2xl font-bold leading-9 text-slate-900">
-              GM Creation
+              Web3 Sticker Creation
             </div>
             <div className="mt-2 flex justify-center gap-6">
               <button
