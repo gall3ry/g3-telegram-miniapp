@@ -171,13 +171,13 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
           console.error(e);
         });
 
-      return () => {
-        load.then((image) => {
-          if (image) {
-            image.unref();
-          }
-        });
-      };
+      // return () => {
+      //   load.then((image) => {
+      //     if (image) {
+      //       image.unref();
+      //     }
+      //   });
+      // };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrl, nftAsset?.name, rive]);

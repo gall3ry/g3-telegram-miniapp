@@ -1,21 +1,8 @@
 import { StickerType } from '@gall3ry/database-client';
+import { stickerTypeRecord } from '@gall3ry/g3-miniapp-sticker-templates-constants';
 import { z } from 'zod';
 import { GM5 } from './GM5';
 import { Sample1 } from './Sample1';
-
-const stickerTypeRecord = {
-  GM5: z.object({
-    type: z.literal(StickerType.GM5), // must be the same as the key
-    shouldRecord: z.boolean().default(false),
-    imageUrl: z.string(),
-  }),
-  Sample1: z.object({
-    type: z.literal(StickerType.Sample1),
-    shouldRecord: z.boolean().default(false),
-    imageUrl: z.string(),
-    stickerTitle: z.string(),
-  }),
-} as const satisfies Record<StickerType, z.AnyZodObject>;
 
 export function mapStickerTypeToTemplateComponent<T extends StickerType>(
   stickerType: T,

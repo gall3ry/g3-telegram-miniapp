@@ -83,6 +83,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash.groupby": "^4.6.0",
     "lodash.mapvalues": "^4.6.0",
+    "lru-cache": "^10.2.2",
     "next": "14.2.3",
     "next-nprogress-bar": "^2.3.12",
     "nuqs": "^1.17.4",

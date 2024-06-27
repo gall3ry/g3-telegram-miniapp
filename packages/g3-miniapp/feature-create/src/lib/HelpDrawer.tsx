@@ -220,7 +220,7 @@ const HowToEarnXP = () => {
           const lightText = item?.lightText;
 
           return (
-            <div className="h-5 items-center flex">
+            <div className="h-5 items-center flex" key={index}>
               <div className="w-5 h-5 px-[3.33px] py-[6.67px] justify-start items-center flex">
                 <div className="size-[6.67px] bg-slate-500 rounded-full" />
               </div>

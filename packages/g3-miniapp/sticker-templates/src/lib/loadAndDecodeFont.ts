@@ -1,5 +1,14 @@
 'use client';
 import { decodeFont, decodeImage } from '@rive-app/canvas';
+import { LRUCache } from 'lru-cache';
+
+const imageCache = new LRUCache<
+  string,
+  Awaited<ReturnType<typeof decodeImage>>
+>({
+  max: 100, // cache size limit
+  ttl: 1000 * 60 * 30, // cache items expire after 30 minutes
+});
 
 export const loadAndDecodeImg = async (
   url: string,
@@ -8,6 +17,12 @@ export const loadAndDecodeImg = async (
     height: number;
   }
 ) => {
+  // Check if the result is already cached
+  const cachedResult = imageCache.get(JSON.stringify({ url, size }));
+  if (cachedResult) {
+    return cachedResult;
+  }
+
   const res = await fetch(url);
   const data = await res.arrayBuffer();
 
@@ -29,8 +44,13 @@ export const loadAndDecodeImg = async (
     });
   });
 
-  return await decodeImage(new Uint8Array(arrBuffer));
+  const result = await decodeImage(new Uint8Array(arrBuffer));
+
+  imageCache.set(JSON.stringify({ url, size }), result);
+
+  return result;
 };
+
 export const loadAndDecodeFont = async (url: string) => {
   const res = await fetch(url);
   const data = await res.arrayBuffer();

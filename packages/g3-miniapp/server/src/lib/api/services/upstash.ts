@@ -1,18 +1,27 @@
 import { env } from '@gall3ry/g3-miniapp-env';
 import {
   Client,
-  type PublishRequest,
-  type PublishToUrlResponse,
+  PublishRequest,
+  PublishToUrlResponse,
+  State,
 } from '@upstash/qstash';
 import { Redis } from '@upstash/redis';
 import axios from 'axios';
+
 export enum Key {
   LEADERBOARD = 'leaderboard',
+  getGMNFTs = 'getGMNFTs',
 }
 
 const mapCacheKeyToTimeExpiry: Record<Key, number> = {
   [Key.LEADERBOARD]: 60,
+  [Key.getGMNFTs]: 5,
 };
+
+const dynamicCacheKey = {
+  [Key.LEADERBOARD]: () => 'leaderboard',
+  [Key.getGMNFTs]: ({ userId }: { userId: number }) => `getGMNFTs-${userId}`,
+} satisfies Record<Key, (args: any) => string>;
 
 const redis = new Redis({
   url: env.UPSTASH_REDIS_REST_URL,
@@ -23,15 +32,19 @@ const qstash = new Client({
   token: env.UPSTASH_QSTASH_TOKEN,
 });
 
-export const callOrGetFromCache = async <T>(
-  key: Key,
-  callback: () => Promise<T>
+export const callOrGetFromCache = async <T, D extends Key>(
+  key: D,
+  callback: () => Promise<T>,
+  args: Parameters<(typeof dynamicCacheKey)[D]>['0']
 ): Promise<T> => {
   if (env.NEXT_PUBLIC_G3_ENV === 'development') {
     return callback();
   }
 
-  const cacheKey = key;
+  const cacheKey = dynamicCacheKey[key]({
+    // no way to make it, but we have typesafe already at args
+    ...(args as any),
+  });
   const cacheValue = await redis.get(cacheKey);
   if (cacheValue) {
     return cacheValue as T;
@@ -85,3 +98,25 @@ export const pushToQueue = async <T>(
 export enum QUEUE_NAME {
   STICKER_CAPTURE_GIF = 'sticker-capture-gif',
 }
+
+export const getMessageId = async (
+  messageId: string
+): Promise<{ state: State }> => {
+  if (env.NODE_ENV === 'development') {
+    return {
+      state: 'DELIVERED' satisfies State,
+    };
+  }
+
+  const event = await qstash
+    .events({
+      filter: {
+        messageId,
+      },
+    })
+    .then(({ events }) => events[0]);
+
+  return {
+    state: event.state,
+  };
+};

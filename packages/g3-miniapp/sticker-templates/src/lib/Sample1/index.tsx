@@ -92,6 +92,7 @@ const Sample1Inner = ({
       }
     },
   });
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const isInitialPlaying =
     recording === 'idle' && rive?.isPlaying && shouldRecord;
@@ -162,8 +163,6 @@ const Sample1Inner = ({
 
   useEffect(() => {
     if (imageUrl && nftAsset && rive) {
-      rive.setTextRunValue('STICKER_TITLE', stickerTitle);
-
       loadAndDecodeImg(imageUrl, {
         width: 1450,
         height: 1450,
@@ -171,6 +170,9 @@ const Sample1Inner = ({
         .then((image) => {
           nftAsset.setRenderImage(image);
           rive.play();
+
+          setImageLoaded(true);
+          return image;
         })
         .catch((e) => {
           console.error(e);
@@ -183,7 +185,7 @@ const Sample1Inner = ({
     <div className="relative overflow-hidden rounded-xl border-2">
       <RiveComponent width="100%" className="aspect-square" />
 
-      {!nftAsset && (
+      {(!nftAsset || !imageLoaded) && (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl border bg-white">
           <Spinner />
         </div>

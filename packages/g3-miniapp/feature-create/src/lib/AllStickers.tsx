@@ -10,18 +10,21 @@ import { useSelectAssetsForGMDrawer } from './useSelectAssetsForGMDrawer';
 
 export const AllStickers = memo(() => {
   const { isAuthenticated } = useIsAuthenticated();
-  const { data: stickersData, isPending: isStickersPending } =
-    api.sticker.getStickers.useQuery(undefined, {
-      enabled: isAuthenticated,
-      refetchInterval: ({ state }) => {
-        const data = state.data;
-        const atLeastOneStickerNotReady =
-          data?.items.some((sticker) => !sticker.imageUrl) ?? false;
+  const {
+    data: stickersData,
+    isPending: isStickersPending,
+    isSuccess,
+  } = api.sticker.getStickers.useQuery(undefined, {
+    enabled: isAuthenticated,
+    refetchInterval: ({ state }) => {
+      const data = state.data;
+      const atLeastOneStickerNotReady =
+        data?.items.some((sticker) => !sticker.imageUrl) ?? false;
 
-        return atLeastOneStickerNotReady ? 5000 : false;
-      },
-    });
-  const stickers = stickersData?.items;
+      return atLeastOneStickerNotReady ? 5000 : false;
+    },
+  });
+  const stickers = stickersData?.items || [];
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
   const [, setStickerId] = useQueryState('stickerId', parseAsInteger);
 
@@ -54,7 +57,7 @@ export const AllStickers = memo(() => {
         </div>
       )}
 
-      {stickers && stickers.length > 0 && (
+      {isSuccess && stickers.length > 0 && (
         <div className="mt-5">
           <div className="text-xl font-bold leading-7 text-slate-900">
             Sticker set

@@ -1,6 +1,10 @@
 import { type Prisma } from '@gall3ry/database-client';
+import { env } from '@gall3ry/g3-miniapp-env';
+import { ErrorMessage } from '@gall3ry/types';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '../../../db';
+import { getMessageId, publish } from '../../services/upstash';
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -97,6 +101,30 @@ export const stickerRouter = createTRPCRouter({
         session: { userId },
       },
     }) => {
+      const addressList = await db.provider.findMany({
+        where: {
+          type: 'TON_WALLET',
+        },
+      });
+
+      // Make cron job for this
+      const messageId = await publish({
+        contentBasedDeduplication: true,
+        url: `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/get-nfts`,
+        body: {
+          providerIds: addressList.map((address) => address.id),
+        },
+      });
+
+      const { state } = await getMessageId(messageId);
+
+      if (state !== 'DELIVERED') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: ErrorMessage.Fetching,
+        });
+      }
+
       return db.gMNFT.findMany({
         where: {
           GMSymbolOCC: {

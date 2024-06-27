@@ -77,6 +77,9 @@
       "@gall3ry/g3-miniapp-sticker-templates": [
         "packages/g3-miniapp/sticker-templates/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-sticker-templates-constants": [
+        "packages/g3-miniapp/sticker-templates-constants/src/index.ts"
+      ],
       "@gall3ry/g3-miniapp-telegram-miniapp-utils": [
         "packages/g3-miniapp/telegram-miniapp-utils/src/index.ts"
       ],
