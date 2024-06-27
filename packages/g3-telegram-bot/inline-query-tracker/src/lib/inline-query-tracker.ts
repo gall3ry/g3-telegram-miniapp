@@ -3,7 +3,7 @@ import { RewardService } from '@gall3ry/data-access-rewards';
 import { Prisma } from '@gall3ry/database-client';
 import { QuestId } from '@gall3ry/types';
 import { Context, NarrowedContext } from 'telegraf';
-import { InlineQueryResultGif, Update } from 'telegraf/types';
+import { InlineQueryResultGif, Update, InlineQueryResultCachedSticker } from 'telegraf/types';
 import { z } from 'zod';
 import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
@@ -16,6 +16,31 @@ export class InlineQueryTrackerModule extends BaseModule {
 
   async onInitializeListeners() {
     // Do nothing
+  }
+
+  async _getStickersDemo(packName: string = 'Epic5_by_g3stg1bot') {
+    const bot = this.bot;
+    const stickers = await bot.telegram.getStickerSet(packName);
+    const results = stickers.stickers.map((sticker, index) => {
+      console.log(sticker);
+      return {
+        id: `${index}`,
+        type: 'sticker',
+        sticker_file_id: sticker.file_id,
+        // sticker_file_id: 'AgADdQ4AAnKk4FE',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Hello, Good Morning",
+                url: `https://t.me/g3stg1bot/test`,
+              },
+            ],
+          ],
+        }
+      } as InlineQueryResultCachedSticker
+    });
+    return results;
   }
 
   async _selectOne({
@@ -199,6 +224,13 @@ export class InlineQueryTrackerModule extends BaseModule {
         // TODO: split to handlers
         const { query } = ctx.inlineQuery;
         const [id] = query.split(' ');
+
+        const results = await this._getStickersDemo();
+        // console.log(results);
+        await ctx.answerInlineQuery(results, {
+          cache_time: 1,
+        });
+        return;
 
         const isRegistered = !!(await db.user.findFirst({
           where: {
