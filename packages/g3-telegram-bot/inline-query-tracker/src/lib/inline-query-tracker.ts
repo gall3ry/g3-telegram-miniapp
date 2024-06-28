@@ -5,7 +5,6 @@ import { QuestId } from '@gall3ry/types';
 import { Context, NarrowedContext } from 'telegraf';
 import {
   InlineQueryResultCachedSticker,
-  InlineQueryResultGif,
   Update,
 } from 'telegraf/types';
 import { z } from 'zod';
@@ -14,7 +13,7 @@ import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
 
 const URL_TO_WEB_APP = 'https://gall3ry.io';
 const URL_TO_TMA = 'https://t.me/g3stg1bot/test';
-const URL_TO_TMA_QUEST = 'https://staging.miniapp.gall3ry.io/quests';
+// const URL_TO_TMA_QUEST = 'https://staging.miniapp.gall3ry.io/quests';
 
 export class InlineQueryTrackerModule extends BaseModule {
   name = 'InlineQueryTrackerModule';
@@ -24,7 +23,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     // Do nothing
   }
 
-  async _getStickersDemo(packName = 'Epic5_by_g3stg1bot') {
+  async _getStickers(packName = 'Epic5_by_g3stg1bot') {
     const bot = this.bot;
     const stickers = await bot.telegram.getStickerSet(packName);
     const results = stickers.stickers.map((sticker, index) => {
@@ -49,8 +48,12 @@ export class InlineQueryTrackerModule extends BaseModule {
     return results;
   }
 
-  async _sendRewardMessage(userId: number, $this = this) {
-    const user = await $this.db.user.findFirst({
+  async _sendRewardMessage(userId: number) {
+    if (!userId) {
+      console.log(`_sendRewardMessage: invalid ${userId}`);
+      return
+    }
+    const user = await this.db.user.findFirst({
       where: {
         id: userId,
       },
@@ -71,7 +74,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       return;
     }
 
-    await $this.bot.telegram.sendMessage(
+    await this.bot.telegram.sendMessage(
       provider.value,
       `🎉 *Congratulations\\! You have earned 25 points\\!* \n\nCurrent balance: ${user.point} points\n\nVisit daily quest to earn more points`,
       {
@@ -122,8 +125,7 @@ export class InlineQueryTrackerModule extends BaseModule {
       return;
     }
 
-    const { imageUrl } = sticker;
-
+    const { imageUrl, telegramFileId } = sticker;
     if (!from.username || !chat_type || !imageUrl) {
       ctx.answerInlineQuery([], {
         cache_time: 1,
@@ -149,9 +151,9 @@ export class InlineQueryTrackerModule extends BaseModule {
         {
           gif_url: imageUrl,
           id: stickerId.toString(),
-          type: 'gif',
-          thumbnail_url: imageUrl,
-        } as InlineQueryResultGif,
+          type: 'sticker',
+          sticker_file_id: telegramFileId,
+        } as InlineQueryResultCachedSticker,
       ],
       {
         cache_time: 1,
@@ -184,7 +186,6 @@ export class InlineQueryTrackerModule extends BaseModule {
     });
 
     logger.debug({ stickers, telegramUserId }, 'Stickers');
-
     const results = stickers
       .map((sticker) => {
         const { imageUrl, id } = sticker;
@@ -194,14 +195,12 @@ export class InlineQueryTrackerModule extends BaseModule {
         }
 
         return {
-          gif_url: imageUrl,
           id: id.toString(),
-          type: 'gif',
-          thumbnail_url: imageUrl,
-        } as InlineQueryResultGif;
+          type: 'sticker',
+          sticker_file_id: sticker.telegramFileId,
+        } as InlineQueryResultCachedSticker;
       })
       .filter((result) => result !== null);
-
     if (results.length === 0) {
       await this._get20NewestStickers(ctx);
 
@@ -233,11 +232,10 @@ export class InlineQueryTrackerModule extends BaseModule {
         }
 
         return {
-          gif_url: imageUrl,
           id: id.toString(),
-          type: 'gif',
-          thumbnail_url: imageUrl,
-        } as InlineQueryResultGif;
+          type: 'sticker',
+          sticker_file_id: sticker.telegramFileId,
+        } as InlineQueryResultCachedSticker;
       })
       .filter((result) => result !== null);
 
@@ -264,6 +262,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     const db = this.db;
     const logger = this.logger;
     const bot = this.bot;
+    const fnSendRewardMessage = this._sendRewardMessage.bind(this);
 
     const rewardService = new RewardService(db);
 
@@ -272,13 +271,6 @@ export class InlineQueryTrackerModule extends BaseModule {
         // TODO: split to handlers
         const { query } = ctx.inlineQuery;
         const [id] = query.split(' ');
-
-        const results = await this._getStickersDemo();
-        // console.log(results);
-        await ctx.answerInlineQuery(results, {
-          cache_time: 1,
-        });
-        return;
 
         const isRegistered = !!(await db.user.findFirst({
           where: {
@@ -332,12 +324,10 @@ export class InlineQueryTrackerModule extends BaseModule {
       const { result_id } = ctx.chosenInlineResult;
 
       // Validate inputs
-      // const { stickerId } = parseInlineQuerySchema({
-      //   stickerId: result_id,
-      // });
+      const { stickerId } = parseInlineQuerySchema({
+        stickerId: result_id,
+      });
 
-      // FIXME: HARD Sticker ID for Demo Point Release System - Need Update Later
-      const stickerId = 242;
       const sticker = await db.sticker.findUnique({
         where: { id: stickerId },
       });
@@ -387,7 +377,7 @@ export class InlineQueryTrackerModule extends BaseModule {
         sharerId = await rewardOwner({
           userId: user.id,
         });
-        await this._sendRewardMessage(user.id);
+        await fnSendRewardMessage(user?.id);
       } else {
         sharerId = await rewardSharerAndOwner();
       }
@@ -472,8 +462,8 @@ export class InlineQueryTrackerModule extends BaseModule {
               metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
             }),
           ]);
-          await this._sendRewardMessage(newSharer.id, this);
-          await this._sendRewardMessage(user.id, this);
+          await fnSendRewardMessage(newSharer?.id);
+          await fnSendRewardMessage(user?.id);
 
           return newSharer.id;
         } else {
@@ -483,7 +473,7 @@ export class InlineQueryTrackerModule extends BaseModule {
             metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
           });
 
-          await this._sendRewardMessage(sharer.id, this);
+          await fnSendRewardMessage(sharer?.id);
           return sharer.id;
         }
       }
@@ -496,7 +486,6 @@ export class InlineQueryTrackerModule extends BaseModule {
           taskId: QuestId.SHARING_MY_STICKER,
         });
 
-        await this._sendRewardMessage(userId);
         return userId;
       }
     });
