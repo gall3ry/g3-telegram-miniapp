@@ -54,7 +54,7 @@ export const TopSwiper = memo(() => {
                 <div className="size-5">
                   <IconTelegram />
                 </div>
-                Send GM Sticker
+                Send Sticker
               </Button>
             </div>
           </SwiperSlide>
