@@ -126,7 +126,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     }
 
     const { imageUrl, telegramFileId } = sticker;
-    if (!from.username || !chat_type || !imageUrl) {
+    if (!from.username || !chat_type || !imageUrl || !telegramFileId) {
       ctx.answerInlineQuery([], {
         cache_time: 1,
         button: {
@@ -149,7 +149,6 @@ export class InlineQueryTrackerModule extends BaseModule {
     await ctx.answerInlineQuery(
       [
         {
-          gif_url: imageUrl,
           id: stickerId.toString(),
           type: 'sticker',
           sticker_file_id: telegramFileId,
@@ -188,9 +187,9 @@ export class InlineQueryTrackerModule extends BaseModule {
     logger.debug({ stickers, telegramUserId }, 'Stickers');
     const results = stickers
       .map((sticker) => {
-        const { imageUrl, id } = sticker;
+        const { imageUrl, id, telegramFileId } = sticker;
 
-        if (!imageUrl) {
+        if (!imageUrl || !telegramFileId)  {
           return null;
         }
 
@@ -225,9 +224,9 @@ export class InlineQueryTrackerModule extends BaseModule {
 
     const results = stickers
       .map((sticker) => {
-        const { imageUrl, id } = sticker;
+        const { imageUrl, id, telegramFileId } = sticker;
 
-        if (!imageUrl) {
+        if (!imageUrl || !telegramFileId) {
           return null;
         }
 
