@@ -34,7 +34,7 @@ export function mapStickerTypeToTemplateComponent<T extends StickerType>(
             return <GM1 {...props} />;
           }
           default: {
-            return null;
+            return <GM1 {...props} />;
           }
         }
       })()}
