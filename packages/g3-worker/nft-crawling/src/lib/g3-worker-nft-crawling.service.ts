@@ -65,7 +65,9 @@ export class G3WorkerNftCrawlingService {
                     return null;
                   });
 
-                  console.log(res);
+                  Logger.log(
+                    `Fetched ${res.items.length} NFTs from ${provider.value}`
+                  );
 
                   if (!res) {
                     console.log(`break ${provider.value}`);

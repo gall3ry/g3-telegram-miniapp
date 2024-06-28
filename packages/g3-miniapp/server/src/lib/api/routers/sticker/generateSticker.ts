@@ -6,6 +6,8 @@ import { db } from '../../../db';
 import { publish } from '../../services/upstash';
 import { protectedProcedure } from '../../trpc';
 
+const STICKER_TYPES_TO_CREATE: StickerType[] = ['GM1', 'GM2', 'GM3'] as const;
+
 export const generateSticker = protectedProcedure
   .input(
     z.object({
@@ -37,7 +39,7 @@ export const generateSticker = protectedProcedure
       }
 
       const data = nfts.flatMap((nft) => {
-        return Object.values(StickerType).map((stickerType) => {
+        return STICKER_TYPES_TO_CREATE.map((stickerType) => {
           switch (stickerType) {
             case 'GM5':
             default: {

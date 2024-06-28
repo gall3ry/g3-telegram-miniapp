@@ -4,7 +4,6 @@ import { type Metadata } from 'next';
 import { unstable_noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { BottomActions } from './BottomActions';
-import { TemplateInfo } from './TemplateInfo';
 
 export async function generateMetadata({
   params,
@@ -49,9 +48,13 @@ const Page = async ({
     id: string;
   };
 }) => {
-  const sticker = await api.sticker.getSticker({
-    id: +id,
-  });
+  const sticker = await api.sticker
+    .getSticker({
+      id: +id,
+    })
+    .catch(() => {
+      notFound();
+    });
 
   if (!sticker) {
     notFound();
@@ -59,7 +62,7 @@ const Page = async ({
 
   return (
     <div>
-      <TemplateInfo sticker={sticker} />
+      {/* <Sticker sticker={sticker} /> */}
       <BottomActions />
     </div>
   );

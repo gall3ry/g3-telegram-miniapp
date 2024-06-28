@@ -1,8 +1,8 @@
 import { cn } from '@g3-miniapp/utils';
 import { useIsAuthenticated } from '@gall3ry/g3-miniapp-authentication';
-import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-templates';
+import { Sticker } from '@gall3ry/g3-miniapp-feature-stickers';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
-import { Button, Spinner, Text } from '@radix-ui/themes';
+import { Button, Spinner } from '@radix-ui/themes';
 import Image from 'next/image';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { memo } from 'react';
@@ -19,7 +19,7 @@ export const AllStickers = memo(() => {
     refetchInterval: ({ state }) => {
       const data = state.data;
       const atLeastOneStickerNotReady =
-        data?.items.some((sticker) => !sticker.imageUrl) ?? false;
+        data?.items.some((sticker) => !sticker?.telegramFileId) ?? false;
 
       return atLeastOneStickerNotReady ? 10000 : false;
     },
@@ -65,7 +65,7 @@ export const AllStickers = memo(() => {
 
           <div className="mt-3 grid grid-cols-2 gap-2">
             {stickers.map((sticker) => {
-              const stickerNotReady = !sticker.imageUrl;
+              const stickerNotReady = !sticker.extra.imageUrl;
 
               return (
                 <div
@@ -86,13 +86,7 @@ export const AllStickers = memo(() => {
                   )}
                 >
                   <div className="aspect-square cursor-pointer">
-                    {sticker.GMNFT.imageUrl &&
-                      mapStickerTypeToTemplateComponent(sticker.stickerType, {
-                        imageUrl: sticker.GMNFT.imageUrl,
-                        stickerTitle: `STICKER #${sticker.id}`,
-                        shouldRecord: false,
-                        type: sticker.stickerType,
-                      })}
+                    <Sticker sticker={sticker} shouldRecord={false} />
                   </div>
 
                   <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">
@@ -101,13 +95,6 @@ export const AllStickers = memo(() => {
                       {sticker.shareCount === 1 ? '' : 's'}
                     </div>
                   </div>
-
-                  {stickerNotReady && (
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center gap-2">
-                      <Spinner />
-                      <Text color="gray">Loading...</Text>
-                    </div>
-                  )}
                 </div>
               );
             })}

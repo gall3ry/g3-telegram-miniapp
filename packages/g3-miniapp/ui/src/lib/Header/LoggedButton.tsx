@@ -1,4 +1,5 @@
 'use client';
+import { formatNumber } from '@g3-miniapp/utils';
 import { useUser } from '@gall3ry/g3-miniapp-authentication';
 import { IconPoints } from '@gall3ry/g3-miniapp-icon';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
@@ -51,7 +52,7 @@ function UserMenu() {
                         <IconPoints />
                       </span>
                       <span className="inline-block ml-[3px]">
-                        {user.point}
+                        {formatNumber(user.point)}
                       </span>
                     </div>
                   </div>

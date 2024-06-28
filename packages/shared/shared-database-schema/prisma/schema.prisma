@@ -161,6 +161,12 @@ model GMNFT {
 }
 
 enum StickerType {
+    GM1
+    GM2
+    GM3
+    GM4
+
+    // @deprecated
     Sample1
     GM5
 }

@@ -1,11 +1,11 @@
 'use client';
 import { useIsAuthenticated } from '@gall3ry/g3-miniapp-authentication';
+import { Sticker } from '@gall3ry/g3-miniapp-feature-stickers';
 import {
   IconAsset,
   IconEffect,
   IconInfoCircled,
 } from '@gall3ry/g3-miniapp-icon';
-import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-templates';
 import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp-utils';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Drawer, DrawerContent } from '@gall3ry/g3-miniapp-ui';
@@ -66,13 +66,9 @@ export const SingleStickerDetailDrawer = () => {
       <DrawerContent>
         <div className="px-5">
           <div className="aspect-square w-full rounded-xl">
-            {selectedSticker?.GMNFT.imageUrl &&
-              mapStickerTypeToTemplateComponent(selectedSticker.stickerType, {
-                stickerTitle: `STICKER #${selectedSticker.id}`,
-                imageUrl: selectedSticker.GMNFT.imageUrl,
-                shouldRecord: false,
-                type: selectedSticker.stickerType,
-              })}
+            {selectedSticker && (
+              <Sticker sticker={selectedSticker} shouldRecord={false} />
+            )}
           </div>
         </div>
 
@@ -129,9 +125,9 @@ export const SingleStickerDetailDrawer = () => {
                   chatTypes: ['channels', 'groups', 'users'],
                 });
               }}
-              disabled={!selectedSticker?.imageUrl}
+              disabled={!selectedSticker?.telegramFileId}
             >
-              {selectedSticker?.imageUrl ? 'Send Sticker' : 'Loading...'}
+              {selectedSticker?.telegramFileId ? 'Send Sticker' : 'Loading...'}
             </Button>
           </div>
         </div>
@@ -164,7 +160,7 @@ export const TopOCCInfo = () => {
               src={IMAGES.create.fairy}
               priority
               alt="Fairy"
-              placeholder="blur"
+              sizes="25vw"
             />
           </div>
 
@@ -185,7 +181,7 @@ export const TopOCCInfo = () => {
 
             <div className="relative mt-3 bg-opacity-10 bg-white rounded p-2 flex gap-2 items-center py-2.5">
               <div className="w-8 h-8 relative">
-                <Image src={IMAGES.level[1]} alt="Level 1" fill sizes="100vw" />
+                <Image src={IMAGES.level[1]} alt="Level 1" fill sizes="10vw" />
               </div>
 
               <div className="flex-1">

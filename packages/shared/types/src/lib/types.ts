@@ -20,6 +20,26 @@ export const mapStickerTypeToStickerTemplate: Record<
     description: 'We use this sticker to greet good morning',
     messageText: 'GM fam!',
   },
+  GM1: {
+    title: 'GM1',
+    description: 'We use this sticker to greet good morning',
+    messageText: 'GM fam!',
+  },
+  GM2: {
+    title: 'GM2',
+    description: 'We use this sticker to greet good morning',
+    messageText: 'GM fam!',
+  },
+  GM3: {
+    title: 'GM3',
+    description: 'We use this sticker to greet good morning',
+    messageText: 'GM fam!',
+  },
+  GM4: {
+    title: 'GM4',
+    description: 'We use this sticker to greet good morning',
+    messageText: 'GM fam!',
+  },
 };
 
 export enum QuestId {

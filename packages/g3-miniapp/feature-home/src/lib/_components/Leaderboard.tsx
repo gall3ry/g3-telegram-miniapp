@@ -5,6 +5,7 @@ import { Spinner } from '@radix-ui/themes';
 import { usePostHog } from 'posthog-js/react';
 import React, { useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { LeaderboardItem } from './LeaderboardItem';
 
 export const Leaderboard = () => {
@@ -53,17 +54,18 @@ export const Leaderboard = () => {
       {data?.pages
         ?.map(({ data: page }, pageIndex) =>
           page.map((item, index) => (
-            <LeaderboardItem
-              occId={item.id}
-              key={index}
-              rank={pageIndex * LIMIT + index + 1}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              occImageUrl={(IMAGES.MOCK_STICKER as any)[(index % 5) + 1]}
-              avatarUrl={item.avatarUrl}
-              username={item.displayName ?? '?'}
-              shareCount={item.shareCount}
-              address={item.address}
-            />
+            <LazyLoadComponent key={index}>
+              <LeaderboardItem
+                occId={item.id}
+                rank={pageIndex * LIMIT + index + 1}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                occImageUrl={(IMAGES.MOCK_STICKER as any)[(index % 5) + 1]}
+                avatarUrl={item.avatarUrl}
+                username={item.displayName ?? '?'}
+                shareCount={item.shareCount}
+                address={item.address}
+              />
+            </LazyLoadComponent>
           ))
         )
         .flat()}

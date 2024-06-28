@@ -1,5 +1,5 @@
 'use client';
-import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-templates';
+import { Sticker } from '@gall3ry/g3-miniapp-feature-stickers';
 import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp-utils';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Button } from '@radix-ui/themes';
@@ -21,6 +21,7 @@ export const TopSwiper = memo(() => {
         className="w-full bg-cover"
         centeredSlides
         initialSlide={2}
+        spaceBetween={10}
       >
         {items?.map((item, index) => (
           <SwiperSlide
@@ -31,13 +32,7 @@ export const TopSwiper = memo(() => {
             }}
           >
             <div className="aspect-square w-full bg-cover bg-no-repeat">
-              {mapStickerTypeToTemplateComponent(item.stickerType, {
-                imageUrl:
-                  item.GMNFT.imageUrl || 'https://via.placeholder.com/150',
-                stickerTitle: `STICKER #${item.id}`,
-                shouldRecord: false,
-                type: item.stickerType,
-              })}
+              <Sticker sticker={item} shouldRecord={false} />
             </div>
 
             <div className="mt-3">

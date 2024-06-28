@@ -71,6 +71,9 @@
       "@gall3ry/g3-miniapp-feature-stickers": [
         "packages/g3-miniapp/feature-stickers/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-feature-stickers/server": [
+        "packages/g3-miniapp/feature-stickers/src/server.ts"
+      ],
       "@gall3ry/g3-miniapp-global-store": [
         "packages/g3-miniapp/global-store/src/index.ts"
       ],

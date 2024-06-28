@@ -3,7 +3,7 @@ import { api } from '@gall3ry/g3-miniapp-trpc-client/server';
 import { type Metadata } from 'next';
 import { unstable_noStore } from 'next/cache';
 import { notFound } from 'next/navigation';
-import { TemplateInfo } from './TemplateInfo';
+import { Sticker } from './Sticker';
 
 export async function generateMetadata({
   params,
@@ -48,9 +48,13 @@ const Page = async ({
     id: string;
   };
 }) => {
-  const sticker = await api.sticker.getSticker({
-    id: +id,
-  });
+  const sticker = await api.sticker
+    .getSticker({
+      id: +id,
+    })
+    .catch(() => {
+      notFound();
+    });
 
   if (!sticker) {
     notFound();
@@ -58,7 +62,7 @@ const Page = async ({
 
   return (
     <div>
-      <TemplateInfo sticker={sticker} shouldRecord />
+      <Sticker sticker={sticker} shouldRecord />
     </div>
   );
 };

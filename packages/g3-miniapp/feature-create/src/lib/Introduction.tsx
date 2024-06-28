@@ -11,7 +11,7 @@ export const Introduction = () => {
           fill
           alt="fairy"
           priority
-          placeholder="blur"
+          sizes="50vw"
         />
       </div>
 

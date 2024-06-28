@@ -4,6 +4,7 @@ import { useUtils } from '@tma.js/sdk-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ComponentProps } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { IconMarketplace } from './IconMarketplace';
 import { useHelpDrawer } from './useHelpDrawer';
 
@@ -33,7 +34,7 @@ const Top = () => {
           alt="fairy"
           fill
           priority
-          placeholder="blur"
+          sizes="100vw"
         />
       </div>
 
@@ -47,7 +48,11 @@ const Top = () => {
       <div className="mt-6 flex gap-2 *:flex-1">
         <div className="w-[106px] min-h-[164px] relative bg-[#B8FFD3] p-2 rounded-xl">
           <div className="w-full aspect-square rounded-lg relative">
-            <Image src={IMAGES.create.help[2]} alt="icon" fill />
+            <LazyLoadImage
+              src={IMAGES.create.help[2]}
+              alt="icon"
+              className="absolute inset-0"
+            />
           </div>
 
           <div className="mt-2">
@@ -62,7 +67,11 @@ const Top = () => {
 
         <div className="w-[106px] min-h-[164px] relative bg-[#B8FFD3] p-2 rounded-xl">
           <div className="w-full aspect-square rounded-lg relative">
-            <Image src={IMAGES.create.help[3]} alt="icon" fill />
+            <LazyLoadImage
+              src={IMAGES.create.help[3]}
+              alt="icon"
+              className="absolute inset-0"
+            />
           </div>
 
           <div className="mt-2">
@@ -76,11 +85,19 @@ const Top = () => {
         </div>
 
         <div className="w-[106px] min-h-[164px] relative p-2 rounded-xl flex items-center flex-col justify-center">
-          <Image fill src={IMAGES.create.help[1]} alt="icon" />
+          <LazyLoadImage
+            wrapperClassName="absolute inset-0"
+            src={IMAGES.create.help[1]}
+            alt="icon"
+          />
 
           <div className="relative">
             <div className="w-10 h-10 relative mx-auto">
-              <Image fill src={IMAGES.create.help.timer} alt="icon" />
+              <LazyLoadImage
+                wrapperClassName="absolute inset-0"
+                src={IMAGES.create.help.timer}
+                alt="icon"
+              />
             </div>
 
             <div className="mt-3">

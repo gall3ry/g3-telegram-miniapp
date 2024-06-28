@@ -39,7 +39,7 @@ const Sample1Inner = ({
   >('idle');
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/gm5/template.riv',
+    src: '/rive/gm/gm_template.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;

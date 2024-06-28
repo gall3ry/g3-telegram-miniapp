@@ -31,7 +31,6 @@ export const LeaderboardItem = ({
 
         <div className="mt-2">
           <div className="relative flex h-8 w-8 items-center gap-2.5 rounded-lg bg-pink-50">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <Avatar
               fallback={username[0] ?? '?'}
               className="h-8 w-8 rounded-lg"
