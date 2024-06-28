@@ -59,7 +59,7 @@ export const generateSticker = protectedProcedure
       });
 
       if (stickers.length > 0) {
-        const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-gif`;
+        const urlToFetch = `${env.CAPTURING_WORKER_PUBLIC_URL}/api/webhook/sticker/capture-png`;
         // send capturing
 
         await publish({
