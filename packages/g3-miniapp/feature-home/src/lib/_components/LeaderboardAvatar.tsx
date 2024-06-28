@@ -14,6 +14,7 @@ export const LeaderboardAvatar = ({
   return (
     <div className="relative">
       <div className="z-0 ml-2 mt-2 aspect-square h-28 w-28 rounded-xl">
+        {/* @ts-ignore */}
         <GM2
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
