@@ -149,7 +149,12 @@ export const TopOCCInfo = () => {
   return (
     <>
       <div className="aspect-[335/120] w-full rounded-xl relative">
-        <Image src={IMAGES.balance_bg} fill alt="Balance background" />
+        <Image
+          src={IMAGES.balance_bg}
+          fill
+          alt="Balance background"
+          sizes="100vw"
+        />
 
         <div className="absolute inset-0 flex w-full p-4">
           <div className="h-full aspect-square rounded-lg overflow-hidden relative">
@@ -173,7 +178,7 @@ export const TopOCCInfo = () => {
 
             <div className="relative mt-3 bg-opacity-10 bg-white rounded p-2 flex gap-2 items-center py-2.5">
               <div className="w-8 h-8 relative">
-                <Image src={IMAGES.level[1]} alt="Level 1" fill />
+                <Image src={IMAGES.level[1]} alt="Level 1" fill sizes="100vw" />
               </div>
 
               <div className="flex-1">
