@@ -28,7 +28,13 @@ const Top = () => {
   return (
     <>
       <div className="aspect-square w-full relative">
-        <Image src={IMAGES.create.fairy_gold} alt="fairy" fill />
+        <Image
+          src={IMAGES.create.fairy_gold}
+          alt="fairy"
+          fill
+          priority
+          placeholder="blur"
+        />
       </div>
 
       <div className="mt-5 text-center text-green-400 text-[40px] font-bold leading-[56px]">

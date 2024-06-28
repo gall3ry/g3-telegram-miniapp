@@ -6,7 +6,13 @@ export const Introduction = () => {
   return (
     <div className="px-5">
       <div className="w-full aspect-square rounded-xl relative">
-        <Image src={IMAGES.create.fairy} fill alt="fairy" />
+        <Image
+          src={IMAGES.create.fairy}
+          fill
+          alt="fairy"
+          priority
+          placeholder="blur"
+        />
       </div>
 
       <div className="mt-6">

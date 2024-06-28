@@ -154,11 +154,18 @@ export const TopOCCInfo = () => {
           fill
           alt="Balance background"
           sizes="100vw"
+          priority
         />
 
         <div className="absolute inset-0 flex w-full p-4">
           <div className="h-full aspect-square rounded-lg overflow-hidden relative">
-            <Image fill src={IMAGES.create.fairy} alt="Fairy" />
+            <Image
+              fill
+              src={IMAGES.create.fairy}
+              priority
+              alt="Fairy"
+              placeholder="blur"
+            />
           </div>
 
           <div className="ml-5 grow">
