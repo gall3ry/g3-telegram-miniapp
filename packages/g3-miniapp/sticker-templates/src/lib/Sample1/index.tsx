@@ -125,6 +125,11 @@ const Sample1Inner = ({
     window.dispatchEvent(event);
   }, []);
 
+  const dispatchPngEvent = useCallback((image: string) => {
+    const event = new CustomEvent('png', { detail: image });
+    window.dispatchEvent(event);
+  }, []);
+
   useEffect(() => {
     switch (recording) {
       case 'recording': {
@@ -136,6 +141,7 @@ const Sample1Inner = ({
       case 'done': {
         void getGifFromImages(images).then((image) => {
           // throw event
+          dispatchPngEvent(image);
           dispatchEvent(image);
           return Promise.resolve();
         });
@@ -145,6 +151,7 @@ const Sample1Inner = ({
         setTimeout(() => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const image = canvas!.toDataURL();
+          dispatchPngEvent(image);
           void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
             (image) => {
               // throw event

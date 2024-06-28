@@ -120,6 +120,11 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
     window.dispatchEvent(event);
   }, []);
 
+  const dispatchPngEvent = useCallback((image: string) => {
+    const event = new CustomEvent('gif', { detail: image });
+    window.dispatchEvent(event);
+  }, []);
+
   useEffect(() => {
     switch (recording) {
       case 'recording': {
@@ -140,6 +145,7 @@ const GM5Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM5>[0]) => {
         setTimeout(() => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const image = canvas!.toDataURL();
+          dispatchPngEvent(image);
           void getGifFromImages(Array.from({ length: 20 }, () => image)).then(
             (image) => {
               // throw event
