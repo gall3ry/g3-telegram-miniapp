@@ -1,15 +1,14 @@
 'use client';
+import { stickerTypeRecord } from '@gall3ry/g3-miniapp-sticker-templates-constants';
 import { Spinner } from '@radix-ui/themes';
 import { Alignment, Fit, Layout, type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
 import { Suspense, memo, useEffect, useState } from 'react';
+import { z } from 'zod';
 import { useRiveRecording } from '../hooks/useRiveRecording';
 import { loadAndDecodeImg } from '../loadAndDecodeFont';
 
-type GM2Props = {
-  shouldRecord?: boolean;
-  imageUrl: string;
-};
+type GM2Props = z.infer<(typeof stickerTypeRecord)['GM2']>;
 
 export const GM2 = memo((props: GM2Props) => {
   return (
@@ -19,7 +18,18 @@ export const GM2 = memo((props: GM2Props) => {
   );
 });
 
-const GM2Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM2>[0]) => {
+const GM2Inner = ({
+  imageUrl,
+  shouldRecord,
+  epicSaved,
+  nftId,
+  nftName,
+  ownerName,
+  price,
+  stickerCreatedDate,
+  stickerId,
+  type,
+}: Parameters<typeof GM2>[0]) => {
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
     src: '/rive/gm/gm_template.riv',
@@ -62,10 +72,15 @@ const GM2Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM2>[0]) => {
       }
     },
     artboard: 'GM2',
+    // onLoad: (event) => {
+    //   console.log(event.data);
+    // },
   });
 
   useEffect(() => {
     if (imageUrl && nftAsset && rive) {
+      // rive.setTextRunValue()
+
       loadAndDecodeImg(imageUrl, {
         width: 1000,
         height: 1000,
@@ -73,6 +88,10 @@ const GM2Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM2>[0]) => {
         .then((image) => {
           nftAsset.setRenderImage(image);
           rive.play();
+
+          setTimeout(() => {
+            setRecording('recording');
+          }, 1000);
           return image;
         })
         .catch((e) => {

@@ -24,7 +24,7 @@ enum Tab {
 const Page = () => {
   const [tab, setTab] = useQueryState(
     'tab',
-    parseAsStringEnum<Tab>(Object.values(Tab)).withDefault(Tab.DAILY)
+    parseAsStringEnum<Tab>(Object.values(Tab)).withDefault(Tab.BASIC)
   );
   return (
     <div>

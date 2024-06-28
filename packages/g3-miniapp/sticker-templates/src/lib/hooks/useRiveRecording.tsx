@@ -19,26 +19,26 @@ export const useRiveRecording = ({
     'idle' | 'recording' | 'done' | 'done_capturing_static_template'
   >('idle');
 
-  const isInitialPlaying =
-    shouldRecord && recording === 'idle' && rive?.isPlaying;
+  // const isInitialPlaying =
+  //   shouldRecord && recording === 'idle' && rive?.isPlaying;
 
   const dispatchEvent = useCallback((image: string) => {
     const event = new CustomEvent('gif', { detail: image });
     window.dispatchEvent(event);
   }, []);
 
-  useEffect(() => {
-    if (isInitialPlaying) {
-      setRecording('recording');
+  // useEffect(() => {
+  //   if (isInitialPlaying) {
+  //     setRecording('recording');
 
-      interval.current = setInterval(() => {
-        // we dont check canvas here for performance reasons
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        setImages((prev) => [...prev, canvas!.toDataURL()]);
-      }, 100);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialPlaying]);
+  //     interval.current = setInterval(() => {
+  //       // we dont check canvas here for performance reasons
+  //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //       setImages((prev) => [...prev, canvas!.toDataURL()]);
+  //     }, 100);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isInitialPlaying]);
 
   const dispatchPngEvent = useCallback((image: string) => {
     const event = new CustomEvent('png', { detail: image });
