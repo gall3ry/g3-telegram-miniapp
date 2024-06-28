@@ -13,6 +13,8 @@ import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
 
 const URL_TO_WEB_APP = 'https://gall3ry.io';
+const URL_TO_TMA = 'https://t.me/g3stg1bot/test';
+const URL_TO_TMA_QUEST = 'https://staging.miniapp.gall3ry.io/quests';
 
 export class InlineQueryTrackerModule extends BaseModule {
   name = 'InlineQueryTrackerModule';
@@ -22,7 +24,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     // Do nothing
   }
 
-  async _getStickersDemo(packName: string = 'Epic5_by_g3stg1bot') {
+  async _getStickersDemo(packName = 'Epic5_by_g3stg1bot') {
     const bot = this.bot;
     const stickers = await bot.telegram.getStickerSet(packName);
     const results = stickers.stickers.map((sticker, index) => {
@@ -37,7 +39,7 @@ export class InlineQueryTrackerModule extends BaseModule {
             [
               {
                 text: 'Hello, Good Morning',
-                url: `https://t.me/g3stg1bot/test`,
+                url: URL_TO_TMA,
               },
             ],
           ],
@@ -45,6 +47,48 @@ export class InlineQueryTrackerModule extends BaseModule {
       } as InlineQueryResultCachedSticker;
     });
     return results;
+  }
+
+  async _sendRewardMessage(userId: number, $this = this) {
+    const user = await $this.db.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        Provider: true,
+      },
+    });
+    if (!user) {
+      console.log(`User ${userId} not found`);
+      return;
+    }
+
+    const provider = user.Provider.find(
+      (provider) => provider.type === 'TELEGRAM'
+    );
+    if (!provider) {
+      console.log(`Provider TELEGRAM not found`);
+      return;
+    }
+
+    await $this.bot.telegram.sendMessage(
+      provider.value,
+      `🎉 *Congratulations\\! You have earned 25 points\\!* \n\nCurrent balance: ${user.point} points\n\nVisit daily quest to earn more points`,
+      {
+        parse_mode: 'MarkdownV2',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: '💎 Earn more points 💎',
+                url: URL_TO_TMA,
+              },
+            ],
+          ],
+        },
+      }
+    );
+    return;
   }
 
   async _selectOne({
@@ -343,6 +387,7 @@ export class InlineQueryTrackerModule extends BaseModule {
         sharerId = await rewardOwner({
           userId: user.id,
         });
+        await this._sendRewardMessage(user.id);
       } else {
         sharerId = await rewardSharerAndOwner();
       }
@@ -410,7 +455,6 @@ export class InlineQueryTrackerModule extends BaseModule {
               },
             },
           });
-
           if (!user?.id) {
             logger.error(`[CRITICAL] Owner of the sticker not found`);
             return;
@@ -428,6 +472,8 @@ export class InlineQueryTrackerModule extends BaseModule {
               metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
             }),
           ]);
+          await this._sendRewardMessage(newSharer.id, this);
+          await this._sendRewardMessage(user.id, this);
 
           return newSharer.id;
         } else {
@@ -437,6 +483,7 @@ export class InlineQueryTrackerModule extends BaseModule {
             metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
           });
 
+          await this._sendRewardMessage(sharer.id, this);
           return sharer.id;
         }
       }
@@ -449,6 +496,7 @@ export class InlineQueryTrackerModule extends BaseModule {
           taskId: QuestId.SHARING_MY_STICKER,
         });
 
+        await this._sendRewardMessage(userId);
         return userId;
       }
     });
