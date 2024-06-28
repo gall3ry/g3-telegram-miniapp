@@ -91,6 +91,7 @@ const Sample1Inner = ({
         setRecording('done');
       }
     },
+    artboard: 'GM2',
   });
   const [imageLoaded, setImageLoaded] = useState(false);
 

@@ -1,5 +1,5 @@
-import { Sample1 } from '@gall3ry/g3-miniapp-sticker-templates';
 import { IMAGES } from '@gall3ry/shared-constants';
+import { GM2 } from '../../../../sticker-templates/src/lib/GM2';
 
 export const LeaderboardAvatar = ({
   rank,
@@ -14,11 +14,10 @@ export const LeaderboardAvatar = ({
   return (
     <div className="relative">
       <div className="z-0 ml-2 mt-2 aspect-square h-28 w-28 rounded-xl">
-        <Sample1
+        <GM2
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           imageUrl={IMAGES.MOCK_OCC[(occId % 5) + 1]}
-          stickerTitle={`STICKER #${occId}`}
         />
       </div>
 

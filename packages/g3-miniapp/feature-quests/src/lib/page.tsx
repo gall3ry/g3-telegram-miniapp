@@ -260,20 +260,23 @@ const DailyQuests = () => {
       },
     });
 
-  const [todayShare] = api.dailyQuest.getTodayShare.useSuspenseQuery(
-    undefined,
-    {
-      initialData: {
-        dailyShareCount: 0,
-      },
-    }
-  );
+  const {
+    data: todayShare,
+    isPending,
+    isSuccess,
+  } = api.dailyQuest.getTodayShare.useQuery();
 
   return (
     <div>
-      <div className="bg-red-400 p-2">
-        Today share: {todayShare.dailyShareCount}
-      </div>
+      {isPending ? (
+        <Spinner />
+      ) : (
+        isSuccess && (
+          <div className="bg-red-400 p-2">
+            Today share: {todayShare.dailyShareCount}
+          </div>
+        )
+      )}
 
       {data.map((quest) => {
         const { isPassed, isClaimed, point, type } = quest;

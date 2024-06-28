@@ -203,7 +203,7 @@ export const TopOCCInfo = () => {
                 </div>
 
                 <div className="mt-1">
-                  <LevelBar percentage={exp / max} />
+                  <LevelBar percentage={0} />
                 </div>
               </div>
             </div>

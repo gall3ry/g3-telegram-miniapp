@@ -34,9 +34,16 @@ export const getStickers = protectedProcedure
       ]);
 
       const result = {
-        items: items.map(
-          ({ stickerType, id, ...sticker }) =>
-            ({
+        items: items
+          .map(({ stickerType, id, ...sticker }) => {
+            const userId = sticker.GMSymbolOCC?.Occ.Provider.User.id;
+            const username = sticker.GMSymbolOCC?.Occ.Provider.User.displayName;
+
+            if (!userId || !username) {
+              throw new Error('User not found');
+            }
+
+            return {
               id: id,
               stickerType: stickerType,
               extra: {
@@ -44,19 +51,23 @@ export const getStickers = protectedProcedure
                 imageUrl: sticker.GMNFT.imageUrl,
               },
               User: {
-                id: sticker.GMSymbolOCC.Occ.Provider.User.id,
-                username: sticker.GMSymbolOCC.Occ.Provider.User.displayName,
+                id: userId,
+                username,
               },
               templateMetadata: sticker.GMNFT.templateMetadata,
               shareCount: sticker.shareCount,
               telegramFileId: sticker.telegramFileId,
               createdAt: sticker.createdAt,
-            } satisfies z.infer<typeof stickerResultSchema>)
-        ),
+            } satisfies z.infer<typeof stickerResultSchema>;
+          })
+          .filter(Boolean),
 
         total,
       };
 
-      return result;
+      return {
+        items: result.items,
+        total: result.total,
+      };
     }
   );
