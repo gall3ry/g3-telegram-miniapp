@@ -3,10 +3,27 @@ import { stickerTypeRecord } from '@gall3ry/g3-miniapp-sticker-templates-constan
 import { Spinner } from '@radix-ui/themes';
 import { Alignment, Fit, Layout, type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
+import { format } from 'date-fns';
 import { Suspense, memo, useEffect, useState } from 'react';
 import { z } from 'zod';
 import { useRiveRecording } from '../hooks/useRiveRecording';
 import { loadAndDecodeImg } from '../loadAndDecodeFont';
+
+const convertToOrdinal = (number: number) => {
+  const j = number % 10;
+  const k = number % 100;
+
+  if (j === 1 && k !== 11) {
+    return number + 'ST';
+  }
+  if (j === 2 && k !== 12) {
+    return number + 'ND';
+  }
+  if (j === 3 && k !== 13) {
+    return number + 'RD';
+  }
+  return number + 'TH';
+};
 
 type GM2Props = z.infer<(typeof stickerTypeRecord)['GM2']>;
 
@@ -31,6 +48,7 @@ const GM2Inner = ({
   type,
 }: Parameters<typeof GM2>[0]) => {
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
+
   const { RiveComponent, canvas, rive } = useRive({
     src: '/rive/gm/gm_template.riv',
     autoplay: true,
@@ -72,14 +90,23 @@ const GM2Inner = ({
       }
     },
     artboard: 'GM2',
-    // onLoad: (event) => {
-    //   console.log(event.data);
-    // },
   });
 
   useEffect(() => {
     if (imageUrl && nftAsset && rive) {
-      // rive.setTextRunValue()
+      try {
+        rive.setTextRunValue('NFT NAME', nftName);
+        rive.setTextRunValue('PRICE 2', `${price} TODAY`);
+        rive.setTextRunValue(
+          'TIME 2',
+          format(new Date(stickerCreatedDate), 'hh:mma MMMM do, yyyy')
+        );
+        rive.setTextRunValue('33RD 2', convertToOrdinal(stickerId));
+        rive.setTextRunValue('CODE 2', `#${nftId}`);
+        rive.setTextRunValue('NAME 2', ownerName || 'Unknown');
+      } catch (error) {
+        // remove it later
+      }
 
       loadAndDecodeImg(imageUrl, {
         width: 1000,

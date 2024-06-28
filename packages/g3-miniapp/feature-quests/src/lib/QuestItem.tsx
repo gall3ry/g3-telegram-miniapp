@@ -1,6 +1,6 @@
 import { cn } from '@g3-miniapp/utils';
 import { IconPoints } from '@gall3ry/g3-miniapp-icon';
-import { Button } from '@radix-ui/themes';
+import { Button } from '@gall3ry/g3-miniapp-ui';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { IconCheck } from './_icon/IconCheck';
@@ -32,7 +32,7 @@ export const QuestItem = ({
     if (isCompleted) {
       return (
         <Button
-          size="2"
+          size="medium"
           onClick={(e) => {
             e.preventDefault();
 
@@ -53,7 +53,7 @@ export const QuestItem = ({
 
     function wrapText(text: string) {
       return (
-        <Button size="2" onClick={onClick} disabled={disabled}>
+        <Button size="medium" onClick={onClick} disabled={disabled}>
           {text}
         </Button>
       );

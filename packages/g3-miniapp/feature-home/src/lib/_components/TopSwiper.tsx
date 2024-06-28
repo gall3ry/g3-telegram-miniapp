@@ -2,7 +2,7 @@
 import { Sticker } from '@gall3ry/g3-miniapp-feature-stickers';
 import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp-utils';
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
-import { Button } from '@radix-ui/themes';
+import { Button } from '@gall3ry/g3-miniapp-ui';
 import { memo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { IconTelegram } from '../_icons/IconTelegram';
@@ -37,7 +37,7 @@ export const TopSwiper = memo(() => {
 
             <div className="mt-3">
               <Button
-                size="4"
+                size="big"
                 className="w-full whitespace-nowrap"
                 onClick={() => {
                   postSwitchInlineQuery({

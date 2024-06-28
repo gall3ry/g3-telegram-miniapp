@@ -1,4 +1,5 @@
 'use client';
+import { formatNumber } from '@g3-miniapp/utils';
 import { mapStickerTypeToTemplateComponent } from '@gall3ry/g3-miniapp-sticker-templates';
 import { stickerTypeRecord } from '@gall3ry/g3-miniapp-sticker-templates-constants';
 import { RouterOutputs } from '@gall3ry/g3-miniapp-trpc-client';
@@ -52,7 +53,7 @@ export const Sticker = memo(
               stickerId: item.id,
 
               nftName: (metadata as any)?.nftName,
-              price: (metadata as any)?.price,
+              price: `$${formatNumber((metadata as any)?.price)}`,
 
               nftId: (metadata as any)?.nftId,
             } as z.input<(typeof stickerTypeRecord)['GM2']>
