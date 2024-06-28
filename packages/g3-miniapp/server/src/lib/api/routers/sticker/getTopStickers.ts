@@ -20,17 +20,33 @@ export const getTopStickers = publicProcedure
     ]);
 
     return {
-      items: items.map(({ stickerType, id, ...sticker }) => ({
-        id: id,
-        type: stickerType,
-        extra: {
-          epicSaved: 0,
-        },
-        User: {
-          id: sticker.GMSymbolOCC.Occ.Provider.User.id,
-          username: sticker.GMSymbolOCC.Occ.Provider.User.displayName,
-        },
-      })),
+      items: items.map(({ stickerType, id, ...sticker }) => {
+        // sticker.GMSymbolOCC.Occ.Provider.User.id,
+        const userId = sticker.GMSymbolOCC?.Occ.Provider.User.id;
+        const username = sticker.GMSymbolOCC?.Occ.Provider.User.displayName;
+
+        if (!userId || !username) {
+          throw new Error('User not found');
+        }
+
+        return {
+          id: id,
+          type: stickerType,
+          extra: {
+            epicSaved: 0,
+            imageUrl: sticker.GMNFT.imageUrl,
+          },
+          User: {
+            id: userId,
+            username: username,
+          },
+          createdAt: sticker.createdAt,
+          shareCount: sticker.shareCount,
+          stickerType,
+          telegramFileId: sticker.telegramFileId,
+          templateMetadata: sticker.GMNFT.templateMetadata,
+        } as z.infer<typeof stickerResultSchema>;
+      }),
       total,
     };
   });
