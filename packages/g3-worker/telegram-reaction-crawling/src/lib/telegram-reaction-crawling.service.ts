@@ -119,4 +119,14 @@ export class TelegramReactionCrawlingService {
     const { count } = await this.db.mapTonProofToPayload.deleteMany({});
     this.logger.debug('[resetMapping] Deleted %d mappings', count);
   }
+
+  @Cron('0 0 * * *') // At 00:00
+  async resetDailyQuests() {
+    const { count } = await this.db.dailyQuestUserInfo.updateMany({
+      data: {
+        dailyShareCount: 0,
+      },
+    });
+    this.logger.debug('[resetDailyQuests] Reset %d daily quests', count);
+  }
 }

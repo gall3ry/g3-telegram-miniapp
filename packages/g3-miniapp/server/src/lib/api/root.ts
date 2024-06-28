@@ -1,4 +1,5 @@
 import { authRouter } from './routers/auth';
+import { dailyQuestRouter } from './routers/daily-quest';
 import { occRouter } from './routers/occ';
 import { tasksRouter } from './routers/quests';
 import { rewardRouter } from './routers/reward';
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   reward: rewardRouter,
   occ: occRouter,
   quests: tasksRouter,
+  dailyQuest: dailyQuestRouter,
   sticker: stickerRouter,
 });
 

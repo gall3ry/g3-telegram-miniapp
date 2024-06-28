@@ -47,6 +47,12 @@
       "@gall3ry/g3-miniapp-feature-create": [
         "packages/g3-miniapp/feature-create/src/index.ts"
       ],
+      "@gall3ry/g3-miniapp-feature-daily-quests": [
+        "packages/g3-miniapp/feature-daily-quests/src/index.ts"
+      ],
+      "@gall3ry/g3-miniapp-feature-daily-quests/server": [
+        "packages/g3-miniapp/feature-daily-quests/src/server.ts"
+      ],
       "@gall3ry/g3-miniapp-feature-home": [
         "packages/g3-miniapp/feature-home/src/index.ts"
       ],

@@ -6,15 +6,16 @@ import { useSelectAssetsForGMDrawer } from './useSelectAssetsForGMDrawer';
 
 export const SelectedAssets = () => {
   const [, setSelectAssetsDrawer] = useSelectAssetsForGMDrawer();
-  const { data: gmNFTs, isSuccess } = api.sticker.getGMNFTs.useQuery(
-    undefined,
-    {
-      enabled: true,
-    }
-  );
+  const {
+    data: gmNFTs,
+    isSuccess,
+    isPending,
+  } = api.sticker.getGMNFTs.useQuery(undefined, {
+    enabled: true,
+  });
 
   return (
-    <Spinner loading={!isSuccess}>
+    <Spinner loading={isPending}>
       {isSuccess && (gmNFTs.result?.length || 0) > 0 && (
         <Button
           size="big"

@@ -142,11 +142,19 @@ export const SingleStickerDetailDrawer = () => {
 
 export const TopOCCInfo = () => {
   const [showHelpDrawer, setShowHelpDrawer] = useHelpDrawer();
+  const [data] = api.occ.getOcc.useSuspenseQuery();
+  const exp = data?.GMSymbolOCC?.exp ?? 0;
+  const max = 100;
 
   return (
     <>
       <div className="aspect-[335/120] w-full rounded-xl relative">
-        <Image src={IMAGES.balance_bg} fill alt="Balance background" />
+        <Image
+          src={IMAGES.balance_bg}
+          fill
+          alt="Balance background"
+          sizes="100vw"
+        />
 
         <div className="absolute inset-0 flex w-full p-4">
           <div className="h-full aspect-square rounded-lg overflow-hidden relative">
@@ -170,7 +178,7 @@ export const TopOCCInfo = () => {
 
             <div className="relative mt-3 bg-opacity-10 bg-white rounded p-2 flex gap-2 items-center py-2.5">
               <div className="w-8 h-8 relative">
-                <Image src={IMAGES.level[1]} alt="Level 1" fill />
+                <Image src={IMAGES.level[1]} alt="Level 1" fill sizes="100vw" />
               </div>
 
               <div className="flex-1">
@@ -183,19 +191,16 @@ export const TopOCCInfo = () => {
 
                   <div>
                     <span className="text-white text-sm font-semibold leading-tight tracking-tight">
-                      0
+                      {exp}
                     </span>
                     <span className="opacity-60 text-white text-sm font-semibold leading-tight tracking-tight">
-                      /100
+                      /{max}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-1">
-                  {/* <div className="h-[5px] bg-opacity-20 bg-white rounded-sm relative">
-                    <div className="w-[98.80px] h-[5px] bg-green-400 rounded-tl-sm rounded-bl-sm absolute" />
-                  </div> */}
-                  <LevelBar percentage={0} />
+                  <LevelBar percentage={exp / max} />
                 </div>
               </div>
             </div>

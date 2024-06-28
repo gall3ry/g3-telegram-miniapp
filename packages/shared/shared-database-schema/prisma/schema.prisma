@@ -20,7 +20,9 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now()) @updatedAt
 
-    countryCode String?
+    countryCode        String?
+    DailyQuestLog      DailyQuestLog[]
+    DailyQuestUserInfo DailyQuestUserInfo?
 }
 
 model RewardLogs {
@@ -137,6 +139,9 @@ model GMSymbolOCC {
 
     Occ   Occ @relation(fields: [occId], references: [id], onDelete: Cascade)
     occId Int @unique
+
+    exp     Int      @default(0)
+    ExpLogs ExpLog[]
 }
 
 model GMNFT {
@@ -194,4 +199,52 @@ model BotMessage {
     updatedAt DateTime @default(now()) @updatedAt
 
     @@index([user_id])
+}
+
+enum DailyQuestType {
+    DAILY_LOGIN
+    DAILY_SHARE_LEVEL_1
+    DAILY_SHARE_LEVEL_2
+    DAILY_SHARE_LEVEL_3
+    DAILY_SHARE_LEVEL_4
+    DAILY_SHARE_LEVEL_5
+    DAILY_SHARE_LEVEL_6
+}
+
+model DailyQuestLog {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    type     DailyQuestType
+    point    Int
+    exp      Int
+    metadata Json?
+
+    userId Int
+    User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DailyQuestUserInfo {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId Int  @unique
+    User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    lastLoginAt     DateTime?
+    dailyShareCount Int       @default(0)
+}
+
+model ExpLog {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    metadata  Json?
+
+    exp Int
+
+    GMSymbolOCC   GMSymbolOCC? @relation(fields: [gMSymbolOCCId], references: [id])
+    gMSymbolOCCId Int?
 }

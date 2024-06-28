@@ -3,7 +3,11 @@ import { RewardService } from '@gall3ry/data-access-rewards';
 import { Prisma } from '@gall3ry/database-client';
 import { QuestId } from '@gall3ry/types';
 import { Context, NarrowedContext } from 'telegraf';
-import { InlineQueryResultGif, Update, InlineQueryResultCachedSticker } from 'telegraf/types';
+import {
+  InlineQueryResultCachedSticker,
+  InlineQueryResultGif,
+  Update,
+} from 'telegraf/types';
 import { z } from 'zod';
 import { PersistentDb, persistentDb } from './persistent-db';
 import { parseInlineQuerySchema } from './schema/parseInlineQuerySchema';
@@ -20,7 +24,7 @@ export class InlineQueryTrackerModule extends BaseModule {
     // Do nothing
   }
 
-  async _getStickersDemo(packName: string = 'Epic5_by_g3stg1bot') {
+  async _getStickersDemo(packName = 'Epic5_by_g3stg1bot') {
     const bot = this.bot;
     const stickers = await bot.telegram.getStickerSet(packName);
     const results = stickers.stickers.map((sticker, index) => {
@@ -34,13 +38,13 @@ export class InlineQueryTrackerModule extends BaseModule {
           inline_keyboard: [
             [
               {
-                text: "Hello, Good Morning",
+                text: 'Hello, Good Morning',
                 url: URL_TO_TMA,
               },
             ],
           ],
-        }
-      } as InlineQueryResultCachedSticker
+        },
+      } as InlineQueryResultCachedSticker;
     });
     return results;
   }
@@ -52,14 +56,16 @@ export class InlineQueryTrackerModule extends BaseModule {
       },
       include: {
         Provider: true,
-      }
+      },
     });
     if (!user) {
       console.log(`User ${userId} not found`);
       return;
     }
 
-    const provider = user.Provider.find((provider) => provider.type === 'TELEGRAM');
+    const provider = user.Provider.find(
+      (provider) => provider.type === 'TELEGRAM'
+    );
     if (!provider) {
       console.log(`Provider TELEGRAM not found`);
       return;
@@ -258,7 +264,6 @@ export class InlineQueryTrackerModule extends BaseModule {
     const db = this.db;
     const logger = this.logger;
     const bot = this.bot;
-    const $this = this;
 
     const rewardService = new RewardService(db);
 
@@ -376,29 +381,49 @@ export class InlineQueryTrackerModule extends BaseModule {
         );
       });
 
+      let sharerId: number | null = null;
+
       if (isOwner) {
-        await rewardOwner({
+        sharerId = await rewardOwner({
           userId: user.id,
         });
         await this._sendRewardMessage(user.id);
       } else {
-        await rewardSharerAndOwner();
+        sharerId = await rewardSharerAndOwner();
       }
 
       storage.appendUserData(ctx.chosenInlineResult.from.id, {
         stickerId,
         chatType,
       });
-      await db.sticker.update({
-        where: { id: stickerId },
-        data: {
-          shareCount: {
-            increment: 1,
-          },
-        },
-      });
 
-      async function rewardSharerAndOwner() {
+      await Promise.all([
+        db.sticker.update({
+          where: { id: stickerId },
+          data: {
+            shareCount: {
+              increment: 1,
+            },
+          },
+        }),
+        db.dailyQuestUserInfo.upsert({
+          where: {
+            userId: sharerId,
+          },
+          create: {
+            userId: sharerId,
+            dailyShareCount: 1,
+          },
+          update: {
+            dailyShareCount: {
+              increment: 1,
+            },
+          },
+        }),
+      ]);
+
+      // return sharer Id
+      async function rewardSharerAndOwner(): Promise<number> {
         console.log('rewardSharerAndOwner');
         const sharer = await db.user.findFirst({
           where: {
@@ -447,25 +472,32 @@ export class InlineQueryTrackerModule extends BaseModule {
               metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
             }),
           ]);
-          await $this._sendRewardMessage(newSharer.id, $this);
-          await $this._sendRewardMessage(user.id, $this);
+          await this._sendRewardMessage(newSharer.id, this);
+          await this._sendRewardMessage(user.id, this);
+
+          return newSharer.id;
         } else {
           await rewardService.rewardUser({
             taskId: QuestId.SHARING_FRIEND_STICKER,
             userId: sharer.id,
             metadata: ctx.chosenInlineResult as unknown as Prisma.JsonObject,
           });
-          await $this._sendRewardMessage(sharer.id, $this);
+
+          await this._sendRewardMessage(sharer.id, this);
+          return sharer.id;
         }
       }
 
+      // return owner Id
       async function rewardOwner({ userId }: { userId: number }) {
         console.log('rewardOwner', userId);
         await rewardService.rewardUser({
           userId,
           taskId: QuestId.SHARING_MY_STICKER,
         });
-        await $this._sendRewardMessage(userId);
+
+        await this._sendRewardMessage(userId);
+        return userId;
       }
     });
     bot.on('message', async (ctx) => {

@@ -4,7 +4,6 @@ import { useWebAppSwitchInlineQuery } from '@gall3ry/g3-miniapp-telegram-miniapp
 import { api } from '@gall3ry/g3-miniapp-trpc-client';
 import { Button } from '@radix-ui/themes';
 import { memo } from 'react';
-import { EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { IconTelegram } from '../_icons/IconTelegram';
 
@@ -20,8 +19,6 @@ export const TopSwiper = memo(() => {
       <Swiper
         slidesPerView="auto"
         className="w-full bg-cover"
-        effect="coverflow"
-        modules={[EffectCoverflow]}
         centeredSlides
         initialSlide={2}
       >
