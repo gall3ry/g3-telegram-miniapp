@@ -1,5 +1,4 @@
 import { env } from '@gall3ry/g3-miniapp-env';
-import { getTxByBOC } from '@gall3ry/shared-ton-utils';
 import { CHAIN } from '@tonconnect/protocol';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { Address, beginCell, toNano } from 'ton-core';
@@ -8,6 +7,9 @@ import { setItemContentCell } from '../_contracts/nftContent/onChain';
 import { useAsyncInitialize } from './useAsyncInitialize';
 import { useTonClient } from './useTonClient';
 import { useTonConnect } from './useTonConnect';
+
+// import { getTxByBOC } from '@gall3ry/shared-ton-utils';
+import { v4 as uuidv4 } from 'uuid';
 
 const randomSeed = Math.floor(Math.random() * 10000);
 
@@ -90,8 +92,8 @@ export function useNftContract() {
         }
       );
       // TODO: Use real txHash and nftAddress later - now just for recording
-      const txhash = await getTxByBOC(boc.boc, wallet);
-      // const txhash = uuidv4();
+      // const txhash = await getTxByBOC(boc.boc, wallet);
+      const txhash = uuidv4();
 
       console.log('txhash', txhash);
 
