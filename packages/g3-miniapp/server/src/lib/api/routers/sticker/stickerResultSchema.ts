@@ -6,7 +6,7 @@ export const stickerResultSchema = z.object({
   stickerType: z.nativeEnum(StickerType),
   User: z.object({
     id: z.number(),
-    username: z.string(),
+    username: z.string().nullable(),
   }),
   extra: z.object({
     epicSaved: z.number(),

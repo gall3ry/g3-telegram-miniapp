@@ -19,12 +19,16 @@ export const getSticker = publicProcedure
       },
     });
 
-    const user = result.GMSymbolOCC.Occ.Provider.User;
-    delete result.GMSymbolOCC.Occ.Provider.User;
+    const user = result.GMSymbolOCC?.Occ.Provider.User;
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     const extra = {
       // TODO:  Make this
       epicSaved: 0,
+      imageUrl: result.GMNFT.imageUrl,
     } as const;
 
     return {

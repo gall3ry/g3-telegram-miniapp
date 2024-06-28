@@ -14,7 +14,7 @@ export const stickerTypeRecord = {
 
     nftName: z.string(),
     nftId: z.number(),
-    ownerName: z.string(),
+    ownerName: z.string().nullable(),
     stickerId: z.number(),
     epicSaved: z.number(),
     stickerCreatedDate: z.coerce.date(),

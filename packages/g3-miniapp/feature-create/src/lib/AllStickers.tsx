@@ -65,7 +65,7 @@ export const AllStickers = memo(() => {
 
           <div className="mt-3 grid grid-cols-2 gap-2">
             {stickers.map((sticker) => {
-              const stickerNotReady = !sticker.extra.imageUrl;
+              const stickerNotReady = !sticker.telegramFileId;
 
               return (
                 <div
@@ -86,7 +86,11 @@ export const AllStickers = memo(() => {
                   )}
                 >
                   <div className="aspect-square cursor-pointer">
-                    <Sticker sticker={sticker} shouldRecord={false} />
+                    <Sticker
+                      sticker={sticker}
+                      shouldRecord={false}
+                      loadingIndicator={true}
+                    />
                   </div>
 
                   <div className="absolute bottom-2 left-2 h-6 rounded-lg bg-white px-2 py-0.5">

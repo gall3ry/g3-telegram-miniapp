@@ -10,15 +10,10 @@ export function mapStickerTypeToTemplateComponent<T extends StickerType>(
   stickerType: T,
   _props: z.infer<(typeof stickerTypeRecord)[T]>
 ) {
-  const {
-    data: props,
-    success,
-    error,
-  } = stickerTypeRecord[stickerType].safeParse(_props);
+  const { data: props, success } =
+    stickerTypeRecord[stickerType].safeParse(_props);
 
   if (!success) {
-    console.log(error.issues);
-
     return null;
   }
 

@@ -10,9 +10,11 @@ export const Sticker = memo(
   ({
     shouldRecord = false,
     sticker,
+    loadingIndicator = false,
   }: {
     shouldRecord?: boolean;
     sticker: NonNullable<RouterOutputs['sticker']['getSticker']>;
+    loadingIndicator?: boolean;
   }) => {
     const isReady = !!sticker?.telegramFileId;
 
@@ -36,19 +38,6 @@ export const Sticker = memo(
         }
         case 'GM2': {
           const metadata = sticker.templateMetadata;
-
-          console.log(metadata);
-          console.log(item);
-
-          /**
-            nftName: z.string(),
-            nftId: z.number(),
-            ownerName: z.string(),
-            stickerId: z.number(),
-            epicSaved: z.string(),
-            stickerCreatedDate: z.coerce.date(),
-            price: z.number(),
-         */
 
           const { data, error } = stickerTypeRecord[item.stickerType].safeParse(
             {
@@ -77,8 +66,6 @@ export const Sticker = memo(
           return mapStickerTypeToTemplateComponent(item.stickerType, data);
         }
         case 'GM3': {
-          const metadata = sticker.templateMetadata;
-
           const { data, error } = stickerTypeRecord[item.stickerType].safeParse(
             {
               imageUrl: item.extra.imageUrl,
@@ -150,14 +137,14 @@ export const Sticker = memo(
 
     return (
       <div className="relative aspect-square">
-        {!isReady && (
+        {sticker ? renderSticker(sticker) : null}
+
+        {!isReady && loadingIndicator && (
           <div className="absolute inset-0 bg-black/5 flex items-center justify-center gap-2">
             <Spinner />
             <Text color="gray">Loading...</Text>
           </div>
         )}
-
-        {sticker ? renderSticker(sticker) : null}
       </div>
     );
   }

@@ -41,7 +41,7 @@ export const useRiveRecording = ({
   }, [isInitialPlaying]);
 
   const dispatchPngEvent = useCallback((image: string) => {
-    const event = new CustomEvent('gif', { detail: image });
+    const event = new CustomEvent('png', { detail: image });
     window.dispatchEvent(event);
   }, []);
 
