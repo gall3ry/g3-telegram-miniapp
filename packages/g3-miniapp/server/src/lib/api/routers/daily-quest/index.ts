@@ -9,10 +9,15 @@ export const dailyQuestRouter = createTRPCRouter({
   completeDailyShare,
   getDailyQuestsInfo,
   getTodayShare: protectedProcedure.query(async ({ ctx: { session } }) => {
-    return db.dailyQuestUserInfo.findFirst({
+    return db.dailyQuestUserInfo.upsert({
       where: {
         userId: session.userId,
       },
+      create: {
+        userId: session.userId,
+        dailyShareCount: 0,
+      },
+      update: {},
       select: {
         dailyShareCount: true,
       },

@@ -8,7 +8,7 @@ import { QuestId, QuestStatus } from '@gall3ry/types';
 import { Spinner } from '@radix-ui/themes';
 import { TRPCClientError } from '@trpc/client';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
-import { useCallback } from 'react';
+import { Suspense, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import { AllQuestsCompleted } from './AllQuestsCompleted';
@@ -48,7 +48,9 @@ const Page = () => {
         </Button>
       </div>
 
-      {tab === Tab.DAILY ? <DailyQuests /> : <BasicQuests />}
+      <Suspense>
+        {tab === Tab.DAILY ? <DailyQuests /> : <BasicQuests />}
+      </Suspense>
     </div>
   );
 };
