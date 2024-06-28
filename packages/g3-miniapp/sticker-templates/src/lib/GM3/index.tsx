@@ -73,6 +73,12 @@ const GM3Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM3>[0]) => {
         .then((image) => {
           nftAsset.setRenderImage(image);
           rive.play();
+
+          if (shouldRecord) {
+            setTimeout(() => {
+              setRecording('recording');
+            }, 1000);
+          }
           return image;
         })
         .catch((e) => {

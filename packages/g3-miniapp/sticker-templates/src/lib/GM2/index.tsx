@@ -89,9 +89,11 @@ const GM2Inner = ({
           nftAsset.setRenderImage(image);
           rive.play();
 
-          setTimeout(() => {
-            setRecording('recording');
-          }, 1000);
+          if (shouldRecord) {
+            setTimeout(() => {
+              setRecording('recording');
+            }, 1000);
+          }
           return image;
         })
         .catch((e) => {
