@@ -2,7 +2,6 @@
 import { Alignment, Fit, Layout, type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
 import { Suspense, memo, useState } from 'react';
-import { useLogger } from 'react-use';
 
 type GM3Props = {
   shouldRecord?: boolean;
@@ -85,8 +84,6 @@ const GM3Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM3>[0]) => {
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [imageUrl, nftAsset?.name, rive]);
-
-  useLogger('GM3', { imageUrl, nftAsset, rive });
 
   // const { interval, setRecording } = useRiveRecording({
   //   rive,

@@ -116,8 +116,6 @@ export class G3WorkerNftCrawlingService {
                     }
                   );
 
-                  console.log(`data`, data);
-
                   const createdNfts = await db.gMNFT.createManyAndReturn({
                     skipDuplicates: true,
                     data: data,
