@@ -190,7 +190,7 @@ const Sample1Inner = ({
   }, [imageUrl, nftAsset?.name, rive]);
 
   return (
-    <div className="relative overflow-hidden rounded-xl border-2">
+    <div className="relative overflow-hidden rounded-xl">
       <RiveComponent width="100%" className="aspect-square" />
 
       {(!nftAsset || !imageLoaded) && (

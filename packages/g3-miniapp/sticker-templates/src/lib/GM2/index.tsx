@@ -137,7 +137,7 @@ const GM2Inner = ({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-xl border-2">
+    <div className="relative overflow-hidden rounded-xl">
       <RiveComponent width="100%" className="aspect-square" />
 
       {!nftAsset && (

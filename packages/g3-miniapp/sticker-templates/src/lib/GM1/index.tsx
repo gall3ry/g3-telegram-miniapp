@@ -95,7 +95,7 @@ const GM1Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM1>[0]) => {
   });
 
   return (
-    <div className="relative overflow-hidden rounded-xl border-2">
+    <div className="relative overflow-hidden rounded-xl">
       <RiveComponent width="100%" className="aspect-square" />
 
       {!nftAsset && (

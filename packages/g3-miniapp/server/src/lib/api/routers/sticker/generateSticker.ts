@@ -6,7 +6,7 @@ import { db } from '../../../db';
 import { publish } from '../../services/upstash';
 import { protectedProcedure } from '../../trpc';
 
-const STICKER_TYPES_TO_CREATE: StickerType[] = ['GM1', 'GM2', 'GM3'] as const;
+const STICKER_TYPES_TO_CREATE: StickerType[] = ['GM1', 'GM2'] as const;
 
 export const generateSticker = protectedProcedure
   .input(
@@ -53,9 +53,22 @@ export const generateSticker = protectedProcedure
         });
       }) satisfies Prisma.StickerCreateManyInput[];
 
-      const stickers = await db.sticker.createManyAndReturn({
-        data: data,
-        skipDuplicates: true,
+      const { stickers } = await db.$transaction(async (db) => {
+        // remove what not in nfts
+        await db.sticker.deleteMany({
+          where: {
+            nftAddress: {
+              notIn: nfts.map((nft) => nft.nftAddress),
+            },
+          },
+        });
+
+        const stickers = await db.sticker.createManyAndReturn({
+          data: data,
+          skipDuplicates: true,
+        });
+
+        return { stickers };
       });
 
       if (stickers.length > 0) {
