@@ -1,10 +1,8 @@
 'use client';
-import { Spinner } from '@radix-ui/themes';
 import { Alignment, Fit, Layout, type ImageAsset } from '@rive-app/canvas';
 import { useRive } from '@rive-app/react-canvas';
-import { Suspense, memo, useEffect, useState } from 'react';
-import { useRiveRecording } from '../hooks/useRiveRecording';
-import { loadAndDecodeImg } from '../loadAndDecodeFont';
+import { Suspense, memo, useState } from 'react';
+import { useLogger } from 'react-use';
 
 type GM3Props = {
   shouldRecord?: boolean;
@@ -22,7 +20,7 @@ export const GM3 = memo((props: GM3Props) => {
 const GM3Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM3>[0]) => {
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/gm/gm_template.riv',
+    src: '/rive/gm/gm3.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
@@ -54,55 +52,57 @@ const GM3Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM3>[0]) => {
       fit: Fit.Contain,
       alignment: Alignment.TopCenter,
     }),
-    onLoop: () => {
-      if (interval.current) {
-        clearInterval(interval.current);
+    // onLoop: () => {
+    //   if (interval.current) {
+    //     clearInterval(interval.current);
 
-        setRecording('done');
-      }
-    },
+    //     setRecording('done');
+    //   }
+    // },
     artboard: 'GM3',
   });
 
-  useEffect(() => {
-    if (imageUrl && nftAsset && rive) {
-      loadAndDecodeImg(imageUrl, {
-        width: 1000,
-        height: 1000,
-      })
-        .then((image) => {
-          nftAsset.setRenderImage(image);
-          rive.play();
+  // useEffect(() => {
+  //   if (imageUrl && nftAsset && rive) {
+  //     loadAndDecodeImg(imageUrl, {
+  //       width: 1000,
+  //       height: 1000,
+  //     })
+  //       .then((image) => {
+  //         nftAsset.setRenderImage(image);
+  //         rive.play();
 
-          if (shouldRecord) {
-            setTimeout(() => {
-              setRecording('recording');
-            }, 1000);
-          }
-          return image;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageUrl, nftAsset?.name, rive]);
+  //         if (shouldRecord) {
+  //           setTimeout(() => {
+  //             setRecording('recording');
+  //           }, 1000);
+  //         }
+  //         return image;
+  //       })
+  //       .catch((e) => {
+  //         console.error(e);
+  //       });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [imageUrl, nftAsset?.name, rive]);
 
-  const { interval, setRecording } = useRiveRecording({
-    rive,
-    shouldRecord,
-    canvas,
-  });
+  useLogger('GM3', { imageUrl, nftAsset, rive });
+
+  // const { interval, setRecording } = useRiveRecording({
+  //   rive,
+  //   shouldRecord,
+  //   canvas,
+  // });
 
   return (
     <div className="relative overflow-hidden rounded-xl border-2">
       <RiveComponent width="100%" className="aspect-square" />
 
-      {!nftAsset && (
+      {/* {!nftAsset && (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl border bg-white">
           <Spinner />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

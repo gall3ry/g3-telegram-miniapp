@@ -50,7 +50,7 @@ const GM2Inner = ({
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
 
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/gm/gm_template.riv',
+    src: '/rive/gm/gm2.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
@@ -109,8 +109,8 @@ const GM2Inner = ({
       }
 
       loadAndDecodeImg(imageUrl, {
-        width: 1000,
-        height: 1000,
+        width: 300,
+        height: 300,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);

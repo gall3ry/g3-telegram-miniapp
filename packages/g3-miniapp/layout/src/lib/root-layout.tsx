@@ -11,6 +11,7 @@ import { cn } from '@g3-miniapp/utils';
 import { Kanit } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { Providers } from './_providers';
+import { PreloadResources } from './preload-resources';
 
 export const metadata = {
   title: 'Gall3ry MiniApp',
@@ -30,6 +31,9 @@ const kanit = Kanit({
 export function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cn(kanit.variable)}>
+      <head>
+        <PreloadResources />
+      </head>
       <body className="font-sans">
         <Providers>
           <Toaster />

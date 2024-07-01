@@ -31,13 +31,13 @@ const Page = () => {
       <CurrentPoint />
 
       <div className="flex mt-6">
-        <Button
+        {/* <Button
           rounded="big"
           onClick={() => setTab(Tab.DAILY)}
           variant={tab === Tab.DAILY ? 'primary' : 'outline'}
         >
           Daily quest
-        </Button>
+        </Button> */}
         <Button
           rounded="big"
           className="ml-2"

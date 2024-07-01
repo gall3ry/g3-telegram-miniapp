@@ -22,7 +22,7 @@ export const GM1 = memo((props: GM1Props) => {
 const GM1Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM1>[0]) => {
   const [nftAsset, setNftAsset] = useState<ImageAsset | null>(null);
   const { RiveComponent, canvas, rive } = useRive({
-    src: '/rive/gm/gm_template.riv',
+    src: '/rive/gm/gm1.riv',
     autoplay: true,
     assetLoader: (_asset, bytes) => {
       const asset = _asset;
@@ -67,8 +67,8 @@ const GM1Inner = ({ imageUrl, shouldRecord }: Parameters<typeof GM1>[0]) => {
   useEffect(() => {
     if (imageUrl && nftAsset && rive) {
       loadAndDecodeImg(imageUrl, {
-        width: 1100,
-        height: 1100,
+        width: 300,
+        height: 300,
       })
         .then((image) => {
           nftAsset.setRenderImage(image);
